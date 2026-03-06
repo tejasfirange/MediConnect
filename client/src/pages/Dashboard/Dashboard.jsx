@@ -1,26 +1,59 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Activity, CalendarClock, ClipboardList, GlassWater, History, LogOut, ShieldAlert } from 'lucide-react';
+import {
+  Activity,
+  ArrowRight,
+  CalendarClock,
+  ClipboardList,
+  GlassWater,
+  Heart,
+  History,
+  LogOut,
+  Settings,
+  ShieldAlert,
+  Sparkles,
+  TrendingUp,
+} from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
-import RiskMeter from '../../components/RiskMeter';
 import { getPatientHistory } from '../../services/patientService';
 import './Dashboard.css';
 
-function toTitleCase(value) {
-  if (!value) return 'No data';
-  return String(value).charAt(0).toUpperCase() + String(value).slice(1).toLowerCase();
+function getGreetingKey() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'morning';
+  if (hour < 17) return 'afternoon';
+  return 'evening';
+}
+
+function getFirstName(email, fallback) {
+  if (!email) return fallback;
+  const local = email.split('@')[0] || '';
+  return local ? local.charAt(0).toUpperCase() + local.slice(1) : fallback;
 }
 
 function Dashboard() {
+  const { t } = useTranslation('dashboard');
   const { isDark } = useTheme();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [reports, setReports] = useState([]);
+  const [tipIndex, setTipIndex] = useState(0);
+
+  const healthTips = useMemo(
+    () => [
+      { icon: GlassWater, tip: t('quickTip.tips.0') },
+      { icon: Heart, tip: t('quickTip.tips.1') },
+      { icon: TrendingUp, tip: t('quickTip.tips.2') },
+      { icon: Sparkles, tip: t('quickTip.tips.3') },
+    ],
+    [t]
+  );
 
   useEffect(() => {
     let mounted = true;
@@ -44,6 +77,13 @@ function Dashboard() {
     };
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTipIndex((prev) => (prev + 1) % healthTips.length);
+    }, 8000);
+    return () => clearInterval(timer);
+  }, [healthTips.length]);
+
   const handleLogout = () => {
     logout();
     toast.info('Logged out successfully');
@@ -55,125 +95,280 @@ function Dashboard() {
   const summary = useMemo(() => {
     if (!latestReport) {
       return {
-        lastRisk: 'No data',
+        riskKey: 'noData',
         totalAssessments: reports.length,
-        lastAssessmentText: 'No assessments yet',
+        lastAssessmentText: t('noAssessments'),
       };
     }
 
     return {
-      lastRisk: toTitleCase(latestReport.riskLevel),
+      riskKey: (latestReport.riskLevel || 'low').toLowerCase(),
       totalAssessments: reports.length,
-      lastAssessmentText: `Latest report #${reports[0]?.pr_id || '-'}`,
+      lastAssessmentText: t('latestReport', { id: reports[0]?.pr_id || '-' }),
     };
-  }, [latestReport, reports]);
+  }, [latestReport, reports, t]);
+
+  const translatedRisk = t(`riskLevels.${summary.riskKey}`, {
+    defaultValue: t('riskLevels.noData'),
+  });
+
+  const riskChipClass = {
+    critical: 'bg-red-500/15 text-red-600 border border-red-200',
+    high: 'bg-orange-500/15 text-orange-600 border border-orange-200',
+    moderate: 'bg-amber-500/15 text-amber-600 border border-amber-200',
+    low: 'bg-emerald-500/15 text-emerald-600 border border-emerald-200',
+    noData: 'bg-slate-500/15 text-slate-600 border border-slate-200',
+  }[summary.riskKey] || 'bg-slate-500/15 text-slate-600 border border-slate-200';
+
+  const riskChipClassDark = {
+    critical: 'bg-red-500/20 text-red-400 border border-red-500/30',
+    high: 'bg-orange-500/20 text-orange-400 border border-orange-500/30',
+    moderate: 'bg-amber-500/20 text-amber-400 border border-amber-500/30',
+    low: 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30',
+    noData: 'bg-slate-500/20 text-slate-300 border border-slate-500/30',
+  }[summary.riskKey] || 'bg-slate-500/20 text-slate-300 border border-slate-500/30';
+
+  const CurrentTipIcon = healthTips[tipIndex].icon;
+
+  const actionCards = [
+    {
+      to: '/assessment',
+      icon: Activity,
+      title: t('actions.newAssessmentTitle'),
+      desc: t('actions.newAssessmentDesc'),
+      iconBg: isDark ? 'bg-blue-500/20' : 'bg-blue-100',
+      iconColor: 'text-blue-500',
+      primary: true,
+    },
+    {
+      to: '/history',
+      icon: History,
+      title: t('actions.viewHistoryTitle'),
+      desc: t('actions.viewHistoryDesc'),
+      iconBg: isDark ? 'bg-violet-500/20' : 'bg-violet-100',
+      iconColor: 'text-violet-500',
+    },
+    {
+      to: '/dashboard',
+      icon: Settings,
+      title: t('actions.logoutTitle'),
+      desc: t('actions.logoutDesc'),
+      iconBg: isDark ? 'bg-rose-500/20' : 'bg-rose-100',
+      iconColor: 'text-rose-500',
+      onClick: handleLogout,
+    },
+  ];
 
   return (
-    <div className={`dashboard-page min-h-screen pb-24 ${isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
-      <Navbar />
-      <main className="mx-auto w-full max-w-6xl px-4 py-12 md:px-8">
-        <section className={`dashboard-shell rounded-3xl border p-6 md:p-8 ${isDark ? 'border-slate-700 bg-slate-900/70' : 'border-white/70 bg-white/80'}`}>
-          <div className="dashboard-hero">
-            <p className={`text-xs uppercase tracking-[0.2em] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>MediConnect</p>
-            <h1 className="mt-2 text-3xl font-bold tracking-tight md:text-4xl">Health Dashboard</h1>
-            <p className={`mt-2 max-w-2xl text-sm md:text-base ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-              Track your latest risk signals, review assessment activity, and take your next health check with a clearer workflow.
-            </p>
-          </div>
+    <div
+      className={`dashboard-page min-h-screen pb-24 ${
+        isDark ? 'dashboard-page--dark bg-slate-950 text-slate-100' : 'dashboard-page--light bg-slate-50 text-slate-900'
+      }`}
+    >
+      <div className="dashboard-orb dashboard-orb--blue" aria-hidden="true" />
+      <div className="dashboard-orb dashboard-orb--sky" aria-hidden="true" />
+      <div className="dashboard-orb dashboard-orb--violet" aria-hidden="true" />
 
-          {loading ? (
-            <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
-              {[1, 2, 3].map((item) => (
-                <div key={item} className={`h-28 animate-pulse rounded-2xl border ${isDark ? 'border-slate-700 bg-slate-800' : 'border-slate-200 bg-slate-100'}`} />
-              ))}
-            </div>
-          ) : (
-            <>
-              <section className="mt-8">
-                <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
-                  <div className={`dashboard-metric rounded-2xl border p-5 shadow-sm lg:col-span-4 ${isDark ? 'border-slate-700 bg-slate-800/90 shadow-black/20' : 'border-slate-200 bg-white shadow-slate-200/80'}`}>
+      <Navbar />
+
+      <main className="relative z-10 mx-auto w-full max-w-6xl px-4 py-10 md:px-8 md:py-14">
+        <section className="dashboard-hero">
+          <p className={`text-xs font-semibold uppercase tracking-[0.2em] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+            {t('brandTag')}
+          </p>
+          <h1 className="dashboard-hero__greeting mt-2">
+            {t(`greeting.${getGreetingKey()}`)},{' '}
+            <span className="bg-gradient-to-r from-blue-600 to-sky-500 bg-clip-text text-transparent">
+              {getFirstName(user?.email, t('greeting.fallbackName'))}
+            </span>{' '}
+            <span className="inline-block animate-bounce" style={{ animationDuration: '2s' }}>{'\u{1F44B}'}</span>
+          </h1>
+          <p className={`dashboard-hero__sub max-w-2xl ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+            {reports.length > 0
+              ? t('hero.welcomeWithReports', { count: reports.length, risk: translatedRisk })
+              : t('hero.welcomeEmpty')}
+          </p>
+          <Link
+            to="/assessment"
+            className="dashboard-cta mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:shadow-xl hover:shadow-blue-500/30"
+          >
+            <Activity size={18} />
+            {t('ctaStartNew')}
+            <ArrowRight size={16} className="ml-1" />
+          </Link>
+        </section>
+
+        {loading ? (
+          <section className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-3">
+            {[1, 2, 3].map((item) => (
+              <div
+                key={item}
+                className={`dashboard-skeleton h-32 rounded-2xl border ${isDark ? 'border-slate-800 bg-slate-900' : 'border-slate-200 bg-white'}`}
+              />
+            ))}
+          </section>
+        ) : (
+          <>
+            <section className="mt-10">
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+                <div
+                  className={`dashboard-stat dashboard-stat--risk-${summary.riskKey} dashboard-fadeIn rounded-2xl border p-5 ${
+                    isDark
+                      ? 'border-slate-800 bg-slate-900/80 shadow-lg shadow-black/20'
+                      : 'border-slate-200/80 bg-white shadow-md shadow-slate-200/60'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <p className={`text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                      {t('metrics.lastRisk')}
+                    </p>
+                    <ShieldAlert size={18} className="text-amber-500" />
+                  </div>
+                  <div className="mt-4">
+                    <span className={`inline-block rounded-full px-3.5 py-1.5 text-sm font-bold ${isDark ? riskChipClassDark : riskChipClass}`}>
+                      {translatedRisk}
+                    </span>
+                  </div>
+                </div>
+
+                <div
+                  className={`dashboard-stat dashboard-fadeIn rounded-2xl border p-5 ${
+                    isDark
+                      ? 'border-slate-800 bg-slate-900/80 shadow-lg shadow-black/20'
+                      : 'border-slate-200/80 bg-white shadow-md shadow-slate-200/60'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <p className={`text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                      {t('metrics.totalAssessments')}
+                    </p>
+                    <ClipboardList size={18} className="text-blue-500" />
+                  </div>
+                  <p className="mt-3 text-4xl font-black leading-none tracking-tight">{summary.totalAssessments}</p>
+                </div>
+
+                <div
+                  className={`dashboard-stat dashboard-fadeIn rounded-2xl border p-5 ${
+                    isDark
+                      ? 'border-slate-800 bg-slate-900/80 shadow-lg shadow-black/20'
+                      : 'border-slate-200/80 bg-white shadow-md shadow-slate-200/60'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <p className={`text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                      {t('metrics.lastCheck')}
+                    </p>
+                    <CalendarClock size={18} className="text-violet-500" />
+                  </div>
+                  <p className="mt-3 text-xl font-bold">{summary.lastAssessmentText}</p>
+                </div>
+              </div>
+            </section>
+
+            <section className="dashboard-tip mt-8">
+              <div
+                className={`rounded-2xl border p-6 ${
+                  isDark
+                    ? 'border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800/80'
+                    : 'border-sky-100 bg-gradient-to-br from-sky-50/80 to-white'
+                }`}
+              >
+                <div className="flex items-start gap-4">
+                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${isDark ? 'bg-sky-500/20' : 'bg-sky-100'}`}>
+                    <CurrentTipIcon size={20} className="text-sky-500" />
+                  </div>
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between">
-                      <p className={`text-xs uppercase tracking-wide ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Last Risk Level</p>
-                      <ShieldAlert size={18} className="text-amber-500" />
+                      <p className={`text-sm font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+                        {t('quickTip.title')}
+                      </p>
+                      <span className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide ${isDark ? 'bg-slate-800 text-slate-400' : 'bg-sky-100 text-sky-600'}`}>
+                        {t('quickTip.tag')}
+                      </span>
                     </div>
-                    <p className="mt-4">
-                      <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-bold text-amber-700">{summary.lastRisk}</span>
+                    <p
+                      className={`mt-2 text-sm leading-relaxed transition-opacity duration-500 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}
+                      key={tipIndex}
+                      style={{ animation: 'fadeSlideUp 500ms ease both' }}
+                    >
+                      {healthTips[tipIndex].tip}
                     </p>
                   </div>
-
-                  <div className={`dashboard-metric rounded-2xl border p-5 shadow-sm lg:col-span-4 ${isDark ? 'border-slate-700 bg-slate-800/90 shadow-black/20' : 'border-slate-200 bg-white shadow-slate-200/80'}`}>
-                    <div className="flex items-center justify-between">
-                      <p className={`text-xs uppercase tracking-wide ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total Assessments</p>
-                      <ClipboardList size={18} className="text-blue-600" />
-                    </div>
-                    <p className="mt-3 text-4xl font-black leading-none">{summary.totalAssessments}</p>
-                  </div>
-
-                  <div className={`dashboard-metric rounded-2xl border p-5 shadow-sm lg:col-span-4 ${isDark ? 'border-slate-700 bg-slate-800/90 shadow-black/20' : 'border-slate-200 bg-white shadow-slate-200/80'}`}>
-                    <div className="flex items-center justify-between">
-                      <p className={`text-xs uppercase tracking-wide ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Last Check</p>
-                      <CalendarClock size={18} className="text-violet-500" />
-                    </div>
-                    <p className="mt-3 text-xl font-bold">{summary.lastAssessmentText}</p>
-                  </div>
                 </div>
-              </section>
-
-              <section className="mt-8 grid grid-cols-1 gap-5 xl:grid-cols-12">
-                <div className="xl:col-span-7">
-                  <RiskMeter riskLevel={latestReport?.riskLevel || 'low'} totalScore={latestReport?.totalScore || 0} />
+                <div className="mt-4 flex justify-center gap-1.5">
+                  {healthTips.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setTipIndex(i)}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        i === tipIndex
+                          ? 'w-6 bg-sky-500'
+                          : `w-1.5 ${isDark ? 'bg-slate-700 hover:bg-slate-600' : 'bg-slate-300 hover:bg-slate-400'}`
+                      }`}
+                      aria-label={`Tip ${i + 1}`}
+                    />
+                  ))}
                 </div>
-                <div className={`rounded-2xl border p-6 shadow-sm xl:col-span-5 ${isDark ? 'border-slate-700 bg-gradient-to-br from-slate-800 to-slate-700 shadow-black/20' : 'border-sky-100 bg-gradient-to-br from-sky-50 to-white shadow-sky-100/80'}`}>
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <GlassWater size={18} className="text-blue-600" />
-                        <p className="text-sm font-semibold">Quick Tip</p>
+              </div>
+            </section>
+
+            <section className="mt-8">
+              <h2 className={`mb-4 text-sm font-semibold uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                {t('actions.quickActions')}
+              </h2>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                {actionCards.map((card) => {
+                  const Icon = card.icon;
+                  const isButton = Boolean(card.onClick);
+
+                  if (isButton) {
+                    return (
+                      <button
+                        key={card.title}
+                        onClick={card.onClick}
+                        className={`dashboard-action group cursor-pointer rounded-2xl border p-5 text-left ${
+                          isDark
+                            ? 'border-slate-800 bg-slate-900/80'
+                            : 'border-slate-200/80 bg-white'
+                        }`}
+                      >
+                        <div className={`dashboard-action__icon ${card.iconBg}`}>
+                          <Icon size={22} className={card.iconColor} />
+                        </div>
+                        <p className={`mt-3 text-sm font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{card.title}</p>
+                        <p className={`mt-1 text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>{card.desc}</p>
+                      </button>
+                    );
+                  }
+
+                  return (
+                    <Link
+                      key={card.title}
+                      to={card.to}
+                      className={`dashboard-action group rounded-2xl border p-5 ${
+                        isDark
+                          ? 'border-slate-800 bg-slate-900/80'
+                          : 'border-slate-200/80 bg-white'
+                      } ${card.primary ? (isDark ? 'ring-1 ring-blue-500/20' : 'ring-1 ring-blue-100') : ''}`}
+                    >
+                      <div className={`dashboard-action__icon ${card.iconBg}`}>
+                        <Icon size={22} className={card.iconColor} />
                       </div>
-                      <p className={`mt-3 text-sm leading-7 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                        Drink enough water and track symptoms regularly. Small daily checks can prevent delayed treatment.
-                      </p>
-                    </div>
-                    <div className={`hidden rounded-xl px-3 py-2 text-xs font-semibold md:block ${isDark ? 'bg-slate-900 text-slate-300' : 'bg-white text-slate-500'}`}>
-                      Wellness
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </>
-          )}
-
-          <section className="mt-8">
-            <div className="flex flex-wrap gap-3">
-              <Link
-                to="/assessment"
-                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:scale-[1.02] hover:bg-blue-700"
-              >
-                <Activity size={18} />
-                Start Assessment
-              </Link>
-              <Link
-                to="/history"
-                className={`inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition hover:scale-[1.02] ${
-                  isDark ? 'bg-slate-800 text-slate-100 hover:bg-slate-700' : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
-                }`}
-              >
-                <History size={18} />
-                Past History
-              </Link>
-              <button
-                onClick={handleLogout}
-                className={`inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition hover:scale-[1.02] ${
-                  isDark ? 'bg-slate-800 text-slate-100 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                }`}
-              >
-                <LogOut size={18} />
-                Logout
-              </button>
-            </div>
-          </section>
-        </section>
+                      <p className={`mt-3 text-sm font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{card.title}</p>
+                      <p className={`mt-1 text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>{card.desc}</p>
+                      <div className={`mt-3 inline-flex items-center gap-1 text-xs font-semibold ${card.primary ? 'text-blue-500' : isDark ? 'text-slate-400' : 'text-slate-500'} transition group-hover:gap-2`}>
+                        {t('actions.open')}
+                        <ArrowRight size={12} />
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </section>
+          </>
+        )}
       </main>
+
       <Footer />
     </div>
   );
