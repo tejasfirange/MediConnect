@@ -85,3 +85,8 @@ CREATE TABLE IF NOT EXISTS consultations (
             REFERENCES patient_reports(pr_id)
             ON DELETE CASCADE
     );
+
+
+    ALTER TABLE consultations ADD COLUMN IF NOT EXISTS claimed_by VARCHAR(255);
+    ALTER TABLE consultations ADD COLUMN IF NOT EXISTS claimed_at TIMESTAMP;
+    UPDATE consultations SET status = 'pending' WHERE status = 'in_review';

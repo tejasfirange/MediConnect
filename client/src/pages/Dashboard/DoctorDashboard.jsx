@@ -69,6 +69,50 @@ function DoctorDashboard() {
     }
   };
 
+  const handleSelectConsult = async (item) => {
+    // If we're already reviewing someone, release them first (optional, or just let claim handle it)
+    if (selectedConsult && selectedConsult.id !== item.id) {
+      await handleRelease();
+    }
+
+    try {
+      const res = await api.post(`/consultations/${item.id}/claim`);
+      setSelectedConsult(item);
+      setEditPrescription(item.llm_prescription);
+      // Update the local queue item status to match backend if needed
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Could not claim this consultation');
+      fetchQueue(); // Refresh queue to show updated status
+    }
+  };
+
+  const handleRelease = async () => {
+    if (!selectedConsult) return;
+    try {
+      await api.post(`/consultations/${selectedConsult.id}/release`);
+      setSelectedConsult(null);
+      fetchQueue();
+    } catch (err) {
+      console.error("Release failed:", err);
+      setSelectedConsult(null);
+      fetchQueue();
+    }
+  };
+
+  useEffect(() => {
+    const handleUnload = () => {
+      if (selectedConsult) {
+        // navigator.sendBeacon is better for unloads, but let's keep it simple or use a sync request if possible
+        // most browsers block async fetches on unload.
+        api.post(`/consultations/${selectedConsult.id}/release`);
+      }
+    };
+    window.addEventListener('beforeunload', handleUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload);
+    };
+  }, [selectedConsult]);
+
   const riskColor = (risk) => {
     switch (risk?.toLowerCase()) {
       case 'critical': return 'text-red-500 bg-red-500/10 border-red-500/20';
@@ -107,8 +151,8 @@ function DoctorDashboard() {
                   <ShieldAlert size={24} />
                 </div>
                 <div>
-                  <p className="text-base font-bold">Clinical Credentials Required</p>
-                  <p className="text-xs opacity-90 leading-relaxed max-w-sm text-blue-700 dark:text-blue-300">
+                  <p className={`text-base font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>Clinical Credentials Required</p>
+                  <p className={`text-xs opacity-90 leading-relaxed max-w-sm ${isDark ? 'text-blue-300' : 'text-blue-600'}`}>
                     Your account needs a verified registration number and clinical qualifications before you can approve prescriptions.
                   </p>
                 </div>
@@ -125,7 +169,7 @@ function DoctorDashboard() {
           <div className="lg:col-span-1 space-y-4">
             <h2 className={`flex items-center gap-2 text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
               <Clock size={20} className="text-blue-500" />
-              Patient Queue ({queue.length})
+              Pending Patient Queue ({queue.length})
             </h2>
             
             {loading ? (
@@ -147,10 +191,7 @@ function DoctorDashboard() {
                 {queue.map((item) => (
                   <button
                     key={item.id}
-                    onClick={() => {
-                      setSelectedConsult(item);
-                      setEditPrescription(item.llm_prescription);
-                    }}
+                    onClick={() => handleSelectConsult(item)}
                     className={`dashboard-action w-full text-left rounded-2xl border p-4 transition-all outline-none ${
                       selectedConsult?.id === item.id 
                         ? (isDark ? 'border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/10' : 'border-blue-300 bg-blue-50 shadow-md') 
@@ -163,8 +204,8 @@ function DoctorDashboard() {
                           <User size={20} className="text-blue-500" />
                         </div>
                         <div>
-                          <p className="font-semibold text-sm">{item.patient_name}</p>
-                          <p className="text-xs text-slate-500">{new Date(item.created_at).toLocaleTimeString()}</p>
+                          <p className={`font-semibold text-sm ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{item.patient_name}</p>
+                          <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{new Date(item.created_at).toLocaleTimeString()}</p>
                         </div>
                       </div>
                       <span className={`text-[10px] font-bold uppercase px-2 py-1 rounded-full border ${riskColor(item.risk_level)}`}>
@@ -183,20 +224,33 @@ function DoctorDashboard() {
               <div className={`prescription-card glass-panel rounded-3xl border p-6 md:p-8 space-y-6 ${isDark ? 'border-slate-800' : 'border-slate-200 shadow-xl'}`}>
                 <div className="flex items-center justify-between border-b pb-4 mb-4 border-slate-700/30">
                   <div>
-                    <h3 className="text-xl font-bold">{selectedConsult.patient_name}'s Assessment</h3>
-                    <p className="text-sm text-slate-500">{selectedConsult.patient_email}</p>
+                    <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{selectedConsult.patient_name}'s Assessment</h3>
+                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{selectedConsult.patient_email}</p>
                   </div>
-                  <button 
-                    onClick={() => setSelectedConsult(null)}
-                    className="p-2 rounded-full hover:bg-slate-800"
-                  >
-                    <XCircle size={24} className="text-slate-500" />
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button 
+                      onClick={handleRelease}
+                      className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
+                        isDark 
+                        ? 'border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-white' 
+                        : 'border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-700'
+                      }`}
+                    >
+                      Cancel Review
+                    </button>
+                    <button 
+                      onClick={handleRelease}
+                      className={`p-2 rounded-full transition-colors ${isDark ? 'hover:bg-slate-800 text-slate-500' : 'hover:bg-slate-100 text-slate-400'}`}
+                      aria-label="Close"
+                    >
+                      <XCircle size={24} />
+                    </button>
+                  </div>
                 </div>
 
                 {/* Assessment Summary */}
                 <div className="space-y-4">
-                  <h4 className="font-semibold text-sm flex items-center gap-2">
+                  <h4 className={`font-semibold text-sm flex items-center gap-2 ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
                     <ShieldAlert size={18} className="text-orange-500" />
                     AI Triage Summary
                   </h4>
@@ -208,22 +262,22 @@ function DoctorDashboard() {
                 </div>
 
                 {/* Response Details */}
-                <div>
-                   <h4 className="font-semibold text-sm mb-3">Symptom Details</h4>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {selectedConsult.report.responseDetails?.slice(0, 6).map((r, i) => (
-                        <div key={i} className={`p-2 rounded-lg border text-xs ${isDark ? 'border-slate-800 bg-slate-950/50' : 'bg-white'}`}>
-                          <p className="font-semibold line-clamp-1">{r.questionText}</p>
-                          <p className="text-blue-500">{r.selectedOptionText}</p>
-                        </div>
-                      ))}
-                   </div>
-                </div>
+                 <div>
+                    <h4 className={`font-semibold text-sm mb-3 ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>Symptom Details</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                       {selectedConsult.report.responseDetails?.slice(0, 6).map((r, i) => (
+                         <div key={i} className={`p-2 rounded-lg border text-xs ${isDark ? 'border-slate-800 bg-slate-950/50' : 'bg-white'}`}>
+                           <p className={`font-semibold line-clamp-1 ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{r.questionText}</p>
+                           <p className="text-blue-500">{r.selectedOptionText}</p>
+                         </div>
+                       ))}
+                    </div>
+                 </div>
 
                 {/* Prescription Area */}
                 <div className="space-y-4 border-t pt-6 border-slate-700">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-semibold text-sm flex items-center gap-2">
+                    <h4 className={`font-semibold text-sm flex items-center gap-2 ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
                       <Edit3 size={18} className="text-blue-500" />
                       Prescription & Recommendation
                     </h4>
@@ -258,7 +312,7 @@ function DoctorDashboard() {
                       onChange={(e) => setEditPrescription(e.target.value)}
                       rows={10}
                       className={`w-full rounded-2xl border p-4 text-sm outline-none ring-blue-500/30 focus:ring-4 transition ${
-                        isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'
+                        isDark ? 'bg-slate-800 border-slate-700 text-slate-100' : 'bg-slate-50 border-slate-200 text-slate-900'
                       }`}
                       placeholder="Enter prescription details..."
                     />
@@ -278,6 +332,12 @@ function DoctorDashboard() {
                     >
                       <Save size={18} />
                       Save & Approve
+                    </button>
+                    <button
+                      onClick={handleRelease}
+                      className="flex-1 rounded-xl border border-slate-700/50 px-6 py-3.5 text-sm font-semibold text-slate-500 hover:bg-slate-800 transition"
+                    >
+                      Cancel
                     </button>
                     <button
                       onClick={() => handleAction(selectedConsult.id, 'rejected', '')}

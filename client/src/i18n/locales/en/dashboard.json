@@ -76,5 +76,20 @@
     "retake": "Retake Assessment",
     "backToDashboard": "Back to Dashboard",
     "noData": "No result data found. Please complete an assessment first."
+  },
+  "pastHistory": {
+    "title": "Past History",
+    "subtitle": "Review your previous assessment reports and recommendations.",
+    "noReports": "No assessments yet.",
+    "noReportsText": "Start your first health assessment to see risk trends and recommendations here.",
+    "selectReport": "Select a report to view details.",
+    "reportId": "Report #{{id}}",
+    "risk": "Risk",
+    "score": "Score",
+    "recommendation": "Recommendation",
+    "summary": "Summary",
+    "responseDetails": "Response Details",
+    "ans": "Answer",
+    "redFlag": "Red flag"
   }
 }

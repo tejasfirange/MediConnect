@@ -48,12 +48,13 @@ async function getDoctorQueue(req, res) {
   try {
     // In a real app, maybe doctors only see high-risk ones
     // Or we filter by matching specialities
+    const doctorEmail = req.user.email;
     const query = `
       SELECT c.*, pd.name as patient_name, pr.report
       FROM consultations c
       JOIN patient_details pd ON c.patient_email = pd.email
       JOIN patient_reports pr ON c.report_id = pr.pr_id
-      WHERE c.status = 'pending'
+      WHERE (c.status = 'pending') OR (c.status = 'in_review' AND c.claimed_by = $1)
       ORDER BY 
         CASE 
           WHEN c.risk_level = 'critical' THEN 1
@@ -63,7 +64,7 @@ async function getDoctorQueue(req, res) {
         END,
         c.created_at ASC
     `;
-    const result = await pool.query(query);
+    const result = await pool.query(query, [doctorEmail]);
     res.json(result.rows);
   } catch (error) {
     console.error('Error fetching doctor queue:', error);
@@ -99,9 +100,26 @@ async function updateConsultation(req, res) {
       return res.status(400).json({ message: 'Invalid status' });
     }
 
+    // Ensure we are only updating a pending or in_review (by this doctor) consultation
+    const checkQuery = `SELECT status, claimed_by FROM consultations WHERE id = $1`;
+    const checkResult = await pool.query(checkQuery, [id]);
+
+    if (checkResult.rowCount === 0) {
+      return res.status(404).json({ message: 'Consultation not found' });
+    }
+
+    const current = checkResult.rows[0];
+    if (current.status !== 'pending' && current.status !== 'in_review') {
+      return res.status(400).json({ message: 'Consultation has already been processed' });
+    }
+
+    if (current.status === 'in_review' && current.claimed_by !== doctorEmail) {
+      return res.status(403).json({ message: 'This consultation is being reviewed by another doctor' });
+    }
+
     const query = `
       UPDATE consultations
-      SET status = $1, doctor_prescription = $2, doctor_email = $3
+      SET status = $1, doctor_prescription = $2, doctor_email = $3, claimed_by = NULL, claimed_at = NULL
       WHERE id = $4
       RETURNING *
     `;
@@ -115,6 +133,72 @@ async function updateConsultation(req, res) {
   } catch (error) {
     console.error('Error updating consultation:', error);
     res.status(500).json({ message: 'Server error updating consultation' });
+  }
+}
+
+async function claimConsultation(req, res) {
+  try {
+    const { id } = req.params;
+    const doctorEmail = req.user.email;
+
+    // Check if it's already claimed or processed
+    const checkQuery = `SELECT status, claimed_by FROM consultations WHERE id = $1`;
+    const checkResult = await pool.query(checkQuery, [id]);
+
+    if (checkResult.rowCount === 0) {
+      return res.status(404).json({ message: 'Consultation not found' });
+    }
+
+    const current = checkResult.rows[0];
+    if (current.status !== 'pending') {
+      if (current.status === 'in_review' && current.claimed_by === doctorEmail) {
+        return res.json({ message: 'Already claimed by you', status: 'in_review' });
+      }
+      return res.status(400).json({ 
+        message: current.status === 'in_review' ? 'Being reviewed by another doctor' : 'Already processed' 
+      });
+    }
+
+    const query = `
+      UPDATE consultations
+      SET status = 'in_review', claimed_by = $1, claimed_at = NOW()
+      WHERE id = $2 AND status = 'pending'
+      RETURNING *
+    `;
+    const result = await pool.query(query, [doctorEmail, id]);
+
+    if (result.rowCount === 0) {
+      return res.status(400).json({ message: 'Failed to claim. Might have been taken.' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error claiming consultation:', error);
+    res.status(500).json({ message: 'Server error claiming consultation' });
+  }
+}
+
+async function releaseConsultation(req, res) {
+  try {
+    const { id } = req.params;
+    const doctorEmail = req.user.email;
+
+    const query = `
+      UPDATE consultations
+      SET status = 'pending', claimed_by = NULL, claimed_at = NULL
+      WHERE id = $1 AND claimed_by = $2 AND status = 'in_review'
+      RETURNING *
+    `;
+    const result = await pool.query(query, [id, doctorEmail]);
+
+    if (result.rowCount === 0) {
+       return res.status(400).json({ message: 'Cannot release this consultation' });
+    }
+
+    res.json({ message: 'Released successfully' });
+  } catch (error) {
+    console.error('Error releasing consultation:', error);
+    res.status(500).json({ message: 'Server error releasing consultation' });
   }
 }
 
@@ -146,5 +230,7 @@ module.exports = {
   getDoctorQueue,
   getCompletedConsultations,
   updateConsultation,
+  claimConsultation,
+  releaseConsultation,
   getPatientConsultations,
 };
