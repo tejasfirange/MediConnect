@@ -1,0 +1,2222 @@
+{
+  "categories": [
+    {
+      "category": "skin",
+      "startQuestion": "q1",
+      "questions": {
+        "q1": {
+          "text": "What skin problem do you have?",
+          "options": [
+            {
+              "text": "Acne",
+              "score": 1,
+              "next": "q2"
+            },
+            {
+              "text": "Rash",
+              "score": 2,
+              "next": "q2"
+            },
+            {
+              "text": "Dry skin",
+              "score": 1,
+              "next": "q2"
+            },
+            {
+              "text": "Allergic reaction",
+              "score": 3,
+              "next": "q2"
+            }
+          ]
+        },
+        "q2": {
+          "text": "Where is the problem located?",
+          "options": [
+            {
+              "text": "Face",
+              "score": 1,
+              "next": "q3"
+            },
+            {
+              "text": "Hands",
+              "score": 1,
+              "next": "q3"
+            },
+            {
+              "text": "Legs",
+              "score": 1,
+              "next": "q3"
+            },
+            {
+              "text": "Multiple areas",
+              "score": 2,
+              "next": "q3"
+            }
+          ]
+        },
+        "q3": {
+          "text": "Is the area red?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q4"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q4"
+            }
+          ]
+        },
+        "q4": {
+          "text": "Do you feel itching?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q5"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q5"
+            }
+          ]
+        },
+        "q5": {
+          "text": "Is there swelling?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q6"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q6"
+            }
+          ]
+        },
+        "q6": {
+          "text": "Did you use a new product recently?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q7"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q7"
+            }
+          ]
+        },
+        "q7": {
+          "text": "Do you have allergies?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q8"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q8"
+            }
+          ]
+        },
+        "q8": {
+          "text": "Is there pain in the affected area?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q9"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q9"
+            }
+          ]
+        },
+        "q9": {
+          "text": "Is the rash spreading?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 5,
+              "redFlag": true,
+              "next": "end"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q10"
+            }
+          ]
+        },
+        "q10": {
+          "text": "Do you have fever with the skin issue?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 4,
+              "redFlag": true,
+              "next": "end"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q11"
+            }
+          ]
+        },
+        "q11": {
+          "text": "Is skin cracked?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q12"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q12"
+            }
+          ]
+        },
+        "q12": {
+          "text": "Skin dryness level?",
+          "options": [
+            {
+              "text": "None",
+              "score": 1,
+              "next": "q13"
+            },
+            {
+              "text": "Mild",
+              "score": 1,
+              "next": "q13"
+            },
+            {
+              "text": "Moderate",
+              "score": 2,
+              "next": "q13"
+            },
+            {
+              "text": "Severe",
+              "score": 3,
+              "next": "q13"
+            }
+          ]
+        },
+        "q13": {
+          "text": "Pain intensity?",
+          "options": [
+            {
+              "text": "No pain",
+              "score": 0,
+              "next": "q14"
+            },
+            {
+              "text": "Mild",
+              "score": 1,
+              "next": "q14"
+            },
+            {
+              "text": "Moderate",
+              "score": 2,
+              "next": "q14"
+            },
+            {
+              "text": "Severe",
+              "score": 3,
+              "next": "q14"
+            }
+          ]
+        },
+        "q14": {
+          "text": "Treatment applied?",
+          "options": [
+            {
+              "text": "Doctor medicine",
+              "score": 1,
+              "next": "q15"
+            },
+            {
+              "text": "OTC cream",
+              "score": 1,
+              "next": "q15"
+            },
+            {
+              "text": "Home remedy",
+              "score": 1,
+              "next": "q15"
+            },
+            {
+              "text": "No treatment",
+              "score": 1,
+              "next": "q15"
+            }
+          ]
+        },
+        "q15": {
+          "text": "Duration of problem?",
+          "options": [
+            {
+              "text": "Less than 1 day",
+              "score": 1,
+              "next": "end"
+            },
+            {
+              "text": "1-2 days",
+              "score": 1,
+              "next": "end"
+            },
+            {
+              "text": "3-7 days",
+              "score": 2,
+              "next": "end"
+            },
+            {
+              "text": "More than 1 week",
+              "score": 3,
+              "next": "end"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "category": "hair",
+      "startQuestion": "q1",
+      "questions": {
+        "q1": {
+          "text": "What hair issue do you have?",
+          "options": [
+            {
+              "text": "Hair fall",
+              "score": 2,
+              "next": "q2"
+            },
+            {
+              "text": "Dandruff",
+              "score": 1,
+              "next": "q2"
+            },
+            {
+              "text": "Hair thinning",
+              "score": 3,
+              "next": "q2"
+            },
+            {
+              "text": "Dry scalp",
+              "score": 1,
+              "next": "q2"
+            }
+          ]
+        },
+        "q2": {
+          "text": "Severity of the issue?",
+          "options": [
+            {
+              "text": "Very mild",
+              "score": 1,
+              "next": "q3"
+            },
+            {
+              "text": "Mild",
+              "score": 1,
+              "next": "q3"
+            },
+            {
+              "text": "Moderate",
+              "score": 2,
+              "next": "q3"
+            },
+            {
+              "text": "Severe",
+              "score": 3,
+              "next": "q3"
+            }
+          ]
+        },
+        "q3": {
+          "text": "Do you have scalp itching?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q4"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q4"
+            }
+          ]
+        },
+        "q4": {
+          "text": "Do you see flakes?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q5"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q5"
+            }
+          ]
+        },
+        "q5": {
+          "text": "Is scalp red?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q6"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q6"
+            }
+          ]
+        },
+        "q6": {
+          "text": "How often do you wash hair?",
+          "options": [
+            {
+              "text": "Daily",
+              "score": 2,
+              "next": "q7"
+            },
+            {
+              "text": "Every 2 days",
+              "score": 1,
+              "next": "q7"
+            },
+            {
+              "text": "Weekly",
+              "score": 1,
+              "next": "q7"
+            },
+            {
+              "text": "Rarely",
+              "score": 2,
+              "next": "q7"
+            }
+          ]
+        },
+        "q7": {
+          "text": "Do you color your hair?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q8"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q8"
+            }
+          ]
+        },
+        "q8": {
+          "text": "Is hair thinning visible?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q9"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q9"
+            }
+          ]
+        },
+        "q9": {
+          "text": "Do you notice bald patches?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 4,
+              "redFlag": true,
+              "next": "end"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q10"
+            }
+          ]
+        },
+        "q10": {
+          "text": "Any scalp pain?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q11"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q11"
+            }
+          ]
+        },
+        "q11": {
+          "text": "Stress level recently?",
+          "options": [
+            {
+              "text": "Low",
+              "score": 1,
+              "next": "q12"
+            },
+            {
+              "text": "Medium",
+              "score": 2,
+              "next": "q12"
+            },
+            {
+              "text": "High",
+              "score": 3,
+              "next": "q12"
+            },
+            {
+              "text": "Very high",
+              "score": 4,
+              "next": "q12"
+            }
+          ]
+        },
+        "q12": {
+          "text": "Is hair brittle?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q13"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q13"
+            }
+          ]
+        },
+        "q13": {
+          "text": "Hair breakage level?",
+          "options": [
+            {
+              "text": "None",
+              "score": 0,
+              "next": "q14"
+            },
+            {
+              "text": "Low",
+              "score": 1,
+              "next": "q14"
+            },
+            {
+              "text": "Medium",
+              "score": 2,
+              "next": "q14"
+            },
+            {
+              "text": "High",
+              "score": 3,
+              "next": "q14"
+            }
+          ]
+        },
+        "q14": {
+          "text": "Using supplements?",
+          "options": [
+            {
+              "text": "Yes doctor prescribed",
+              "score": 1,
+              "next": "q15"
+            },
+            {
+              "text": "Yes OTC",
+              "score": 1,
+              "next": "q15"
+            },
+            {
+              "text": "Natural remedies",
+              "score": 1,
+              "next": "q15"
+            },
+            {
+              "text": "No supplements",
+              "score": 1,
+              "next": "q15"
+            }
+          ]
+        },
+        "q15": {
+          "text": "Duration of problem?",
+          "options": [
+            {
+              "text": "Less than 1 month",
+              "score": 1,
+              "next": "end"
+            },
+            {
+              "text": "1-3 months",
+              "score": 2,
+              "next": "end"
+            },
+            {
+              "text": "3-6 months",
+              "score": 3,
+              "next": "end"
+            },
+            {
+              "text": "More than 6 months",
+              "score": 4,
+              "next": "end"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "category": "eye",
+      "startQuestion": "q1",
+      "questions": {
+        "q1": {
+          "text": "What eye issue do you have?",
+          "options": [
+            {
+              "text": "Eye strain",
+              "score": 1,
+              "next": "q2"
+            },
+            {
+              "text": "Redness",
+              "score": 2,
+              "next": "q2"
+            },
+            {
+              "text": "Dry eyes",
+              "score": 1,
+              "next": "q2"
+            },
+            {
+              "text": "Itching",
+              "score": 2,
+              "next": "q2"
+            }
+          ]
+        },
+        "q2": {
+          "text": "How long do you use screens daily?",
+          "options": [
+            {
+              "text": "Less than 2 hours",
+              "score": 1,
+              "next": "q3"
+            },
+            {
+              "text": "2-4 hours",
+              "score": 2,
+              "next": "q3"
+            },
+            {
+              "text": "4-6 hours",
+              "score": 3,
+              "next": "q3"
+            },
+            {
+              "text": "More than 6 hours",
+              "score": 4,
+              "next": "q3"
+            }
+          ]
+        },
+        "q3": {
+          "text": "Do you have blurred vision?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 4,
+              "redFlag": true,
+              "next": "end"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q4"
+            }
+          ]
+        },
+        "q4": {
+          "text": "Do your eyes feel dry?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q5"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q5"
+            }
+          ]
+        },
+        "q5": {
+          "text": "Do you feel burning sensation?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q6"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q6"
+            }
+          ]
+        },
+        "q6": {
+          "text": "Do you wear glasses or lenses?",
+          "options": [
+            {
+              "text": "Glasses",
+              "score": 1,
+              "next": "q7"
+            },
+            {
+              "text": "Contact lenses",
+              "score": 2,
+              "next": "q7"
+            },
+            {
+              "text": "Both",
+              "score": 2,
+              "next": "q7"
+            },
+            {
+              "text": "None",
+              "score": 1,
+              "next": "q7"
+            }
+          ]
+        },
+        "q7": {
+          "text": "Are your eyes watering?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q8"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q8"
+            }
+          ]
+        },
+        "q8": {
+          "text": "Do you feel eye pain?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q9"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q9"
+            }
+          ]
+        },
+        "q9": {
+          "text": "Is there eye discharge?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 4,
+              "redFlag": true,
+              "next": "end"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q10"
+            }
+          ]
+        },
+        "q10": {
+          "text": "Sensitivity to light?",
+          "options": [
+            {
+              "text": "None",
+              "score": 1,
+              "next": "q11"
+            },
+            {
+              "text": "Mild",
+              "score": 2,
+              "next": "q11"
+            },
+            {
+              "text": "Moderate",
+              "score": 3,
+              "next": "q11"
+            },
+            {
+              "text": "Severe",
+              "score": 4,
+              "next": "q11"
+            }
+          ]
+        },
+        "q11": {
+          "text": "Eye swelling present?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q12"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q12"
+            }
+          ]
+        },
+        "q12": {
+          "text": "Do you blink frequently?",
+          "options": [
+            {
+              "text": "Rarely",
+              "score": 1,
+              "next": "q13"
+            },
+            {
+              "text": "Sometimes",
+              "score": 1,
+              "next": "q13"
+            },
+            {
+              "text": "Often",
+              "score": 2,
+              "next": "q13"
+            },
+            {
+              "text": "Very often",
+              "score": 3,
+              "next": "q13"
+            }
+          ]
+        },
+        "q13": {
+          "text": "Do you have headache with eye strain?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q14"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q14"
+            }
+          ]
+        },
+        "q14": {
+          "text": "Did you use eye drops?",
+          "options": [
+            {
+              "text": "Doctor prescribed",
+              "score": 1,
+              "next": "q15"
+            },
+            {
+              "text": "OTC drops",
+              "score": 1,
+              "next": "q15"
+            },
+            {
+              "text": "Home remedy",
+              "score": 1,
+              "next": "q15"
+            },
+            {
+              "text": "No treatment",
+              "score": 1,
+              "next": "q15"
+            }
+          ]
+        },
+        "q15": {
+          "text": "How long have symptoms lasted?",
+          "options": [
+            {
+              "text": "Less than 1 day",
+              "score": 1,
+              "next": "end"
+            },
+            {
+              "text": "1-2 days",
+              "score": 2,
+              "next": "end"
+            },
+            {
+              "text": "3-5 days",
+              "score": 3,
+              "next": "end"
+            },
+            {
+              "text": "More than 5 days",
+              "score": 4,
+              "next": "end"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "category": "headache",
+      "startQuestion": "q1",
+      "questions": {
+        "q1": {
+          "text": "Where is the headache located?",
+          "options": [
+            {
+              "text": "Forehead",
+              "score": 1,
+              "next": "q2"
+            },
+            {
+              "text": "One side",
+              "score": 2,
+              "next": "q2"
+            },
+            {
+              "text": "Back of head",
+              "score": 2,
+              "next": "q2"
+            },
+            {
+              "text": "Whole head",
+              "score": 3,
+              "next": "q2"
+            }
+          ]
+        },
+        "q2": {
+          "text": "When did the headache start?",
+          "options": [
+            {
+              "text": "Today",
+              "score": 1,
+              "next": "q3"
+            },
+            {
+              "text": "Yesterday",
+              "score": 2,
+              "next": "q3"
+            },
+            {
+              "text": "2-3 days ago",
+              "score": 3,
+              "next": "q3"
+            },
+            {
+              "text": "More than 3 days",
+              "score": 4,
+              "next": "q3"
+            }
+          ]
+        },
+        "q3": {
+          "text": "Do you feel nausea?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q4"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q4"
+            }
+          ]
+        },
+        "q4": {
+          "text": "Are you sensitive to light?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q5"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q5"
+            }
+          ]
+        },
+        "q5": {
+          "text": "Screen usage today?",
+          "options": [
+            {
+              "text": "Less than 2 hours",
+              "score": 1,
+              "next": "q6"
+            },
+            {
+              "text": "2-4 hours",
+              "score": 2,
+              "next": "q6"
+            },
+            {
+              "text": "4-6 hours",
+              "score": 3,
+              "next": "q6"
+            },
+            {
+              "text": "More than 6 hours",
+              "score": 4,
+              "next": "q6"
+            }
+          ]
+        },
+        "q6": {
+          "text": "Stress level?",
+          "options": [
+            {
+              "text": "Low",
+              "score": 1,
+              "next": "q7"
+            },
+            {
+              "text": "Medium",
+              "score": 2,
+              "next": "q7"
+            },
+            {
+              "text": "High",
+              "score": 3,
+              "next": "q7"
+            },
+            {
+              "text": "Very high",
+              "score": 4,
+              "next": "q7"
+            }
+          ]
+        },
+        "q7": {
+          "text": "Did you sleep poorly?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q8"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q8"
+            }
+          ]
+        },
+        "q8": {
+          "text": "Do you feel dizzy?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q9"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q9"
+            }
+          ]
+        },
+        "q9": {
+          "text": "Do you have blurred vision?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 5,
+              "redFlag": true,
+              "next": "end"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q10"
+            }
+          ]
+        },
+        "q10": {
+          "text": "Pain intensity?",
+          "options": [
+            {
+              "text": "Mild",
+              "score": 1,
+              "next": "q11"
+            },
+            {
+              "text": "Moderate",
+              "score": 2,
+              "next": "q11"
+            },
+            {
+              "text": "Severe",
+              "score": 3,
+              "next": "q11"
+            },
+            {
+              "text": "Very severe",
+              "score": 4,
+              "next": "q11"
+            }
+          ]
+        },
+        "q11": {
+          "text": "Does rest improve headache?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 1,
+              "next": "q12"
+            },
+            {
+              "text": "No",
+              "score": 2,
+              "next": "q12"
+            }
+          ]
+        },
+        "q12": {
+          "text": "Are you dehydrated?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q13"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q13"
+            }
+          ]
+        },
+        "q13": {
+          "text": "Does movement worsen pain?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q14"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q14"
+            }
+          ]
+        },
+        "q14": {
+          "text": "Did you take medicine?",
+          "options": [
+            {
+              "text": "Doctor medicine",
+              "score": 1,
+              "next": "q15"
+            },
+            {
+              "text": "OTC painkiller",
+              "score": 1,
+              "next": "q15"
+            },
+            {
+              "text": "Home remedy",
+              "score": 1,
+              "next": "q15"
+            },
+            {
+              "text": "No medicine",
+              "score": 1,
+              "next": "q15"
+            }
+          ]
+        },
+        "q15": {
+          "text": "Total headache duration?",
+          "options": [
+            {
+              "text": "Less than 1 hour",
+              "score": 1,
+              "next": "end"
+            },
+            {
+              "text": "1-6 hours",
+              "score": 2,
+              "next": "end"
+            },
+            {
+              "text": "6-12 hours",
+              "score": 3,
+              "next": "end"
+            },
+            {
+              "text": "More than 12 hours",
+              "score": 4,
+              "next": "end"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "category": "body_pain",
+      "startQuestion": "q1",
+      "questions": {
+        "q1": {
+          "text": "Where is the pain located?",
+          "options": [
+            {
+              "text": "Back",
+              "score": 2,
+              "next": "q2"
+            },
+            {
+              "text": "Legs",
+              "score": 2,
+              "next": "q2"
+            },
+            {
+              "text": "Arms",
+              "score": 1,
+              "next": "q2"
+            },
+            {
+              "text": "Whole body",
+              "score": 3,
+              "next": "q2"
+            }
+          ]
+        },
+        "q2": {
+          "text": "When did the pain start?",
+          "options": [
+            {
+              "text": "Today",
+              "score": 1,
+              "next": "q3"
+            },
+            {
+              "text": "Yesterday",
+              "score": 2,
+              "next": "q3"
+            },
+            {
+              "text": "More than 2 days",
+              "score": 3,
+              "next": "q3"
+            }
+          ]
+        },
+        "q3": {
+          "text": "Did it start after physical activity?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q4"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q4"
+            }
+          ]
+        },
+        "q4": {
+          "text": "Do you have swelling?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q5"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q5"
+            }
+          ]
+        },
+        "q5": {
+          "text": "Is the pain sharp or dull?",
+          "options": [
+            {
+              "text": "Sharp",
+              "score": 3,
+              "next": "q6"
+            },
+            {
+              "text": "Dull",
+              "score": 1,
+              "next": "q6"
+            }
+          ]
+        },
+        "q6": {
+          "text": "Does movement increase pain?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q7"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q7"
+            }
+          ]
+        },
+        "q7": {
+          "text": "Do you feel stiffness?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q8"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q8"
+            }
+          ]
+        },
+        "q8": {
+          "text": "Did you lift heavy weight recently?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q9"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q9"
+            }
+          ]
+        },
+        "q9": {
+          "text": "Do you have fever?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 4,
+              "redFlag": true,
+              "next": "end"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q10"
+            }
+          ]
+        },
+        "q10": {
+          "text": "Is the pain constant?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q11"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q11"
+            }
+          ]
+        },
+        "q11": {
+          "text": "Pain intensity?",
+          "options": [
+            {
+              "text": "Mild",
+              "score": 1,
+              "next": "q12"
+            },
+            {
+              "text": "Moderate",
+              "score": 2,
+              "next": "q12"
+            },
+            {
+              "text": "Severe",
+              "score": 4,
+              "next": "q12"
+            }
+          ]
+        },
+        "q12": {
+          "text": "Did you take pain medicine?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 1,
+              "next": "q13"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q13"
+            }
+          ]
+        },
+        "q13": {
+          "text": "Does rest help?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 1,
+              "next": "q14"
+            },
+            {
+              "text": "No",
+              "score": 3,
+              "next": "q14"
+            }
+          ]
+        },
+        "q14": {
+          "text": "Is there redness?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q15"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q15"
+            }
+          ]
+        },
+        "q15": {
+          "text": "Duration of pain?",
+          "options": [
+            {
+              "text": "Less than 1 day",
+              "score": 1,
+              "next": "end"
+            },
+            {
+              "text": "1-3 days",
+              "score": 2,
+              "next": "end"
+            },
+            {
+              "text": "More than 3 days",
+              "score": 3,
+              "next": "end"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "category": "stomach",
+      "startQuestion": "q1",
+      "questions": {
+        "q1": {
+          "text": "What stomach issue do you have?",
+          "options": [
+            {
+              "text": "Stomach pain",
+              "score": 2,
+              "next": "q2"
+            },
+            {
+              "text": "Gas",
+              "score": 1,
+              "next": "q2"
+            },
+            {
+              "text": "Acidity",
+              "score": 2,
+              "next": "q2"
+            },
+            {
+              "text": "Bloating",
+              "score": 1,
+              "next": "q2"
+            }
+          ]
+        },
+        "q2": {
+          "text": "When did it start?",
+          "options": [
+            {
+              "text": "Today",
+              "score": 1,
+              "next": "q3"
+            },
+            {
+              "text": "Yesterday",
+              "score": 2,
+              "next": "q3"
+            },
+            {
+              "text": "More than 2 days",
+              "score": 3,
+              "next": "q3"
+            }
+          ]
+        },
+        "q3": {
+          "text": "Did it start after eating outside food?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q4"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q4"
+            }
+          ]
+        },
+        "q4": {
+          "text": "Do you feel nausea?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q5"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q5"
+            }
+          ]
+        },
+        "q5": {
+          "text": "Do you have vomiting?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q6"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q6"
+            }
+          ]
+        },
+        "q6": {
+          "text": "Is there burning sensation?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q7"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q7"
+            }
+          ]
+        },
+        "q7": {
+          "text": "Do you feel bloated?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q8"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q8"
+            }
+          ]
+        },
+        "q8": {
+          "text": "Do you have diarrhea?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q9"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q9"
+            }
+          ]
+        },
+        "q9": {
+          "text": "Do you have fever?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 4,
+              "redFlag": true,
+              "next": "end"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q10"
+            }
+          ]
+        },
+        "q10": {
+          "text": "Is the pain sharp?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q11"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q11"
+            }
+          ]
+        },
+        "q11": {
+          "text": "Pain intensity?",
+          "options": [
+            {
+              "text": "Mild",
+              "score": 1,
+              "next": "q12"
+            },
+            {
+              "text": "Moderate",
+              "score": 2,
+              "next": "q12"
+            },
+            {
+              "text": "Severe",
+              "score": 4,
+              "next": "q12"
+            }
+          ]
+        },
+        "q12": {
+          "text": "Did you take antacid?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 1,
+              "next": "q13"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q13"
+            }
+          ]
+        },
+        "q13": {
+          "text": "Does food increase pain?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q14"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q14"
+            }
+          ]
+        },
+        "q14": {
+          "text": "Do you feel relief after rest?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 1,
+              "next": "q15"
+            },
+            {
+              "text": "No",
+              "score": 2,
+              "next": "q15"
+            }
+          ]
+        },
+        "q15": {
+          "text": "Duration of problem?",
+          "options": [
+            {
+              "text": "Few hours",
+              "score": 1,
+              "next": "end"
+            },
+            {
+              "text": "1-2 days",
+              "score": 2,
+              "next": "end"
+            },
+            {
+              "text": "More than 2 days",
+              "score": 3,
+              "next": "end"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "category": "fever",
+      "startQuestion": "q1",
+      "questions": {
+        "q1": {
+          "text": "What is your body temperature?",
+          "options": [
+            {
+              "text": "99-100 F",
+              "score": 1,
+              "next": "q2"
+            },
+            {
+              "text": "100-101 F",
+              "score": 2,
+              "next": "q2"
+            },
+            {
+              "text": "Above 101 F",
+              "score": 3,
+              "next": "q2"
+            }
+          ]
+        },
+        "q2": {
+          "text": "When did the fever start?",
+          "options": [
+            {
+              "text": "Today",
+              "score": 1,
+              "next": "q3"
+            },
+            {
+              "text": "Yesterday",
+              "score": 2,
+              "next": "q3"
+            },
+            {
+              "text": "More than 2 days",
+              "score": 3,
+              "next": "q3"
+            }
+          ]
+        },
+        "q3": {
+          "text": "Do you have chills?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q4"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q4"
+            }
+          ]
+        },
+        "q4": {
+          "text": "Do you feel weak?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q5"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q5"
+            }
+          ]
+        },
+        "q5": {
+          "text": "Do you have headache?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q6"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q6"
+            }
+          ]
+        },
+        "q6": {
+          "text": "Do you have body pain?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q7"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q7"
+            }
+          ]
+        },
+        "q7": {
+          "text": "Do you have cough?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q8"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q8"
+            }
+          ]
+        },
+        "q8": {
+          "text": "Do you have sore throat?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q9"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q9"
+            }
+          ]
+        },
+        "q9": {
+          "text": "Do you have vomiting?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q10"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q10"
+            }
+          ]
+        },
+        "q10": {
+          "text": "Do you have rash?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 4,
+              "redFlag": true,
+              "next": "end"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q11"
+            }
+          ]
+        },
+        "q11": {
+          "text": "Did you take fever medicine?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 1,
+              "next": "q12"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q12"
+            }
+          ]
+        },
+        "q12": {
+          "text": "Did fever reduce after medicine?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 1,
+              "next": "q13"
+            },
+            {
+              "text": "No",
+              "score": 3,
+              "next": "q13"
+            }
+          ]
+        },
+        "q13": {
+          "text": "Do you sweat a lot?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q14"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q14"
+            }
+          ]
+        },
+        "q14": {
+          "text": "Are you hydrated?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 1,
+              "next": "q15"
+            },
+            {
+              "text": "No",
+              "score": 2,
+              "next": "q15"
+            }
+          ]
+        },
+        "q15": {
+          "text": "Duration of fever?",
+          "options": [
+            {
+              "text": "Less than 1 day",
+              "score": 1,
+              "next": "end"
+            },
+            {
+              "text": "1-3 days",
+              "score": 2,
+              "next": "end"
+            },
+            {
+              "text": "More than 3 days",
+              "score": 4,
+              "next": "end"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "category": "cold_cough",
+      "startQuestion": "q1",
+      "questions": {
+        "q1": {
+          "text": "What symptom are you experiencing?",
+          "options": [
+            {
+              "text": "Cold",
+              "score": 1,
+              "next": "q2"
+            },
+            {
+              "text": "Dry cough",
+              "score": 2,
+              "next": "q2"
+            },
+            {
+              "text": "Wet cough",
+              "score": 2,
+              "next": "q2"
+            },
+            {
+              "text": "Both cold and cough",
+              "score": 3,
+              "next": "q2"
+            }
+          ]
+        },
+        "q2": {
+          "text": "When did the symptoms start?",
+          "options": [
+            {
+              "text": "Today",
+              "score": 1,
+              "next": "q3"
+            },
+            {
+              "text": "Yesterday",
+              "score": 2,
+              "next": "q3"
+            },
+            {
+              "text": "More than 2 days",
+              "score": 3,
+              "next": "q3"
+            }
+          ]
+        },
+        "q3": {
+          "text": "Do you have a runny nose?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q4"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q4"
+            }
+          ]
+        },
+        "q4": {
+          "text": "Do you have nasal congestion?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q5"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q5"
+            }
+          ]
+        },
+        "q5": {
+          "text": "Do you have sore throat?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q6"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q6"
+            }
+          ]
+        },
+        "q6": {
+          "text": "Is your cough dry or productive?",
+          "options": [
+            {
+              "text": "Dry cough",
+              "score": 2,
+              "next": "q7"
+            },
+            {
+              "text": "Productive (with mucus)",
+              "score": 3,
+              "next": "q7"
+            },
+            {
+              "text": "No cough",
+              "score": 1,
+              "next": "q7"
+            }
+          ]
+        },
+        "q7": {
+          "text": "Do you have mild fever?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q8"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q8"
+            }
+          ]
+        },
+        "q8": {
+          "text": "Do you feel body fatigue?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q9"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q9"
+            }
+          ]
+        },
+        "q9": {
+          "text": "Do you have chest pain while coughing?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 3,
+              "next": "q10"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q10"
+            }
+          ]
+        },
+        "q10": {
+          "text": "Do you have difficulty breathing?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 5,
+              "redFlag": true,
+              "next": "end"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q11"
+            }
+          ]
+        },
+        "q11": {
+          "text": "Do you sneeze frequently?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q12"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q12"
+            }
+          ]
+        },
+        "q12": {
+          "text": "Have you taken any cold medicine?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 1,
+              "next": "q13"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q13"
+            }
+          ]
+        },
+        "q13": {
+          "text": "Did the medicine improve symptoms?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 1,
+              "next": "q14"
+            },
+            {
+              "text": "No",
+              "score": 3,
+              "next": "q14"
+            }
+          ]
+        },
+        "q14": {
+          "text": "Are symptoms worse at night?",
+          "options": [
+            {
+              "text": "Yes",
+              "score": 2,
+              "next": "q15"
+            },
+            {
+              "text": "No",
+              "score": 1,
+              "next": "q15"
+            }
+          ]
+        },
+        "q15": {
+          "text": "How long have symptoms lasted?",
+          "options": [
+            {
+              "text": "Less than 2 days",
+              "score": 1,
+              "next": "end"
+            },
+            {
+              "text": "3-5 days",
+              "score": 2,
+              "next": "end"
+            },
+            {
+              "text": "More than 5 days",
+              "score": 3,
+              "next": "end"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
