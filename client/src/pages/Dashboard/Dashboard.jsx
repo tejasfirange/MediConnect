@@ -13,6 +13,7 @@ import {
   ShieldAlert,
   Sparkles,
   TrendingUp,
+  User,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -21,6 +22,7 @@ import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { getPatientHistory } from '../../services/patientService';
+import DoctorDashboard from './DoctorDashboard';
 import './Dashboard.css';
 
 function getGreetingKey() {
@@ -149,6 +151,14 @@ function Dashboard() {
       iconColor: 'text-violet-500',
     },
     {
+      to: '/my-consultations',
+      icon: User,
+      title: 'My Consultations',
+      desc: 'Check prescription status and review doctor advice.',
+      iconBg: isDark ? 'bg-emerald-500/20' : 'bg-emerald-100',
+      iconColor: 'text-emerald-500',
+    },
+    {
       to: '/dashboard',
       icon: Settings,
       title: t('actions.logoutTitle'),
@@ -158,6 +168,10 @@ function Dashboard() {
       onClick: handleLogout,
     },
   ];
+
+  if (user?.role === 'doctor') {
+    return <DoctorDashboard />;
+  }
 
   return (
     <div

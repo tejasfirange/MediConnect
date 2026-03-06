@@ -1,7 +1,11 @@
-const DEFAULT_MODEL = (process.env.CEREBRAS_MODEL || 'llama-3.3-70b').trim();
+const { OpenAI } = require('openai');
+
+const DEFAULT_MODEL = (process.env.CEREBRAS_MODEL || 'llama3.1-70b').trim();
+const OPENAI_MODEL = (process.env.OPENAI_MODEL || 'gpt-4o-mini').trim();
 const SUPPORTED_LANGUAGES = new Set(['en', 'mr']);
 
 let cerebrasClientPromise = null;
+let openaiClient = null;
 
 function normalizeLanguage(rawLanguage) {
   const value = String(rawLanguage || 'en').trim().toLowerCase();
@@ -63,6 +67,15 @@ async function getCerebrasClient() {
   return cerebrasClientPromise;
 }
 
+function getOpenAIClient() {
+  if (openaiClient) return openaiClient;
+  if (!process.env.OPENAI_API_KEY) return null;
+
+  openaiClient = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+  return openaiClient;
+}
 
 function buildPrompt({ language, result, category }) {
   const outputLanguage = language === 'mr' ? 'Marathi' : 'English';
@@ -70,17 +83,14 @@ function buildPrompt({ language, result, category }) {
   const responses = (result.responseDetails || [])
     .map((entry, index) => {
       const redFlag = entry.redFlag ? ' (RED FLAG)' : '';
-      return `${index + 1}. Question: ${entry.questionText}
-Answer: ${entry.selectedOptionText}
-Score: ${entry.score}${redFlag}`;
+      return `${index + 1}. Question: ${entry.questionText}\nAnswer: ${entry.selectedOptionText}\nScore: ${entry.score}${redFlag}`;
     })
     .join('\n\n');
 
   return {
     system: `
-You are a medical triage assistant generating patient-facing summaries.
-
-Your task is to explain a symptom assessment result clearly and responsibly.
+You are a medical triage assistant generating patient-facing summaries in Markdown format.
+Use headers, bullet points, and bold text for clarity.
 
 Rules:
 - DO NOT diagnose diseases.
@@ -89,15 +99,13 @@ Rules:
 - Use calm, supportive language.
 - Explain risk level logically based on symptoms and scoring.
 - Help the user understand what their responses mean.
-
-Your output must be informative, medically responsible, and easy for a non-medical user to understand.
+- ALWAYS use Markdown formatting.
 `,
 
     user: `
 Generate a comprehensive triage summary.
 
 Language: ${outputLanguage}
-
 Assessment Category: ${category}
 
 Assessment Result Data:
@@ -112,107 +120,93 @@ ${result.recommendation}
 User Responses:
 ${responses || 'No responses available'}
 
-Instructions:
-
-Write a detailed explanation with the following sections.
-
-1. Assessment Overview
-Explain what the system detected overall.
-
-2. Risk Interpretation
-Explain why the system classified the case as ${result.riskLevel}.
-Mention important contributing factors such as symptom duration, severity, or red flags.
-
-3. Key Symptoms Contributing to Risk
-Summarize the most important answers that influenced the assessment.
-
-4. Recommended Next Steps
-Explain what the user should do next in simple language.
-
-5. Warning Signs
-Explain situations where the user should seek urgent medical care.
+Instructions for Markdown:
+1. ### Assessment Overview
+   Explain what the system detected overall.
+2. ### Risk Interpretation
+   Explain why it is ${result.riskLevel}. Mention factors like red flags or duration.
+3. ### Key Contributing Symptoms
+   Use a bulleted list to summarize weights.
+4. ### Next Steps
+   Clear guidance.
+5. ### When to seek immediate care
+   Warning signs.
 
 Constraints:
-- 220 to 320 words
-- Friendly tone
-- Avoid medical jargon
-- Plain text only
+- 220 to 320 words.
+- Friendly, professional tone.
 `
   };
 }
-
 
 async function generateAssessmentSummary({ result, category, language }) {
   const normalizedLanguage = normalizeLanguage(language);
 
   if (!result?.completed) {
-    return {
-      language: normalizedLanguage,
-      text: null,
-      source: 'none',
-    };
+    return { language: normalizedLanguage, text: null, source: 'none' };
   }
 
-  if (!SUPPORTED_LANGUAGES.has(normalizedLanguage)) {
-    return {
-      language: 'en',
-      text: getFallbackSummary(result, 'en'),
-      source: 'fallback',
-    };
-  }
+  // 1. Try Cerebras
+  if (process.env.CEREBRAS_API_KEY) {
+    try {
+      const cerebras = await getCerebrasClient();
+      const prompt = buildPrompt({ language: normalizedLanguage, result, category });
 
-  if (!process.env.CEREBRAS_API_KEY) {
-    return {
-      language: normalizedLanguage,
-      text: getFallbackSummary(result, normalizedLanguage),
-      source: 'fallback',
-    };
-  }
+      console.log(`[Cerebras] Generating summary for ${category} using ${DEFAULT_MODEL}...`);
+      const completion = await cerebras.chat.completions.create({
+        model: DEFAULT_MODEL,
+        messages: [
+          { role: 'system', content: prompt.system },
+          { role: 'user', content: prompt.user }
+        ],
+        max_completion_tokens: 800,
+        temperature: 0.25,
+      });
 
-  try {
-    const cerebras = await getCerebrasClient();
-    const prompt = buildPrompt({ language: normalizedLanguage, result, category });
-
-    console.log(`[Cerebras] Generating summary for category: ${category} (${normalizedLanguage})...`);
-
-    const completion = await cerebras.chat.completions.create({
-      model: DEFAULT_MODEL,
-      messages: [
-        { role: 'system', content: prompt.system },
-        { role: 'user', content: prompt.user }
-      ],
-      max_completion_tokens: 700,
-      temperature: 0.25,
-      top_p: 1,
-    });
-
-    const text = completion?.choices?.[0]?.message?.content?.trim();
-    if (!text) {
-      console.warn('[Cerebras] Warning: Empty completion content. Falling back.');
-      return {
-        language: normalizedLanguage,
-        text: getFallbackSummary(result, normalizedLanguage),
-        source: 'fallback',
-      };
+      const text = completion?.choices?.[0]?.message?.content?.trim();
+      if (text) {
+        console.log(`[Cerebras] Success (${text.length} chars)`);
+        return { language: normalizedLanguage, text, source: 'cerebras' };
+      }
+    } catch (err) {
+      console.warn(`[Cerebras] Failed: ${err.message}`);
     }
-
-    console.log(`[Cerebras] Summary generated successfully (${text.length} chars).`);
-    return {
-      language: normalizedLanguage,
-      text,
-      source: 'cerebras',
-    };
-  } catch (_error) {
-    console.error('[Cerebras] Error generating summary:', _error.name, _error.message);
-    if (_error.response) {
-      console.error('[Cerebras] API Response:', _error.response.status, _error.response.data);
-    }
-    return {
-      language: normalizedLanguage,
-      text: getFallbackSummary(result, normalizedLanguage),
-      source: 'fallback',
-    };
   }
+
+  // 2. Try OpenAI
+  const openai = getOpenAIClient();
+  if (openai) {
+    try {
+      const prompt = buildPrompt({ language: normalizedLanguage, result, category });
+      console.log(`[OpenAI] Generating summary using ${OPENAI_MODEL}...`);
+      
+      const completion = await openai.chat.completions.create({
+        model: OPENAI_MODEL,
+        messages: [
+          { role: 'system', content: prompt.system },
+          { role: 'user', content: prompt.user }
+        ],
+        max_tokens: 800,
+        temperature: 0.3,
+      });
+
+      const text = completion?.choices?.[0]?.message?.content?.trim();
+      if (text) {
+        console.log(`[OpenAI] Success (${text.length} chars)`);
+        return { language: normalizedLanguage, text, source: 'openai' };
+      }
+    } catch (err) {
+      console.error(`[OpenAI] Failed: ${err.message}`);
+    }
+  }
+
+  // 3. Fallback
+  console.log('[Summary] Using fallback template.');
+  return {
+    language: normalizedLanguage,
+    text: getFallbackSummary(result, normalizedLanguage),
+    source: 'fallback',
+  };
 }
 
 module.exports = {
