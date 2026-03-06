@@ -1,0 +1,22 @@
+{
+  "brand": "MediConnect",
+  "nav": {
+    "features": "वैशिष्ट्ये",
+    "howItWorks": "हे कसे कार्य करते",
+    "forClinics": "क्लिनिकसाठी",
+    "signIn": "साइन इन",
+    "getStarted": "सुरू करा",
+    "menu": "मेनू",
+    "themeLight": "लाइट",
+    "themeDark": "डार्क",
+    "language": "भाषा",
+    "english": "इंग्रजी",
+    "marathi": "मराठी"
+  },
+  "footer": {
+    "rights": "सर्व हक्क राखीव.",
+    "privacy": "गोपनीयता",
+    "terms": "अटी",
+    "contact": "संपर्क"
+  }
+}

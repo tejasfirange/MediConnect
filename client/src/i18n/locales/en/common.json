@@ -1,0 +1,22 @@
+{
+  "brand": "MediConnect",
+  "nav": {
+    "features": "Features",
+    "howItWorks": "How It Works",
+    "forClinics": "For Clinics",
+    "signIn": "Sign In",
+    "getStarted": "Get Started",
+    "menu": "Menu",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "language": "Language",
+    "english": "English",
+    "marathi": "Marathi"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "contact": "Contact"
+  }
+}
