@@ -12,6 +12,27 @@ import {
 } from '../../services/assessmentService';
 import './Assessment.css';
 
+// Asset Imports
+import skinImg from '../../assets/skin care.png';
+import eyeImg from '../../assets/eye.png';
+import headacheImg from '../../assets/headache.png';
+import bodyPainImg from '../../assets/body_pain.png';
+import stomachImg from '../../assets/stomach_pain.png';
+import feverImg from '../../assets/fever.png';
+import coughImg from '../../assets/cough.png';
+import hairImg from '../../assets/hair.png';
+
+const categoryImageMap = {
+  skin: skinImg,
+  eye: eyeImg,
+  headache: headacheImg,
+  body_pain: bodyPainImg,
+  stomach: stomachImg,
+  fever: feverImg,
+  cold_cough: coughImg,
+  hair: hairImg,
+};
+
 const categoryLabelMap = {
   en: {
     skin: 'Skin',
@@ -188,28 +209,52 @@ function Assessment() {
           </p>
 
           {!selectedCategory ? (
-            <div className="mt-6 space-y-4">
-              <div className="flex justify-end">
+            <div className="mt-8 space-y-6">
+              <div className="flex justify-between items-center">
+                <h2 className={`text-xs font-black uppercase tracking-[0.2em] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Select Specialization</h2>
                 <button
                   onClick={() => navigate('/dashboard')}
-                  className={`rounded-xl border px-4 py-2 text-sm font-semibold ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                     isDark
-                      ? 'border-slate-600 text-slate-100 hover:bg-slate-800'
-                      : 'border-slate-300 text-slate-700 hover:bg-slate-100'
+                      ? 'bg-slate-800 text-slate-400 hover:text-white border border-slate-700'
+                      : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'
                   }`}
                 >
                   Back to Dashboard
                 </button>
               </div>
-              <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                 {categories.map((category) => (
                   <button
                     key={category.key}
                     onClick={() => startAssessment(category.key)}
                     disabled={loading}
-                    className="rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-left font-semibold text-slate-800 transition hover:border-blue-300 hover:bg-blue-50 disabled:opacity-60"
+                    className={`group relative flex flex-col items-center overflow-hidden rounded-[2rem] border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
+                      isDark 
+                        ? 'border-slate-800 bg-slate-900 hover:border-blue-500/50' 
+                        : 'border-slate-100 bg-white hover:border-blue-200'
+                    } disabled:opacity-60`}
                   >
-                    {getCategoryDisplayLabel(category.key, category.label, i18n.language)}
+                    {/* Image Container */}
+                    <div className={`w-full aspect-square overflow-hidden border-b ${
+                      isDark ? 'bg-slate-800 border-slate-800' : 'bg-slate-50 border-slate-50'
+                    }`}>
+                      <img 
+                        src={categoryImageMap[category.key] || hairImg} 
+                        alt={category.label}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    </div>
+                    
+                    {/* Content Section */}
+                    <div className="p-4 w-full text-center">
+                      <p className={`text-[11px] font-black uppercase tracking-widest ${
+                        isDark ? 'text-slate-400 group-hover:text-blue-400' : 'text-slate-500 group-hover:text-blue-600'
+                      }`}>
+                        {getCategoryDisplayLabel(category.key, category.label, i18n.language)}
+                      </p>
+                    </div>
                   </button>
                 ))}
               </div>
