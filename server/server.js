@@ -15,6 +15,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use('/api/assessment', assessmentRoutes);
 
 app.use("/api/auth", authRoutes);
@@ -26,6 +27,21 @@ app.get('/api/health', (_req, res) => {
     status: 'ok',
     message: 'MediConnect backend is running'
   });
+});
+
+app.get("/reset-password/:token", (req, res) => {
+
+    const token = req.params.token;
+
+    res.send(`
+        <h2>Reset Password</h2>
+        <form method="POST" action="/api/auth/reset-password">
+            <input type="hidden" name="token" value="${token}" />
+            <input type="password" name="newPassword" placeholder="New Password" required />
+            <button type="submit">Reset Password</button>
+        </form>
+    `);
+
 });
 
 app.listen(PORT, () => {
