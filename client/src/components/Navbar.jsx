@@ -1,20 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Globe, LogOut, Menu, Moon, Sun, User, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { toast } from 'react-toastify';
 
 function Navbar() {
   const { t, i18n } = useTranslation('common');
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
   const { isDark, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [language, setLanguage] = useState(() => {
     const saved = localStorage.getItem('mediconnect-language');
     return saved === 'mr' || saved === 'en' ? saved : 'en';
   });
   const languageMenuRef = useRef(null);
+  const profileMenuRef = useRef(null);
   const location = useLocation();
   const onLanding = location.pathname === '/';
   const onDashboard = location.pathname.startsWith('/dashboard');
@@ -30,6 +35,8 @@ function Navbar() {
     { code: 'mr', label: t('nav.marathi') },
   ];
 
+  const userInitial = user?.email?.charAt(0)?.toUpperCase() || 'U';
+
   useEffect(() => {
     localStorage.setItem('mediconnect-language', language);
     i18n.changeLanguage(language);
@@ -40,36 +47,56 @@ function Navbar() {
       if (languageMenuRef.current && !languageMenuRef.current.contains(event.target)) {
         setLanguageOpen(false);
       }
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+        setProfileOpen(false);
+      }
     }
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const handleLogout = () => {
+    setProfileOpen(false);
+    logout();
+    toast.info('Logged out successfully');
+    navigate('/login');
+  };
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
   return (
     <header
-      className={`sticky top-0 z-50 border-b backdrop-blur ${
-        isDark ? 'border-slate-700 bg-slate-900/85' : 'border-blue-100/80 bg-white/85'
+      className={`sticky top-0 z-50 backdrop-blur-xl transition-colors duration-300 ${
+        isDark
+          ? 'border-b border-slate-800/80 bg-slate-950/80'
+          : 'border-b border-slate-200/60 bg-white/80'
       }`}
+      style={{ WebkitBackdropFilter: 'blur(16px)' }}
     >
       <nav className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 md:px-6">
-        <Link to="/" className="group inline-flex items-center gap-2">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-sm font-bold text-white transition-transform duration-200 group-hover:scale-105">
+        {/* ─── Logo ─── */}
+        <Link to="/" className="group inline-flex items-center gap-2.5">
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-blue-500 text-sm font-bold text-white shadow-md shadow-blue-500/25 transition-transform duration-200 group-hover:scale-105">
             M
           </span>
-          <span className={`text-lg font-semibold tracking-tight ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+          <span className={`text-lg font-bold tracking-tight ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
             {t('brand')}
           </span>
         </Link>
 
-        <ul className="hidden items-center gap-8 md:flex">
+        {/* ─── Desktop Nav Links ─── */}
+        <ul className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => (
             <li key={item.key}>
               <a
                 href={item.href}
-                onClick={() => setMenuOpen(false)}
-                className={`text-sm font-medium transition-colors duration-200 hover:text-blue-600 ${
-                  isDark ? 'text-slate-300' : 'text-slate-600'
+                className={`rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
+                  isDark
+                    ? 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-100'
+                    : 'text-slate-500 hover:bg-slate-100/80 hover:text-slate-900'
                 }`}
               >
                 {t(item.key)}
@@ -78,28 +105,27 @@ function Navbar() {
           ))}
         </ul>
 
-        <div className="hidden items-center gap-3 md:flex">
+        {/* ─── Desktop Right Section ─── */}
+        <div className="hidden items-center gap-2 md:flex">
+          {/* Language Switcher */}
           <div className="relative" ref={languageMenuRef}>
             <button
               onClick={() => setLanguageOpen((prev) => !prev)}
-              className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition ${
+              className={`inline-flex h-9 w-9 items-center justify-center rounded-xl transition-all duration-200 ${
                 isDark
-                  ? 'border-slate-600 text-slate-100 hover:bg-slate-800'
-                  : 'border-slate-300 text-slate-700 hover:bg-slate-100'
+                  ? 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
+                  : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
               }`}
               aria-label={t('nav.language')}
+              title={language === 'en' ? t('nav.english') : t('nav.marathi')}
             >
-              <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="9" />
-                <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" />
-              </svg>
-              {language === 'en' ? t('nav.english') : t('nav.marathi')}
+              <Globe size={18} />
             </button>
 
             {languageOpen && (
               <div
-                className={`absolute right-0 mt-2 w-40 rounded-lg border p-1 shadow-lg ${
-                  isDark ? 'border-slate-700 bg-slate-900' : 'border-slate-200 bg-white'
+                className={`absolute right-0 mt-2 w-40 overflow-hidden rounded-xl border p-1 shadow-xl transition-all ${
+                  isDark ? 'border-slate-700 bg-slate-900 shadow-black/30' : 'border-slate-200 bg-white shadow-slate-200/80'
                 }`}
               >
                 {languages.map((item) => {
@@ -111,12 +137,20 @@ function Navbar() {
                         setLanguage(item.code);
                         setLanguageOpen(false);
                       }}
-                      className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm ${
-                        isDark ? 'text-slate-200 hover:bg-slate-800' : 'text-slate-700 hover:bg-blue-50'
+                      className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium transition ${
+                        selected
+                          ? isDark
+                            ? 'bg-blue-500/10 text-blue-400'
+                            : 'bg-blue-50 text-blue-600'
+                          : isDark
+                          ? 'text-slate-300 hover:bg-slate-800'
+                          : 'text-slate-600 hover:bg-slate-50'
                       }`}
                     >
                       <span>{item.label}</span>
-                      <span className="text-blue-600">{selected ? '\u2713' : ''}</span>
+                      {selected && (
+                        <span className="text-blue-500">✓</span>
+                      )}
                     </button>
                   );
                 })}
@@ -124,46 +158,101 @@ function Navbar() {
             )}
           </div>
 
+          {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className={`rounded-lg border px-4 py-2 text-sm font-semibold transition ${
+            className={`inline-flex h-9 w-9 items-center justify-center rounded-xl transition-all duration-200 ${
               isDark
-                ? 'border-slate-600 text-slate-100 hover:bg-slate-800'
-                : 'border-slate-300 text-slate-700 hover:bg-slate-100'
+                ? 'text-slate-400 hover:bg-slate-800 hover:text-amber-400'
+                : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
             }`}
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={isDark ? t('nav.themeLight') : t('nav.themeDark')}
           >
-            {isDark ? t('nav.themeLight') : t('nav.themeDark')}
+            {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
+
+          {/* Auth Section */}
           {isAuthenticated ? (
             <>
-              <div className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 ${isDark ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-700'}`}>
-                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
-                  {user?.email?.charAt(0)?.toUpperCase() || 'U'}
-                </span>
-                <span className="max-w-40 truncate text-xs font-semibold">{user?.email || 'User'}</span>
+              {!onDashboard && (
+                <Link
+                  to="/dashboard"
+                  className="ml-1 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/30"
+                >
+                  Dashboard
+                </Link>
+              )}
+
+              {/* Profile Avatar + Dropdown */}
+              <div className="relative" ref={profileMenuRef}>
+                <button
+                  onClick={() => setProfileOpen((prev) => !prev)}
+                  className="ml-1 inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-blue-500 text-sm font-bold text-white shadow-md shadow-blue-500/20 transition-transform duration-200 hover:scale-105"
+                  aria-label="Profile menu"
+                >
+                  {userInitial}
+                </button>
+
+                {profileOpen && (
+                  <div
+                    className={`absolute right-0 mt-2 w-56 overflow-hidden rounded-xl border p-1.5 shadow-xl ${
+                      isDark ? 'border-slate-700 bg-slate-900 shadow-black/30' : 'border-slate-200 bg-white shadow-slate-200/80'
+                    }`}
+                  >
+                    {/* User info */}
+                    <div className={`rounded-lg px-3 py-2.5 ${isDark ? 'bg-slate-800/60' : 'bg-slate-50'}`}>
+                      <p className={`text-xs font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Signed in as</p>
+                      <p className={`mt-0.5 truncate text-sm font-semibold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+                        {user?.email || 'User'}
+                      </p>
+                    </div>
+
+                    <div className={`my-1.5 h-px ${isDark ? 'bg-slate-700/60' : 'bg-slate-200/80'}`} />
+
+                    {/* Dashboard link (if not on dashboard) */}
+                    {!onDashboard && (
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setProfileOpen(false)}
+                        className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                          isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-50'
+                        }`}
+                      >
+                        <User size={16} />
+                        Dashboard
+                      </Link>
+                    )}
+
+                    {/* Logout */}
+                    <button
+                      onClick={handleLogout}
+                      className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                        isDark ? 'text-red-400 hover:bg-red-500/10' : 'text-red-600 hover:bg-red-50'
+                      }`}
+                    >
+                      <LogOut size={16} />
+                      Log out
+                    </button>
+                  </div>
+                )}
               </div>
-              <Link
-                to="/dashboard"
-                className={`rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition ${
-                  onDashboard
-                    ? 'bg-blue-600 text-white'
-                    : 'border border-blue-200 text-blue-700 hover:border-blue-300 hover:bg-blue-50'
-                }`}
-              >
-                Dashboard
-              </Link>
             </>
           ) : (
             <>
               <Link
                 to="/login"
-                className="rounded-lg border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50"
+                className={`ml-1 rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-200 ${
+                  isDark
+                    ? 'text-slate-300 hover:bg-slate-800 hover:text-slate-100'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                }`}
               >
                 {t('nav.signIn')}
               </Link>
               <Link
                 to="/register"
-                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+                className="rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/30"
               >
                 {t('nav.getStarted')}
               </Link>
@@ -171,29 +260,36 @@ function Navbar() {
           )}
         </div>
 
+        {/* ─── Mobile Menu Button ─── */}
         <button
           onClick={() => setMenuOpen((prev) => !prev)}
-          className={`inline-flex rounded-lg border p-2 transition md:hidden ${
+          className={`inline-flex h-9 w-9 items-center justify-center rounded-xl transition md:hidden ${
             isDark
-              ? 'border-slate-600 text-slate-100 hover:bg-slate-800'
-              : 'border-blue-200 text-slate-700 hover:bg-blue-50'
+              ? 'text-slate-300 hover:bg-slate-800'
+              : 'text-slate-600 hover:bg-slate-100'
           }`}
           aria-label="Toggle menu"
         >
-          <span className="text-sm font-semibold">{t('nav.menu')}</span>
+          {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </nav>
 
+      {/* ─── Mobile Menu ─── */}
       {menuOpen && (
-        <div className={`border-t px-4 py-3 md:hidden ${isDark ? 'border-slate-700 bg-slate-900' : 'border-blue-100 bg-white'}`}>
-          <ul className="space-y-3">
+        <div
+          className={`border-t px-4 pb-4 pt-3 md:hidden ${
+            isDark ? 'border-slate-800 bg-slate-950/95' : 'border-slate-200/60 bg-white/95'
+          }`}
+          style={{ WebkitBackdropFilter: 'blur(16px)', backdropFilter: 'blur(16px)' }}
+        >
+          <ul className="space-y-1">
             {navItems.map((item) => (
               <li key={item.key}>
                 <a
                   href={item.href}
                   onClick={() => setMenuOpen(false)}
-                  className={`block rounded-lg px-3 py-2 text-sm font-medium transition hover:text-blue-600 ${
-                    isDark ? 'text-slate-200 hover:bg-slate-800' : 'text-slate-700 hover:bg-blue-50'
+                  className={`block rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                    isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'
                   }`}
                 >
                   {t(item.key)}
@@ -201,43 +297,69 @@ function Navbar() {
               </li>
             ))}
           </ul>
-          <div className="mt-4 flex gap-2">
+
+          <div className="mt-3 flex items-center gap-2 border-t pt-3" style={{ borderColor: isDark ? 'rgb(30 41 59 / 0.6)' : 'rgb(226 232 240 / 0.6)' }}>
+            {/* Language toggle */}
             <button
               onClick={() => setLanguage((prev) => (prev === 'en' ? 'mr' : 'en'))}
-              className={`w-1/2 rounded-lg border px-3 py-2 text-sm font-semibold ${
-                isDark ? 'border-slate-600 text-slate-100' : 'border-slate-300 text-slate-700'
+              className={`inline-flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
-              {language === 'en' ? `${t('nav.english')} \u2713` : `${t('nav.marathi')} \u2713`}
+              <Globe size={16} />
+              {language === 'en' ? t('nav.english') : t('nav.marathi')}
             </button>
+
+            {/* Theme toggle */}
             <button
               onClick={toggleTheme}
-              className={`w-1/2 rounded-lg border px-3 py-2 text-sm font-semibold ${
-                isDark ? 'border-slate-600 text-slate-100' : 'border-slate-300 text-slate-700'
+              className={`inline-flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
+              {isDark ? <Sun size={16} /> : <Moon size={16} />}
               {isDark ? t('nav.themeLight') : t('nav.themeDark')}
             </button>
+          </div>
+
+          <div className="mt-3 flex items-center gap-2">
             {isAuthenticated ? (
               <>
-                <div className={`w-full rounded-lg px-3 py-2 text-center text-xs font-semibold ${isDark ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-700'}`}>
-                  {user?.email || 'User'}
-                </div>
-                <Link
-                  to="/dashboard"
-                  className={`w-full rounded-lg px-3 py-2 text-center text-sm font-semibold ${
-                    onDashboard ? 'bg-blue-600 text-white' : 'border border-blue-200 text-blue-700'
+                {!onDashboard && (
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex-1 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 px-3 py-2.5 text-center text-sm font-semibold text-white shadow-md shadow-blue-500/20"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className={`flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                    isDark ? 'text-red-400 hover:bg-red-500/10' : 'text-red-600 hover:bg-red-50'
                   }`}
                 >
-                  Dashboard
-                </Link>
+                  <LogOut size={16} />
+                  Log out
+                </button>
               </>
             ) : (
               <>
-                <Link to="/login" className="w-1/2 rounded-lg border border-blue-200 px-3 py-2 text-center text-sm font-semibold text-blue-700">
+                <Link
+                  to="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className={`flex-1 rounded-xl px-3 py-2.5 text-center text-sm font-semibold transition ${
+                    isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'
+                  }`}
+                >
                   {t('nav.signIn')}
                 </Link>
-                <Link to="/register" className="w-1/2 rounded-lg bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white">
+                <Link
+                  to="/register"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex-1 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 px-3 py-2.5 text-center text-sm font-semibold text-white shadow-md shadow-blue-500/20"
+                >
                   {t('nav.getStarted')}
                 </Link>
               </>
