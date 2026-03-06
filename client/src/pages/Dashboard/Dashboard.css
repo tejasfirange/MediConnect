@@ -259,3 +259,122 @@
   background: rgba(148, 163, 184, 0.3);
   border-radius: 3px;
 }
+
+/* ── Premium Markdown & Prescription Styling ── */
+.markdown-wrapper {
+  line-height: 1.7;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.markdown-wrapper h1, 
+.markdown-wrapper h2, 
+.markdown-wrapper h3 {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-heading, #0f172a);
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.dashboard-page--dark .markdown-wrapper h1,
+.dashboard-page--dark .markdown-wrapper h2,
+.dashboard-page--dark .markdown-wrapper h3 {
+  color: #f1f5f9;
+}
+
+.markdown-wrapper h3 { font-size: 1.1rem; border-left: 3px solid #3b82f6; padding-left: 0.75rem; }
+
+.markdown-wrapper p {
+  margin-bottom: 1rem;
+}
+
+.markdown-wrapper ul, 
+.markdown-wrapper ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.25rem;
+}
+
+.markdown-wrapper li {
+  margin-bottom: 0.5rem;
+}
+
+/* ── Enhanced Tables for Medical Data ── */
+.markdown-wrapper table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.5rem 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  font-size: 0.875rem;
+}
+
+.markdown-wrapper th {
+  background: rgba(59, 130, 246, 0.05);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.markdown-wrapper td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  vertical-align: top;
+}
+
+.markdown-wrapper tr:last-child td {
+  border-bottom: none;
+}
+
+.dashboard-page--dark .markdown-wrapper th {
+  background: rgba(59, 130, 246, 0.1);
+  color: #94a3b8;
+}
+
+/* ── Glassmorphism Panels ── */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.dashboard-page--dark .glass-panel {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ── Consultation Detail Specifics ── */
+.prescription-card {
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.05),
+    0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s ease;
+}
+
+.consultation-id-badge {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.doctor-info-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 16px;
+  background: rgba(59, 130, 246, 0.05);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.dashboard-page--dark .doctor-info-bar {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.15);
+}

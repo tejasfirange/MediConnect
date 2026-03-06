@@ -12,6 +12,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import ResetPassword from './pages/ForgotPassword/ResetPassword'; 
+import MyConsultations from './pages/Dashboard/MyConsultations';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
@@ -74,10 +75,17 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route
+        path="/my-consultations"
+        element={
+          <ProtectedRoute>
+            <MyConsultations />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
-
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
