@@ -8,6 +8,10 @@ const authRoutes = require("./routes/authRoutes");
 const patientRoutes = require("./routes/patientRoutes");
 const doctorRoutes = require("./routes/doctorRoutes");
 const consultationRoutes = require('./routes/consultationRoutes');
+const { runMigration } = require('./services/migrationService');
+
+// Run DB migrations at startup
+runMigration();
 
 const app = express();
 
