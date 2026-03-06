@@ -12,6 +12,13 @@ import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import ResetPassword from './pages/ForgotPassword/ResetPassword'; 
+import HealthTools from './pages/HealthTests/HealthTools';
+import BMI from './pages/HealthTests/BMI';
+import LungTest from './pages/HealthTests/LungTest';
+import ReactionTest from './pages/HealthTests/ReactionTest';
+import Hydration from './pages/HealthTests/Hydration';
+import StressQuiz from './pages/HealthTests/StressQuiz';
+import MemoryStrength  from './pages/HealthTests/memorystrenth';  
 import MyConsultations from './pages/Dashboard/MyConsultations';
 import Profile from './pages/Profile/Profile';
 
@@ -97,7 +104,21 @@ function AppRoutes() {
       />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="/tests" element={<HealthTools />} />
+
+        <Route path="/bmi" element={<BMI />} />
+
+        <Route path="/lungs" element={<LungTest />} />
+
+        {/* <Route path="/eye" element={<EyeTest />} /> */}
+
+        <Route path="/reaction" element={<ReactionTest />} />
+
+        <Route path="/hydration" element={<Hydration />} />
+
+        <Route path="/stress" element={<StressQuiz />} />
+        <Route path="/memory" element={<MemoryStrength />} />
+
     </Routes>
   );
 }
