@@ -8,7 +8,7 @@ const {
   getPatientHistoryById,
 } = require("../controllers/patientController");
 
-router.post("/register-patient", authMiddleware, registerPatient);
+router.post("/register-patient",registerPatient);
 router.get("/me", authMiddleware, getPatientProfile);
 router.get("/history", authMiddleware, getPatientHistory);
 router.get("/history/:id", authMiddleware, getPatientHistoryById);
