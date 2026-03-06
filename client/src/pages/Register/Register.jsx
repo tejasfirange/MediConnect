@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
+import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { registerStepOne, registerStepTwo } from '../../services/authService';
@@ -43,12 +42,16 @@ function Register() {
     setError('');
 
     if (stepOne.password.length < 6) {
-      setError('Password must be at least 6 characters.');
+      const message = 'Password must be at least 6 characters.';
+      setError(message);
+      toast.error(message);
       return;
     }
 
     if (stepOne.password !== stepOne.confirmPassword) {
-      setError('Password and confirm password do not match.');
+      const message = 'Password and confirm password do not match.';
+      setError(message);
+      toast.error(message);
       return;
     }
 
@@ -61,8 +64,11 @@ function Register() {
 
       setRegistrationToken(data.registrationToken);
       setStep(2);
+      toast.success('Step 1 complete. Please add your profile details.');
     } catch (err) {
-      setError(err.message);
+      const message = err.message || 'Registration failed';
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -73,12 +79,16 @@ function Register() {
     setError('');
 
     if (!details.name.trim()) {
-      setError('Name is required.');
+      const message = 'Name is required.';
+      setError(message);
+      toast.error(message);
       return;
     }
 
     if (role === 'doctor' && !details.registration_no.trim()) {
-      setError('Doctor registration number is required.');
+      const message = 'Doctor registration number is required.';
+      setError(message);
+      toast.error(message);
       return;
     }
 
@@ -103,9 +113,12 @@ function Register() {
 
       const data = await registerStepTwo(payload);
       login({ token: data.token, user: data.user });
+      toast.success('Registration successful');
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message);
+      const message = err.message || 'Registration failed';
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -113,8 +126,7 @@ function Register() {
 
   return (
     <div className={`register-page min-h-screen ${isDark ? 'bg-slate-950' : 'bg-slate-50'}`}>
-      <Navbar />
-      <main className="mx-auto w-full max-w-3xl px-4 py-10 md:px-6">
+      <main className="mx-auto flex min-h-screen w-full max-w-3xl items-center justify-center px-4 py-8 md:px-6">
         <div className={`rounded-3xl border p-6 shadow-sm md:p-8 ${panelClass}`}>
           <h1 className="text-2xl font-bold">Create account</h1>
           <p className={`mt-1 text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
@@ -276,7 +288,6 @@ function Register() {
           </p>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

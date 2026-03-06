@@ -1,4 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Landing from './pages/Landing/Landing';
 import Register from './pages/Register/Register';
 import Login from './pages/Login/Login';
@@ -53,6 +55,7 @@ function App() {
         <BrowserRouter>
           <AppRoutes />
         </BrowserRouter>
+        <ToastContainer position="top-right" autoClose={3000} newestOnTop pauseOnFocusLoss={false} />
       </AuthProvider>
     </ThemeProvider>
   );
