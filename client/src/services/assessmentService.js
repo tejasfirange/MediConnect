@@ -30,12 +30,12 @@ export async function getInitialQuestion(category) {
   }
 }
 
-export async function evaluateAssessment(category, answers) {
+export async function evaluateAssessment(category, answers, persist = false) {
   try {
     const language = localStorage.getItem('mediconnect-language') || 'en';
     const response = await api.post(
       '/assessment/evaluate',
-      { category, answers, language },
+      { category, answers, language, persist },
       {
         headers: {
           'x-language': language,

@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Zap, Timer, AlertCircle, Trophy, RotateCcw, Brain, Info, Play } from "lucide-react";
+import { Zap, Timer, AlertCircle, Trophy, RotateCcw, Brain, Info, Play, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import reactionBg from "../../assets/reactionbg.png";
 
 export default function ReactionTest() {
+  const navigate = useNavigate();
   const [gameState, setGameState] = useState("idle"); 
   const [startTime, setStartTime] = useState(0);
   const [reactionTime, setReactionTime] = useState(null);
@@ -66,9 +68,18 @@ export default function ReactionTest() {
               <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-1">Reflex Lab</p>
             </div>
           </div>
-          <button onClick={() => {setGameState("idle"); setError(false);}} className="p-2 text-slate-300 hover:text-blue-500 transition-colors">
-            <RotateCcw size={20} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => navigate('/tests')}
+              className="p-2 text-slate-300 hover:text-blue-500 transition-colors"
+              title="Back to Tools"
+            >
+              <ArrowLeft size={20} />
+            </button>
+            <button onClick={() => {setGameState("idle"); setError(false);}} className="p-2 text-slate-300 hover:text-blue-500 transition-colors">
+              <RotateCcw size={20} />
+            </button>
+          </div>
         </div>
 
         {/* Interaction Pad */}

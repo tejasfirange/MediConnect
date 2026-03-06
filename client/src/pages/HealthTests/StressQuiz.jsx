@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Brain, ArrowRight, RefreshCcw, ShieldAlert, Zap, Info, Thermometer, Activity } from "lucide-react";
+import { Brain, ArrowRight, RefreshCcw, ShieldAlert, Zap, Info, Thermometer, Activity, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import stressBg from "../../assets/stressbg.jpeg";
 
 export default function StressQuiz() {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
@@ -84,11 +86,20 @@ export default function StressQuiz() {
               <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1.5">Neuro-Diagnostic</p>
             </div>
           </div>
-          {showResult && (
-            <button onClick={() => {setCurrentStep(0); setTotalScore(0); setShowResult(false);}} className="p-2 text-slate-300 hover:text-indigo-600 transition-colors">
-              <RefreshCcw size={20} />
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => navigate('/tests')}
+              className="p-2 text-slate-300 hover:text-indigo-600 transition-colors"
+              title="Back to Tools"
+            >
+              <ArrowLeft size={20} />
             </button>
-          )}
+            {showResult && (
+              <button onClick={() => {setCurrentStep(0); setTotalScore(0); setShowResult(false);}} className="p-2 text-slate-300 hover:text-indigo-600 transition-colors">
+                <RefreshCcw size={20} />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Diagnostic Area */}

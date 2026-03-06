@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Droplets, RefreshCw, AlertCircle, Info } from "lucide-react";
+import { Droplets, RefreshCw, AlertCircle, Info, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import hydrationBg from "../../assets/hydrationbg.jpeg";
 
 export default function HydrationApp() {
+  const navigate = useNavigate();
   const [weight, setWeight] = useState("");
   const [waterGoal, setWaterGoal] = useState(null);
   const [error, setError] = useState("");
@@ -74,6 +76,13 @@ export default function HydrationApp() {
               <h1 className="text-xl font-black text-slate-800 tracking-tight leading-none">Hydration</h1>
               <p className="text-slate-400 text-[10px] font-bold mt-1 uppercase tracking-widest">Intake Tracker</p>
             </div>
+            <button 
+              onClick={() => navigate('/tests')}
+              className="ml-auto text-slate-300 hover:text-blue-600 transition-colors"
+              title="Back to Tools"
+            >
+              <ArrowLeft size={20} />
+            </button>
           </div>
 
           <div className="space-y-4">

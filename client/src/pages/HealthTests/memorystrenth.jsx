@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Brain, Play, RefreshCw, Trophy, AlertCircle, Zap } from "lucide-react";
+import { Brain, Play, RefreshCw, Trophy, AlertCircle, Zap, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import memorybg from "../../assets/memorybg.png";
 
 export default function MemoryStrength() {
+  const navigate = useNavigate();
   const [sequence, setSequence] = useState([]);
   const [userSequence, setUserSequence] = useState([]);
   const [isDisplaying, setIsDisplaying] = useState(false);
@@ -70,6 +72,13 @@ export default function MemoryStrength() {
             <h1 className="text-xl font-black text-slate-800 leading-none tracking-tight">CogniRecall</h1>
             <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1.5">Synaptic Index</p>
           </div>
+          <button 
+            onClick={() => navigate('/tests')}
+            className="p-2 text-slate-300 hover:text-purple-600 transition-colors mr-2"
+            title="Back to Tools"
+          >
+            <ArrowLeft size={20} />
+          </button>
           <div className="bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100 text-center">
             <span className="text-[10px] font-black text-slate-300 uppercase block leading-none mb-1">Streak</span>
             <span className="text-2xl font-black text-purple-600 leading-none">{score}</span>

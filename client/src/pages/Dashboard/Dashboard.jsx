@@ -12,6 +12,7 @@ import {
   Settings,
   ShieldAlert,
   Sparkles,
+  Target,
   TrendingUp,
   User,
 } from 'lucide-react';
@@ -159,6 +160,14 @@ function Dashboard() {
       desc: t('actions.viewHistoryDesc'),
       iconBg: isDark ? 'bg-violet-500/20' : 'bg-violet-100',
       iconColor: 'text-violet-500',
+    },
+    {
+      to: '/tests',
+      icon: Target,
+      title: 'Health Tools',
+      desc: 'Quick diagnostics like BMI, Stress, and Lung tests.',
+      iconBg: isDark ? 'bg-blue-500/20' : 'bg-blue-50',
+      iconColor: 'text-blue-500',
     },
     {
       to: '/my-consultations',

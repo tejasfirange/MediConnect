@@ -80,7 +80,7 @@ async function submitAssessment(req, res) {
       summarySource: summary.source,
     };
 
-    if (result.completed && req.user?.email) {
+    if (result.completed && req.user?.email && req.body.persist === true) {
       try {
         const savedReport = await savePatientReport(req.user.email, responsePayload);
         responsePayload.reportId = savedReport.pr_id;

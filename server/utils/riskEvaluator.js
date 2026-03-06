@@ -1,15 +1,15 @@
 const RECOMMENDATIONS = {
   en: {
-    critical: 'Immediate medical attention recommended.',
-    high: 'Consult a doctor as soon as possible.',
-    moderate: 'Monitor symptoms and seek medical advice if worsening.',
-    low: 'Home care is likely sufficient unless symptoms change.',
+    critical: '❌ Immediate Attention Needed! Seek emergency hospital care immediately.',
+    high: '⚠️ Consult a doctor as soon as possible for professional evaluation.',
+    moderate: 'Monitor symptoms closely. We recommend consulting a doctor if symptoms persist or worsen.',
+    low: 'Home care is likely sufficient. Recommended: Rest, hydration, and safe OTC remedies like Paracetamol (for pain/fever) or Antacids (for stomach issues) as needed.',
   },
   mr: {
-    critical: 'त्वरित वैद्यकीय मदतीची शिफारस केली जाते.',
-    high: 'शक्य तितक्या लवकर डॉक्टरांचा सल्ला घ्या.',
-    moderate: 'लक्षणांवर लक्ष ठेवा आणि बिघडल्यास वैद्यकीय सल्ला घ्या.',
-    low: 'लक्षणे बदलल्याशिवाय घरगुती काळजी पुरेशी आहे.',
+    critical: '❌ त्वरित वैद्यकीय लक्ष आवश्यक आहे! ताबडतोब आपत्कालीन हॉस्पिटलमध्ये जा.',
+    high: '⚠️ व्यावसायिक मूल्यमापनासाठी शक्य तितक्या लवकर डॉक्टरांचा सल्ला घ्या.',
+    moderate: 'लक्षणांवर बारीक लक्ष ठेवा. लक्षणे कायम राहिल्यास किंवा बिघडल्यास डॉक्टरांचा सल्ला घेण्याची आम्ही शिफारस करतो.',
+    low: 'घरगुती काळजी पुरेशी असावी. शिफारस केलेले: विश्रांती, हायड्रेशन आणि आवश्यकतेनुसार पॅरासिटामॉल किंवा अँटासिड्स सारखे सुरक्षित घरगुती उपाय.',
   },
 };
 

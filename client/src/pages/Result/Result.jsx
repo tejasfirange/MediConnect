@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { ShieldAlert } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
@@ -91,8 +92,8 @@ function Result() {
     }
   };
 
-  const isRiskAboveLow = result?.riskLevelCode && (result.riskLevelCode === 'high' || result.riskLevelCode === 'critical');
-  const canSendToDoctor = user?.role === 'patient' && isRiskAboveLow && !sent;
+  const isCritical = result?.riskLevelCode === 'critical';
+  const canSendToDoctor = user?.role === 'patient' && !isCritical && !sent;
 
   return (
     <div className={`dashboard-page min-h-screen flex flex-col ${isDark ? 'dashboard-page--dark bg-slate-950' : 'dashboard-page--light bg-slate-50'}`}>
@@ -132,10 +133,39 @@ function Result() {
                 <p className="mt-1">{t('assessmentResult.score')}: <span className="font-semibold">{result.totalScore ?? '-'}</span></p>
               </div>
 
-              <div className={`rounded-xl border px-4 py-3 ${isDark ? 'border-slate-700 bg-slate-800' : 'border-slate-200 bg-slate-50'}`}>
-                <p className="text-sm font-semibold text-blue-500 uppercase tracking-wider mb-1">{t('assessmentResult.clinicalRecommendation')}</p>
-                <p className={`text-lg font-bold leading-relaxed ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{result.recommendation}</p>
+              <div className={`rounded-xl border px-4 py-3 ${
+                result.riskLevelCode === 'critical' ? 'bg-rose-500/10 border-rose-500/30' : 
+                result.riskLevelCode === 'high' ? 'bg-orange-500/10 border-orange-500/30' :
+                isDark ? 'border-slate-700 bg-slate-800' : 'border-slate-200 bg-slate-50'
+              }`}>
+                <p className={`text-sm font-semibold uppercase tracking-wider mb-1 ${
+                  result.riskLevelCode === 'critical' ? 'text-rose-500' : 
+                  result.riskLevelCode === 'high' ? 'text-orange-500' : 
+                  'text-blue-500'
+                }`}>
+                  {t('assessmentResult.clinicalRecommendation')}
+                </p>
+                <p className={`text-lg font-bold leading-relaxed ${
+                  result.riskLevelCode === 'critical' ? 'text-rose-600' : 
+                  isDark ? 'text-slate-100' : 'text-slate-900'
+                }`}>
+                  {result.recommendation}
+                </p>
               </div>
+
+              {result.riskLevelCode === 'critical' && (
+                <div className="bg-rose-600 p-6 rounded-2xl shadow-xl shadow-rose-500/20 text-white animate-pulse border-2 border-rose-400">
+                   <div className="flex items-center gap-4">
+                      <div className="bg-white/20 p-3 rounded-full">
+                         <ShieldAlert size={32} />
+                      </div>
+                      <div>
+                         <h2 className="text-xl font-black uppercase tracking-tight">Immediate Medical Attention Required</h2>
+                         <p className="text-sm font-bold text-rose-100">Please visit your nearest emergency department or call emergency services immediately.</p>
+                      </div>
+                   </div>
+                </div>
+              )}
 
               {result.summary ? (
                 <div className={`rounded-xl border px-4 py-3 ${isDark ? 'border-slate-700 bg-slate-800' : 'border-slate-200 bg-slate-50'}`}>
@@ -176,7 +206,11 @@ function Result() {
                   <button
                     onClick={handleSendToDoctor}
                     disabled={loading}
-                    className="rounded-xl bg-gradient-to-r from-orange-600 to-orange-500 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-orange-500/20 transition hover:shadow-xl hover:shadow-orange-500/30 hover:-translate-y-0.5 disabled:opacity-50"
+                    className={`rounded-xl px-6 py-3.5 text-sm font-bold text-white shadow-lg transition hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 ${
+                      result.riskLevelCode === 'high' || result.riskLevelCode === 'moderate' 
+                      ? 'bg-gradient-to-r from-orange-600 to-orange-500 shadow-orange-500/20 hover:shadow-orange-500/30' 
+                      : 'bg-blue-600 shadow-blue-500/20 hover:bg-blue-700'
+                    }`}
                   >
                     {loading ? t('assessmentResult.transmitting') : t('assessmentResult.sendToDoctor')}
                   </button>
