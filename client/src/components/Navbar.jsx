@@ -79,9 +79,11 @@ function Navbar() {
       <nav className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 md:px-6">
         {/* ─── Logo ─── */}
         <Link to="/" className="group inline-flex items-center gap-2.5">
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-blue-500 text-sm font-bold text-white shadow-md shadow-blue-500/25 transition-transform duration-200 group-hover:scale-105">
-            M
-          </span>
+          <img 
+            src="/logo.png" 
+            alt="MediConnect Logo" 
+            className="h-10 w-10 object-contain transition-transform duration-200 group-hover:scale-105" 
+          />
           <span className={`text-lg font-bold tracking-tight ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
             {t('brand')}
           </span>
