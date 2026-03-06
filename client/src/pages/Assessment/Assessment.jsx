@@ -158,7 +158,7 @@ function Assessment() {
   };
 
   return (
-    <div className={`assessment-page min-h-screen ${isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
+    <div className={`assessment-page min-h-screen pb-24 ${isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
       <Navbar />
       <main className="mx-auto max-w-4xl px-4 py-10 md:px-6">
         <div className={`rounded-3xl border p-6 md:p-8 ${isDark ? 'border-slate-700 bg-slate-900' : 'border-slate-200 bg-white'}`}>
@@ -168,17 +168,31 @@ function Assessment() {
           </p>
 
           {!selectedCategory ? (
-            <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2">
-              {categories.map((category) => (
+            <div className="mt-6 space-y-4">
+              <div className="flex justify-end">
                 <button
-                  key={category.key}
-                  onClick={() => startAssessment(category.key)}
-                  disabled={loading}
-                  className="rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-left font-semibold text-slate-800 transition hover:border-blue-300 hover:bg-blue-50 disabled:opacity-60"
+                  onClick={() => navigate('/dashboard')}
+                  className={`rounded-xl border px-4 py-2 text-sm font-semibold ${
+                    isDark
+                      ? 'border-slate-600 text-slate-100 hover:bg-slate-800'
+                      : 'border-slate-300 text-slate-700 hover:bg-slate-100'
+                  }`}
                 >
-                  {getCategoryDisplayLabel(category.key, category.label, i18n.language)}
+                  Back to Dashboard
                 </button>
-              ))}
+              </div>
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                {categories.map((category) => (
+                  <button
+                    key={category.key}
+                    onClick={() => startAssessment(category.key)}
+                    disabled={loading}
+                    className="rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-left font-semibold text-slate-800 transition hover:border-blue-300 hover:bg-blue-50 disabled:opacity-60"
+                  >
+                    {getCategoryDisplayLabel(category.key, category.label, i18n.language)}
+                  </button>
+                ))}
+              </div>
             </div>
           ) : (
             <div className="mt-6 space-y-4">

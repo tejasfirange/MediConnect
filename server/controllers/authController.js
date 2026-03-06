@@ -9,6 +9,11 @@ const sendEmail = require("../services/emailService"); // new email service for 
 ========================= */
 
 const hashPassword = (password) => CryptoJS.SHA256(password).toString();
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_REGEX = /^\d{10}$/;
+
+const isValidEmail = (value) => EMAIL_REGEX.test(String(value || "").trim().toLowerCase());
+const isValidPhone = (value) => PHONE_REGEX.test(String(value || "").trim());
 
 /* =========================
    REGISTER STEP 1
@@ -27,6 +32,9 @@ const registerStepOne = async (req, res) => {
         message: "email and password are required"
       });
     }
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ message: "Enter a valid email address" });
+    }
 
     if (!process.env.JWT_SECRET) {
       return res.status(500).json({
@@ -34,11 +42,9 @@ const registerStepOne = async (req, res) => {
       });
     }
 
-    const existingUser = await pool.query(
-      "SELECT email FROM users WHERE email=$1",
-      [email]
-    );
+    const normalizedEmail = String(email).trim().toLowerCase();
 
+    const existingUser = await pool.query("SELECT email FROM users WHERE email=$1", [normalizedEmail]);
     if (existingUser.rows.length > 0) {
       return res.status(409).json({
         message: "User already exists with this email"
@@ -48,11 +54,7 @@ const registerStepOne = async (req, res) => {
     const passwordHash = hashPassword(password);
 
     const registrationToken = jwt.sign(
-      {
-        type: "registration",
-        email,
-        passwordHash
-      },
+      { type: "registration", email: normalizedEmail, passwordHash },
       process.env.JWT_SECRET,
       { expiresIn: "30m" }
     );
@@ -60,7 +62,7 @@ const registerStepOne = async (req, res) => {
     res.json({
       message: "Step 1 complete. Continue with role and profile details.",
       registrationToken,
-      email
+      email: normalizedEmail,
     });
 
   } catch (error) {
@@ -96,11 +98,15 @@ const completeRegistration = async (req, res) => {
     const { email, passwordHash } = decoded;
 
     const { name, dob, gender, contact_no, registration_no, qualification } = details;
+    const trimmedContactNo = String(contact_no || "").trim();
 
     if (!name) {
       return res.status(400).json({
         message: "details.name is required"
       });
+    }
+    if (trimmedContactNo && !isValidPhone(trimmedContactNo)) {
+      return res.status(400).json({ message: "Contact number must be exactly 10 digits" });
     }
 
     await client.query("BEGIN");
@@ -125,9 +131,9 @@ const completeRegistration = async (req, res) => {
     if (role === "patient") {
 
       await client.query(
-        `INSERT INTO patient_details (email,name,dob,gender,contact_no)
-         VALUES ($1,$2,$3,$4,$5)`,
-        [email, name, dob || null, gender || null, contact_no || null]
+        `INSERT INTO patient_details (email, name, dob, gender, contact_no)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [email, name, dob || null, gender || null, trimmedContactNo || null]
       );
 
     } else {
@@ -141,7 +147,7 @@ const completeRegistration = async (req, res) => {
           name,
           dob || null,
           gender || null,
-          contact_no || null,
+          trimmedContactNo || null,
           registration_no || null,
           qualification || null
         ]
@@ -196,10 +202,18 @@ const loginUser = async (req, res) => {
   try {
 
     const { email, password } = req.body;
+    const normalizedEmail = String(email || "").trim().toLowerCase();
+
+    if (!normalizedEmail || !password) {
+      return res.status(400).json({ message: "email and password are required" });
+    }
+    if (!isValidEmail(normalizedEmail)) {
+      return res.status(400).json({ message: "Enter a valid email address" });
+    }
 
     const user = await pool.query(
       "SELECT * FROM users WHERE email=$1",
-      [email]
+      [normalizedEmail]
     );
 
     if (user.rows.length === 0) {

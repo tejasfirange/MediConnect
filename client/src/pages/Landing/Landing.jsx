@@ -3,14 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import './Landing.css';
 
 function Landing() {
   const { t } = useTranslation('landing');
   const { isDark } = useTheme();
+  const { isAuthenticated } = useAuth();
 
-  const pageClass = `landing-page min-h-screen ${isDark ? 'theme-dark bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`;
+  const pageClass = `landing-page min-h-screen pb-24 ${isDark ? 'theme-dark bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`;
 
   return (
     <div id="home" className={pageClass}>
@@ -40,7 +42,7 @@ function Landing() {
 
             <div className="flex flex-wrap gap-3">
               <Link
-                to="/register"
+                to={isAuthenticated ? '/assessment' : '/login'}
                 className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-blue-700"
               >
                 {t('startAssessment')}
