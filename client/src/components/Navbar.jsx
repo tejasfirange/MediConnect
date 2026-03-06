@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 
 function Navbar() {
   const { t, i18n } = useTranslation('common');
+  const { isAuthenticated, user } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
@@ -15,6 +17,7 @@ function Navbar() {
   const languageMenuRef = useRef(null);
   const location = useLocation();
   const onLanding = location.pathname === '/';
+  const onDashboard = location.pathname.startsWith('/dashboard');
 
   const navItems = [
     { key: 'nav.features', href: onLanding ? '#features' : '/#features' },
@@ -131,18 +134,41 @@ function Navbar() {
           >
             {isDark ? t('nav.themeLight') : t('nav.themeDark')}
           </button>
-          <Link
-            to="/login"
-            className="rounded-lg border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50"
-          >
-            {t('nav.signIn')}
-          </Link>
-          <Link
-            to="/register"
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
-          >
-            {t('nav.getStarted')}
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <div className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 ${isDark ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-700'}`}>
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
+                  {user?.email?.charAt(0)?.toUpperCase() || 'U'}
+                </span>
+                <span className="max-w-40 truncate text-xs font-semibold">{user?.email || 'User'}</span>
+              </div>
+              <Link
+                to="/dashboard"
+                className={`rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition ${
+                  onDashboard
+                    ? 'bg-blue-600 text-white'
+                    : 'border border-blue-200 text-blue-700 hover:border-blue-300 hover:bg-blue-50'
+                }`}
+              >
+                Dashboard
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="rounded-lg border border-blue-200 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50"
+              >
+                {t('nav.signIn')}
+              </Link>
+              <Link
+                to="/register"
+                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+              >
+                {t('nav.getStarted')}
+              </Link>
+            </>
+          )}
         </div>
 
         <button
@@ -192,12 +218,30 @@ function Navbar() {
             >
               {isDark ? t('nav.themeLight') : t('nav.themeDark')}
             </button>
-            <Link to="/login" className="w-1/2 rounded-lg border border-blue-200 px-3 py-2 text-center text-sm font-semibold text-blue-700">
-              {t('nav.signIn')}
-            </Link>
-            <Link to="/register" className="w-1/2 rounded-lg bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white">
-              {t('nav.getStarted')}
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <div className={`w-full rounded-lg px-3 py-2 text-center text-xs font-semibold ${isDark ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-700'}`}>
+                  {user?.email || 'User'}
+                </div>
+                <Link
+                  to="/dashboard"
+                  className={`w-full rounded-lg px-3 py-2 text-center text-sm font-semibold ${
+                    onDashboard ? 'bg-blue-600 text-white' : 'border border-blue-200 text-blue-700'
+                  }`}
+                >
+                  Dashboard
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="w-1/2 rounded-lg border border-blue-200 px-3 py-2 text-center text-sm font-semibold text-blue-700">
+                  {t('nav.signIn')}
+                </Link>
+                <Link to="/register" className="w-1/2 rounded-lg bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white">
+                  {t('nav.getStarted')}
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}

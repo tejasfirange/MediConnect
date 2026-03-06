@@ -6,6 +6,8 @@ import { useAuth } from '../../context/AuthContext';
 import { registerStepOne, registerStepTwo } from '../../services/authService';
 import './Register.css';
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_REGEX = /^\d{10}$/;
 const initialStepOne = { email: '', password: '', confirmPassword: '' };
 const initialDetails = {
   name: '',
@@ -40,6 +42,14 @@ function Register() {
   const handleStepOneSubmit = async (event) => {
     event.preventDefault();
     setError('');
+    const normalizedEmail = stepOne.email.trim().toLowerCase();
+
+    if (!EMAIL_REGEX.test(normalizedEmail)) {
+      const message = 'Please enter a valid email address.';
+      setError(message);
+      toast.error(message);
+      return;
+    }
 
     if (stepOne.password.length < 6) {
       const message = 'Password must be at least 6 characters.';
@@ -58,7 +68,7 @@ function Register() {
     try {
       setLoading(true);
       const data = await registerStepOne({
-        email: stepOne.email.trim(),
+        email: normalizedEmail,
         password: stepOne.password,
       });
 
@@ -77,9 +87,16 @@ function Register() {
   const handleStepTwoSubmit = async (event) => {
     event.preventDefault();
     setError('');
+    const trimmedContactNo = details.contact_no.trim();
 
     if (!details.name.trim()) {
       const message = 'Name is required.';
+      setError(message);
+      toast.error(message);
+      return;
+    }
+    if (trimmedContactNo && !PHONE_REGEX.test(trimmedContactNo)) {
+      const message = 'Contact number must be exactly 10 digits.';
       setError(message);
       toast.error(message);
       return;
@@ -101,7 +118,7 @@ function Register() {
           name: details.name.trim(),
           dob: details.dob || null,
           gender: details.gender || null,
-          contact_no: details.contact_no || null,
+          contact_no: trimmedContactNo || null,
           ...(role === 'doctor'
             ? {
                 registration_no: details.registration_no || null,
@@ -235,10 +252,12 @@ function Register() {
               </div>
 
               <input
-                type="text"
+                type="tel"
                 value={details.contact_no}
                 onChange={(e) => setDetails((prev) => ({ ...prev, contact_no: e.target.value }))}
                 placeholder="Contact number"
+                inputMode="numeric"
+                maxLength={10}
                 className={`w-full rounded-xl border px-4 py-3 outline-none ring-blue-300 focus:ring ${inputClass}`}
               />
 

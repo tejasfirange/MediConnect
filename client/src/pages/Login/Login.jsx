@@ -6,6 +6,8 @@ import { useAuth } from '../../context/AuthContext';
 import { loginUser } from '../../services/authService';
 import './Login.css';
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function decodeTokenUser(token) {
   try {
     const payload = token.split('.')[1];
@@ -40,10 +42,18 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (!EMAIL_REGEX.test(normalizedEmail)) {
+      const message = 'Please enter a valid email address.';
+      setError(message);
+      toast.error(message);
+      return;
+    }
 
     try {
       setLoading(true);
-      const data = await loginUser({ email: email.trim(), password });
+      const data = await loginUser({ email: normalizedEmail, password });
       const user = decodeTokenUser(data.token);
       login({ token: data.token, user });
       toast.success('Logged in successfully');
