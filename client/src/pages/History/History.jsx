@@ -54,15 +54,27 @@ function History() {
             Review your previous assessment reports and recommendations.
           </p>
 
-          {loading ? <p className="mt-4 text-sm">Loading history...</p> : null}
+          {loading ? (
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              {[1, 2, 3].map((item) => (
+                <div key={item} className={`h-24 animate-pulse rounded-2xl border ${isDark ? 'border-slate-700 bg-slate-800' : 'border-slate-200 bg-slate-100'}`} />
+              ))}
+            </div>
+          ) : null}
           {error ? <p className="mt-4 rounded-lg bg-red-100 px-3 py-2 text-sm text-red-700">{error}</p> : null}
 
           {!loading && !error ? (
             reports.length === 0 ? (
-              <div className="mt-6 space-y-3">
-                <p className={isDark ? 'text-slate-300' : 'text-slate-600'}>No past reports found yet.</p>
-                <Link to="/assessment" className="inline-flex rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
-                  Take Assessment
+              <div className={`mt-6 rounded-2xl border p-6 ${isDark ? 'border-slate-700 bg-slate-800' : 'border-slate-200 bg-slate-50'}`}>
+                <p className="text-lg font-semibold">No assessments yet.</p>
+                <p className={`mt-2 text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  Start your first health assessment to see risk trends and recommendations here.
+                </p>
+                <Link
+                  to="/assessment"
+                  className="mt-4 inline-flex rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:scale-[1.02] hover:bg-blue-700"
+                >
+                  Start Assessment
                 </Link>
               </div>
             ) : (
