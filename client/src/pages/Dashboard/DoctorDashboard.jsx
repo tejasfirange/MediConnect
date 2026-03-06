@@ -9,7 +9,9 @@ import {
   ChevronRight,
   ShieldAlert,
   Save,
-  Trash2
+  Trash2,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Navbar from '../../components/Navbar';
@@ -19,6 +21,7 @@ import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { Link } from 'react-router-dom';
 import './Dashboard.css';
 
 function DoctorDashboard() {
@@ -28,6 +31,8 @@ function DoctorDashboard() {
   const [loading, setLoading] = useState(true);
   const [selectedConsult, setSelectedConsult] = useState(null);
   const [editPrescription, setEditPrescription] = useState('');
+  const [showPreview, setShowPreview] = useState(false);
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     fetchQueue();
@@ -36,10 +41,14 @@ function DoctorDashboard() {
   const fetchQueue = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/consultations/queue');
-      setQueue(response.data);
+      const [queueRes, profileRes] = await Promise.all([
+        api.get('/consultations/queue'),
+        api.get('/doctor/me').catch(() => ({ data: { doctor: null } }))
+      ]);
+      setQueue(queueRes.data);
+      setProfile(profileRes.data.doctor);
     } catch (err) {
-      toast.error('Failed to fetch doctor queue');
+      toast.error('Failed to fetch dashboard data');
     } finally {
       setLoading(false);
     }
@@ -70,23 +79,51 @@ function DoctorDashboard() {
   };
 
   return (
-    <div className={`dashboard-page min-h-screen pb-24 ${isDark ? 'dashboard-page--dark' : 'dashboard-page--light'}`}>
+    <div className={`dashboard-page min-h-screen flex flex-col ${isDark ? 'dashboard-page--dark bg-slate-950' : 'dashboard-page--light bg-slate-50'}`}>
       <div className="dashboard-orb dashboard-orb--blue"></div>
       <div className="dashboard-orb dashboard-orb--violet"></div>
       <Navbar />
       
-      <main className="mx-auto max-w-6xl px-4 py-10 md:px-8">
-        <header className="dashboard-hero mb-8">
-          <h1 className="dashboard-hero__greeting text-3xl font-bold">Doctor's Dashboard</h1>
-          <p className={`dashboard-hero__sub ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-            Manage patient assessments and provide clinical prescriptions.
-          </p>
+      <main className="mx-auto w-full max-w-6xl px-4 py-10 md:px-8 flex-1">
+        <header className="dashboard-hero mb-12">
+           <div className="flex items-center gap-4 mb-3">
+             <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center shadow-lg shadow-blue-500/20">
+               <Activity size={26} className="text-white" />
+             </div>
+             <div>
+               <h1 className="text-4xl font-black tracking-tight bg-gradient-to-r from-blue-500 via-sky-400 to-indigo-400 bg-clip-text text-transparent">
+                 Doctor's Dashboard
+               </h1>
+               <p className={`text-sm font-medium tracking-wide ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                 Welcome back, Dr. {profile?.name?.split(' ')[0] || user?.email?.split('@')[0]}
+               </p>
+             </div>
+           </div>
+
+          {!loading && !profile?.registration_no && (
+            <div className={`mt-6 p-5 rounded-3xl border flex items-center justify-between gap-6 transition-all animate-in fade-in slide-in-from-top-4 duration-700 ${isDark ? 'bg-blue-500/10 border-blue-500/20 shadow-lg shadow-blue-900/10' : 'bg-blue-50 border-blue-200 shadow-xl shadow-blue-500/5'}`}>
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 flex items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-500/30">
+                  <ShieldAlert size={24} />
+                </div>
+                <div>
+                  <p className="text-base font-bold">Clinical Credentials Required</p>
+                  <p className="text-xs opacity-90 leading-relaxed max-w-sm text-blue-700 dark:text-blue-300">
+                    Your account needs a verified registration number and clinical qualifications before you can approve prescriptions.
+                  </p>
+                </div>
+              </div>
+              <Link to="/profile" className="px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 transition-all hover:scale-105 active:scale-95 shadow-md">
+                Verify Now
+              </Link>
+            </div>
+          )}
         </header>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Queue List */}
           <div className="lg:col-span-1 space-y-4">
-            <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <h2 className={`flex items-center gap-2 text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
               <Clock size={20} className="text-blue-500" />
               Patient Queue ({queue.length})
             </h2>
@@ -96,9 +133,14 @@ function DoctorDashboard() {
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
               </div>
             ) : queue.length === 0 ? (
-              <div className={`rounded-2xl border p-10 text-center ${isDark ? 'border-slate-800 bg-slate-900' : 'border-slate-200 bg-white'}`}>
-                <CheckCircle size={40} className="mx-auto mb-3 text-slate-400" />
-                <p className="text-sm">Queue is empty!</p>
+              <div className={`rounded-3xl border p-12 text-center flex flex-col items-center justify-center animate-in zoom-in duration-500 ${isDark ? 'border-slate-700/50 bg-slate-900/60 glass-panel shadow-2xl shadow-black/40' : 'border-slate-200 bg-white'}`}>
+                <div className={`h-16 w-16 mb-6 rounded-3xl flex items-center justify-center ${isDark ? 'bg-emerald-500/20 text-emerald-400 shadow-lg shadow-emerald-500/10' : 'bg-emerald-50 text-emerald-600'}`}>
+                  <CheckCircle size={32} />
+                </div>
+                <h3 className={`font-bold text-lg mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Queue Clear</h3>
+                <p className={`text-sm max-w-[200px] leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  All assessments have been processed. Great work!
+                </p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -185,18 +227,42 @@ function DoctorDashboard() {
                       <Edit3 size={18} className="text-blue-500" />
                       Prescription & Recommendation
                     </h4>
-                    <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Generated by LLM</span>
+                    <div className="flex items-center gap-4">
+                      <button 
+                         onClick={() => setShowPreview(!showPreview)}
+                         className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                           showPreview 
+                           ? 'bg-blue-500 text-white' 
+                           : (isDark ? 'bg-slate-800 text-slate-400 hover:text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200')
+                         }`}
+                         title={showPreview ? "Back to Edit" : "Preview Markdown"}
+                      >
+                         {showPreview ? <EyeOff size={14} /> : <Eye size={14} />}
+                         {showPreview ? "Editing Mode" : "Preview Mode"}
+                      </button>
+                      <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Generated by LLM</span>
+                    </div>
                   </div>
                   
-                  <textarea
-                    value={editPrescription}
-                    onChange={(e) => setEditPrescription(e.target.value)}
-                    rows={10}
-                    className={`w-full rounded-2xl border p-4 text-sm outline-none ring-blue-500/30 focus:ring-4 transition ${
-                      isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'
-                    }`}
-                    placeholder="Enter prescription details..."
-                  />
+                  {showPreview ? (
+                    <div className={`w-full rounded-2xl border p-6 min-h-[250px] markdown-wrapper ${
+                      isDark ? 'bg-slate-900/50 border-slate-700 text-slate-300' : 'bg-white border-slate-200 text-slate-700'
+                    }`}>
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {editPrescription}
+                      </ReactMarkdown>
+                    </div>
+                  ) : (
+                    <textarea
+                      value={editPrescription}
+                      onChange={(e) => setEditPrescription(e.target.value)}
+                      rows={10}
+                      className={`w-full rounded-2xl border p-4 text-sm outline-none ring-blue-500/30 focus:ring-4 transition ${
+                        isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'
+                      }`}
+                      placeholder="Enter prescription details..."
+                    />
+                  )}
 
                   <div className="flex flex-wrap gap-3 pt-4">
                     <button
@@ -224,14 +290,25 @@ function DoctorDashboard() {
                 </div>
               </div>
             ) : (
-              <div className={`h-full flex flex-col items-center justify-center rounded-3xl border border-dashed p-10 text-center ${isDark ? 'border-slate-800' : 'border-slate-300'}`}>
-                <div className={`h-16 w-16 mb-4 rounded-full flex items-center justify-center ${isDark ? 'bg-slate-900' : 'bg-slate-100'}`}>
-                  <Activity size={32} className="text-slate-400" />
+              <div className={`h-[500px] flex flex-col items-center justify-center rounded-[32px] border-2 border-dashed p-12 text-center transition-all animate-in fade-in duration-1000 ${
+                isDark ? 'border-slate-700/40 bg-slate-900/40' : 'border-slate-200 bg-slate-50/50'
+              }`}>
+                <div className={`relative mb-8`}>
+                  <div className={`absolute -inset-4 rounded-full blur-2xl animate-pulse ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`} />
+                  <div className={`relative h-20 w-20 rounded-3xl flex items-center justify-center shadow-2xl ${isDark ? 'bg-slate-800 text-blue-400 border border-slate-700' : 'bg-white text-slate-300'}`}>
+                    <Activity size={32} />
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold">No Consultation Selected</h3>
-                <p className={`mt-2 max-w-xs text-sm ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-                  Select a patient from the queue to view their assessment and draft a prescription.
+                <h3 className={`text-2xl font-black tracking-tight mb-3 italic ${isDark ? 'text-white' : 'text-slate-900'}`}>Command Center</h3>
+                <p className={`max-w-md text-sm font-medium leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-500'}`}>
+                   Your digital consultation suite is ready. Select a patient from the queue to review their AI-triaged reports and finalize their medical path.
                 </p>
+                <div className={`mt-8 flex items-center gap-2 px-5 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest ${
+                  isDark ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'bg-blue-500/5 text-blue-600 border border-blue-500/10'
+                }`}>
+                  <span className="h-2 w-2 rounded-full bg-blue-500 animate-ping" />
+                  Awaiting Input
+                </div>
               </div>
             )}
           </div>

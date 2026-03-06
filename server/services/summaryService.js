@@ -109,7 +109,7 @@ Language: ${outputLanguage}
 Assessment Category: ${category}
 
 Assessment Result Data:
-Risk Level: ${result.riskLevel}
+Risk Level: ${result.riskLevel} (${result.riskLevelCode || 'unknown'})
 Total Score: ${result.totalScore}
 Red Flag Triggered: ${result.redFlagTriggered ? 'Yes' : 'No'}
 Questions Answered: ${result.answeredCount || 0}

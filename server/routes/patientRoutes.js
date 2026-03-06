@@ -6,10 +6,12 @@ const {
   getPatientProfile,
   getPatientHistory,
   getPatientHistoryById,
+  updatePatientProfile,
 } = require("../controllers/patientController");
 
 router.post("/register-patient",registerPatient);
 router.get("/me", authMiddleware, getPatientProfile);
+router.put("/update", authMiddleware, updatePatientProfile);
 router.get("/history", authMiddleware, getPatientHistory);
 router.get("/history/:id", authMiddleware, getPatientHistoryById);
 

@@ -108,9 +108,58 @@ const getPatientHistoryById = async (req, res) => {
   }
 };
 
+const updatePatientProfile = async (req, res) => {
+  try {
+    const email = req.user.email;
+    const { name, dob, gender, contact_no } = req.body;
+
+    // Use UPSERT logic (INSERT ... ON CONFLICT)
+    // Note: This assumes UNIQUE constraint on email exists. 
+    // If it doesn't, we'll use a transaction with UPDATE/INSERT fallback.
+    
+    const query = `
+      INSERT INTO patient_details (email, name, dob, gender, contact_no)
+      VALUES ($1, $2, $3, $4, $5)
+      ON CONFLICT (email) DO UPDATE
+      SET name = EXCLUDED.name, 
+          dob = EXCLUDED.dob, 
+          gender = EXCLUDED.gender, 
+          contact_no = EXCLUDED.contact_no
+      RETURNING *
+    `;
+
+    const result = await pool.query(query, [email, name, dob, gender, contact_no]);
+
+    res.json({
+      message: "Profile updated successfully",
+      patient: result.rows[0],
+    });
+  } catch (error) {
+    // If ON CONFLICT fails because of missing constraint, we fallback to UPDATE/INSERT
+    if (error.code === '42710' || error.message.includes('ON CONFLICT')) {
+       // Manual fallback
+       const updateRes = await pool.query(
+         "UPDATE patient_details SET name=$1, dob=$2, gender=$3, contact_no=$4 WHERE email=$5 RETURNING *",
+         [req.body.name, req.body.dob, req.body.gender, req.body.contact_no, req.user.email]
+       );
+       
+       if (updateRes.rowCount === 0) {
+         const insertRes = await pool.query(
+           "INSERT INTO patient_details (email, name, dob, gender, contact_no) VALUES ($1,$2,$3,$4,$5) RETURNING *",
+           [req.user.email, req.body.name, req.body.dob, req.body.gender, req.body.contact_no]
+         );
+         return res.json({ message: "Profile created successfully", patient: insertRes.rows[0] });
+       }
+       return res.json({ message: "Profile updated successfully", patient: updateRes.rows[0] });
+    }
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   registerPatient,
   getPatientProfile,
   getPatientHistory,
   getPatientHistoryById,
+  updatePatientProfile,
 };

@@ -122,9 +122,14 @@ async function getPatientConsultations(req, res) {
   try {
     const patientEmail = req.user.email;
     const query = `
-      SELECT c.*, dr.name as doctor_name
+      SELECT c.*, 
+             dr.name as doctor_name, dr.registration_no, dr.qualification, dr.contact_no as doctor_phone,
+             pd.name as patient_name, pd.gender, pd.dob as patient_dob, pd.contact_no as patient_phone,
+             pr.report as report_data
       FROM consultations c
       LEFT JOIN doctor_details dr ON c.doctor_email = dr.email
+      LEFT JOIN patient_details pd ON c.patient_email = pd.email
+      LEFT JOIN patient_reports pr ON c.report_id = pr.pr_id
       WHERE c.patient_email = $1
       ORDER BY c.created_at DESC
     `;

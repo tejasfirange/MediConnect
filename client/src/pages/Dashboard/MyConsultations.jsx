@@ -6,8 +6,10 @@ import {
   User, 
   ChevronRight,
   FileText,
-  AlertCircle
+  AlertCircle,
+  Download
 } from 'lucide-react';
+import PrescriptionTemplate from '../../components/PrescriptionTemplate';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
@@ -56,6 +58,10 @@ function MyConsultations() {
       .replace(/^#*.*AI-Generated Draft.*$/gim, '')
       .replace(/^#*.*For doctor review and approval only.*$/gim, '')
       .trim();
+  };
+
+  const handleDownloadPDF = () => {
+    window.print();
   };
 
   return (
@@ -139,14 +145,22 @@ function MyConsultations() {
                         </div>
                       ) : (c.status === 'approved' || c.status === 'edited') && c.doctor_prescription ? (
                         <div className="space-y-6">
-                           <div className="doctor-info-bar">
-                              <div className="h-12 w-12 flex items-center justify-center rounded-full bg-blue-500 text-white shadow-lg shadow-blue-500/30">
-                                 <FileText size={24} />
+                           <div className="flex flex-wrap items-center justify-between gap-4">
+                              <div className="doctor-info-bar flex-1">
+                                 <div className="h-12 w-12 flex items-center justify-center rounded-full bg-blue-500 text-white shadow-lg shadow-blue-500/30">
+                                    <FileText size={24} />
+                                 </div>
+                                 <div>
+                                   <h4 className="font-bold">Doctor's Clinical Prescription</h4>
+                                   <p className="text-xs text-slate-500 font-medium">Validated & Signed by Dr. {c.doctor_name}</p>
+                                 </div>
                               </div>
-                              <div>
-                                <h4 className="font-bold">Doctor's Clinical Prescription</h4>
-                                <p className="text-xs text-slate-500 font-medium">Validated & Signed by Dr. {c.doctor_name}</p>
-                              </div>
+                              <button 
+                                onClick={handleDownloadPDF}
+                                className="flex items-center gap-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-500/20"
+                              >
+                                <Download size={16} /> Download PDF
+                              </button>
                            </div>
                            <div className={`markdown-wrapper rounded-2xl p-6 md:p-8 ${isDark ? 'text-slate-300 bg-slate-800/50' : 'text-slate-700 bg-slate-50'}`}>
                               <ReactMarkdown remarkPlugins={[remarkGfm]}>
@@ -189,6 +203,7 @@ function MyConsultations() {
       </main>
 
       <Footer />
+      {selectedConsult && <PrescriptionTemplate consultation={selectedConsult} />}
     </div>
   );
 }
