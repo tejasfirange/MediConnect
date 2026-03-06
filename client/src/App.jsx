@@ -10,6 +10,8 @@ import Result from './pages/Result/Result';
 import History from './pages/History/History';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
+import ResetPassword from './pages/ForgotPassword/ResetPassword'; 
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
@@ -73,6 +75,9 @@ function AppRoutes() {
         }
       />
       <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
+
     </Routes>
   );
 }
