@@ -272,20 +272,70 @@
             {
               "text": "Less than 1 day",
               "score": 1,
-              "next": "end"
+              "next": "q16"
             },
             {
               "text": "1-2 days",
               "score": 1,
-              "next": "end"
+              "next": "q16"
             },
             {
               "text": "3-7 days",
               "score": 2,
-              "next": "end"
+              "next": "q16"
             },
             {
               "text": "More than 1 week",
+              "score": 3,
+              "next": "q16"
+            }
+          ]
+        },
+        "q16": {
+          "text": "Have you noticed changes in your hair color recently?",
+          "options": [
+            {
+              "text": "No change",
+              "score": 0,
+              "next": "q17"
+            },
+            {
+              "text": "Slight color change",
+              "score": 1,
+              "next": "q17"
+            },
+            {
+              "text": "Hair turning grey quickly",
+              "score": 2,
+              "next": "q17"
+            },
+            {
+              "text": "Severe discoloration",
+              "score": 3,
+              "next": "q17"
+            }
+          ]
+        },
+        "q17": {
+          "text": "Are you frequently exposed to farm soil or dust?",
+          "options": [
+            {
+              "text": "Never",
+              "score": 0,
+              "next": "end"
+            },
+            {
+              "text": "Rarely",
+              "score": 1,
+              "next": "end"
+            },
+            {
+              "text": "Often",
+              "score": 2,
+              "next": "end"
+            },
+            {
+              "text": "Daily exposure",
               "score": 3,
               "next": "end"
             }
@@ -877,21 +927,146 @@
             {
               "text": "Less than 1 day",
               "score": 1,
-              "next": "end"
+              "next": "q16"
             },
             {
               "text": "1-2 days",
               "score": 2,
-              "next": "end"
+              "next": "q16"
             },
             {
               "text": "3-5 days",
               "score": 3,
-              "next": "end"
+              "next": "q16"
             },
             {
               "text": "More than 5 days",
               "score": 4,
+              "next": "q16"
+            }
+          ]
+        },
+        "q16": {
+          "text": "Do you have any eye-related problems currently?",
+          "options": [
+            {
+              "text": "No problem",
+              "score": 0,
+              "next": "q17"
+            },
+            {
+              "text": "Mild irritation",
+              "score": 1,
+              "next": "q17"
+            },
+            {
+              "text": "Frequent irritation or redness",
+              "score": 2,
+              "next": "q17"
+            },
+            {
+              "text": "Severe eye discomfort",
+              "score": 3,
+              "next": "q17"
+            }
+          ]
+        },
+        "q17": {
+          "text": "What type of occupation do you have?",
+          "options": [
+            {
+              "text": "Office work on screen",
+              "score": 2,
+              "next": "q18"
+            },
+            {
+              "text": "welder",
+              "score": 2,
+              "next": "q18"
+            },
+            {
+              "text": "high travelling",
+              "score": 2,
+              "next": "q18"
+            },
+            {
+              "text": "Student/Other",
+              "score": 1,
+              "next": "q18"
+            }
+          ]
+        },
+        "q18": {
+          "text": "How many hours do you use your mobile phone daily?",
+          "options": [
+            {
+              "text": "Less than 1 hour",
+              "score": 0,
+              "next": "q19"
+            },
+            {
+              "text": "1-3 hours",
+              "score": 1,
+              "next": "q19"
+            },
+            {
+              "text": "4-6 hours",
+              "score": 2,
+              "next": "q19"
+            },
+            {
+              "text": "More than 6 hours",
+              "score": 3,
+              "next": "q19"
+            }
+          ]
+        },
+        "q19": {
+          "text": "How long is your daily screen time (mobile/computer)?",
+          "options": [
+            {
+              "text": "Less than 2 hours",
+              "score": 0,
+              "next": "q20"
+            },
+            {
+              "text": "2-4 hours",
+              "score": 1,
+              "next": "q20"
+            },
+            {
+              "text": "4-8 hours",
+              "score": 2,
+              "next": "q20"
+            },
+            {
+              "text": "More than 8 hours",
+              "score": 3,
+              "next": "q20"
+            }
+          ]
+        },
+        "q20": {
+          "text": "Do you notice sticky or watery discharge from your eyes?",
+          "options": [
+            {
+              "text": "No",
+              "score": 0,
+              "next": "end"
+            },
+            {
+              "text": "Occasionally",
+              "score": 1,
+              "next": "end"
+            },
+            {
+              "text": "Often",
+              "score": 2,
+              "next": "end"
+            },
+            {
+              "text": "Very frequently",
+              "score": 3,
               "next": "end"
             }
           ]
@@ -1179,21 +1354,71 @@
             {
               "text": "Less than 1 hour",
               "score": 1,
-              "next": "end"
+              "next": "q16"
             },
             {
               "text": "1-6 hours",
               "score": 2,
-              "next": "end"
+              "next": "q16"
             },
             {
               "text": "6-12 hours",
               "score": 3,
-              "next": "end"
+              "next": "q16"
             },
             {
               "text": "More than 12 hours",
               "score": 4,
+              "next": "q16"
+            }
+          ]
+        },
+        "q16": {
+          "text": "Do you experience headache on one side of your head?",
+          "options": [
+            {
+              "text": "Never",
+              "score": 0,
+              "next": "q17"
+            },
+            {
+              "text": "Sometimes",
+              "score": 1,
+              "next": "q17"
+            },
+            {
+              "text": "Often",
+              "score": 2,
+              "next": "q17"
+            },
+            {
+              "text": "Very frequently",
+              "score": 3,
+              "next": "q17"
+            }
+          ]
+        },
+        "q17": {
+          "text": "Do you frequently have a runny nose?",
+          "options": [
+            {
+              "text": "No",
+              "score": 0,
+              "next": "end"
+            },
+            {
+              "text": "Occasionally",
+              "score": 1,
+              "next": "end"
+            },
+            {
+              "text": "Often",
+              "score": 2,
+              "next": "end"
+            },
+            {
+              "text": "Almost every day",
+              "score": 3,
               "next": "end"
             }
           ]
@@ -1698,15 +1923,65 @@
             {
               "text": "Few hours",
               "score": 1,
-              "next": "end"
+              "next": "q16"
             },
             {
               "text": "1-2 days",
               "score": 2,
-              "next": "end"
+              "next": "q16"
             },
             {
               "text": "More than 2 days",
+              "score": 3,
+              "next": "q16"
+            }
+          ]
+        },
+        "q16": {
+          "text": "Do you experience acidity or burning sensation in the stomach?",
+          "options": [
+            {
+              "text": "Never",
+              "score": 0,
+              "next": "q17"
+            },
+            {
+              "text": "Sometimes",
+              "score": 1,
+              "next": "q17"
+            },
+            {
+              "text": "Often",
+              "score": 2,
+              "next": "q17"
+            },
+            {
+              "text": "Very frequently",
+              "score": 3,
+              "next": "q17"
+            }
+          ]
+        },
+        "q17": {
+          "text": "Do you practice fasting regularly?",
+          "options": [
+            {
+              "text": "No",
+              "score": 0,
+              "next": "end"
+            },
+            {
+              "text": "Once a month",
+              "score": 1,
+              "next": "end"
+            },
+            {
+              "text": "Weekly",
+              "score": 2,
+              "next": "end"
+            },
+            {
+              "text": "Very frequently",
               "score": 3,
               "next": "end"
             }
@@ -1945,16 +2220,41 @@
             {
               "text": "Less than 1 day",
               "score": 1,
-              "next": "end"
+              "next": "q16"
             },
             {
               "text": "1-3 days",
               "score": 2,
-              "next": "end"
+              "next": "q16"
             },
             {
               "text": "More than 3 days",
               "score": 4,
+              "next": "q16"
+            }
+          ]
+        },
+        "q16": {
+          "text": "How often do you feel stressed?",
+          "options": [
+            {
+              "text": "Rarely",
+              "score": 0,
+              "next": "end"
+            },
+            {
+              "text": "Sometimes",
+              "score": 1,
+              "next": "end"
+            },
+            {
+              "text": "Often",
+              "score": 2,
+              "next": "end"
+            },
+            {
+              "text": "Almost always",
+              "score": 3,
               "next": "end"
             }
           ]
