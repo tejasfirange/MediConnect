@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Wind, Play, Square, Trophy, Info } from "lucide-react";
+import { Wind, Play, Square, Trophy, Info, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import lungBg from "../../assets/lungsbg.jpeg";
 
 export default function LungTest() {
+  const navigate = useNavigate();
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [result, setResult] = useState(null);
@@ -49,6 +51,13 @@ export default function LungTest() {
           </div>
           <h1 className="text-2xl font-black text-slate-800 mt-4 tracking-tight">Lung Capacity</h1>
           <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-1 text-center">Respiratory Stamina</p>
+          <button 
+            onClick={() => navigate('/tests')}
+            className="absolute top-8 left-8 text-slate-300 hover:text-cyan-600 transition-colors"
+            title="Back to Tools"
+          >
+            <ArrowLeft size={20} />
+          </button>
         </div>
 
         {/* Circular Timer */}

@@ -84,7 +84,7 @@ function Assessment() {
   };
 
   const applyAnswers = async (nextAnswers, categoryKey = selectedCategory) => {
-    const result = await evaluateAssessment(categoryKey, nextAnswers);
+    const result = await evaluateAssessment(categoryKey, nextAnswers, true);
 
     if (result.completed) {
       navigate('/result', {
@@ -115,7 +115,7 @@ function Assessment() {
           .catch(err => setError(err.message))
           .finally(() => setLoading(false));
       } else {
-        evaluateAssessment(selectedCategory, answers)
+        evaluateAssessment(selectedCategory, answers, false)
           .then(result => {
              if (!result.completed) {
                 setCurrentQuestionId(result.nextQuestionId);

@@ -1,23 +1,59 @@
-/* ── Animated Background ── */
-.dashboard-page {
-  background-image:
-    radial-gradient(circle at 10% -5%, rgba(37, 99, 235, 0.08), transparent 28%),
-    radial-gradient(circle at 85% 0%, rgba(14, 165, 233, 0.07), transparent 32%);
-}
-
-.dashboard-page--light {
-  background-image:
-    radial-gradient(circle at 12% -8%, rgba(37, 99, 235, 0.045), transparent 26%),
-    radial-gradient(circle at 88% 0%, rgba(14, 165, 233, 0.035), transparent 28%);
-}
-
+/* ── Premium Background Lighting ── */
 .dashboard-page--dark {
   background-color: #020617;
   background-image: 
+    radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(37, 99, 235, 0.1) 0%, transparent 40%),
     radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 50%),
     radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.12) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(14, 165, 233, 0.08) 0px, transparent 50%);
+    linear-gradient(to bottom, #020617, #010409);
   background-attachment: fixed;
+}
+
+.dashboard-page--light {
+  background-color: #f8fafc;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(37, 99, 235, 0.05) 0%, transparent 40%);
+}
+
+/* ── Dashboard Layout & Typography ── */
+.dashboard-title {
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  line-height: 1;
+}
+
+/* ── Glow Effects ── */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-page--dark .glass-panel {
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.6);
+}
+
+/* Icon Glows */
+.icon-glow-blue {
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
+}
+
+.icon-glow-emerald {
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+}
+
+/* ── Sidebar Custom Scroll ── */
+aside::-webkit-scrollbar {
+  width: 4px;
+}
+aside::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.1);
+  border-radius: 10px;
 }
 
 /* ── Floating Orbs ── */

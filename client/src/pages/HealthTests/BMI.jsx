@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Activity, RotateCcw } from "lucide-react";
+import { Activity, RotateCcw, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import bmiBg from "../../assets/bmibg.png";
 
 export default function BMICalculator() {
+  const navigate = useNavigate();
 
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
@@ -52,9 +54,19 @@ export default function BMICalculator() {
             <Activity size={24}/>
           </div>
 
-          <h1 className="text-2xl font-bold text-slate-800">
-            BMI Calculator
-          </h1>
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold text-slate-800">
+              BMI Calculator
+            </h1>
+          </div>
+
+          <button 
+            onClick={() => navigate('/tests')}
+            className="text-slate-400 hover:text-blue-600 transition-colors"
+            title="Back to Tools"
+          >
+            <ArrowLeft size={24} />
+          </button>
 
         </div>
 

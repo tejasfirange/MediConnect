@@ -20,6 +20,7 @@ function Navbar() {
   });
   const languageMenuRef = useRef(null);
   const profileMenuRef = useRef(null);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const onLanding = location.pathname === '/';
   const onDashboard = location.pathname.startsWith('/dashboard');
@@ -29,6 +30,13 @@ function Navbar() {
     { key: 'nav.howItWorks', href: onLanding ? '#how-it-works' : '/#how-it-works' },
     { key: 'nav.forClinics', href: onLanding ? '#for-clinics' : '/#for-clinics' },
   ];
+
+  // Always show Health Tests and preventative tools for everyone
+  navItems.push({ 
+    key: 'nav.healthTests',
+    label: 'Health Tests',
+    href: '/tests' 
+  });
 
   const languages = [
     { code: 'en', label: t('nav.english') },
@@ -62,6 +70,15 @@ function Navbar() {
     navigate('/login');
   };
 
+  // Handle scroll shadow and sticky behavior
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Close mobile menu on route change
   useEffect(() => {
     setMenuOpen(false);
@@ -69,110 +86,90 @@ function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 backdrop-blur-xl transition-colors duration-300 ${
-        isDark
-          ? 'border-b border-slate-800/80 bg-slate-950/80'
-          : 'border-b border-slate-200/60 bg-white/80'
-      }`}
-      style={{ WebkitBackdropFilter: 'blur(16px)' }}
+      className={`sticky top-0 z-[60] transition-all duration-300 ${
+        scrolled 
+          ? isDark 
+            ? 'bg-slate-950/90 border-b border-slate-800/80 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.5)]' 
+            : 'bg-white/90 border-b border-slate-200/80 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.1)]'
+          : 'bg-transparent border-b border-transparent'
+      } backdrop-blur-md`}
     >
       <nav className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 md:px-6">
-        {/* ─── Logo ─── */}
-        <Link to="/" className="group inline-flex items-center gap-2.5">
-          <img 
-            src="/logo.png" 
-            alt="MediConnect Logo" 
-            className="h-10 w-10 object-contain transition-transform duration-200 group-hover:scale-105" 
-          />
-          <span className={`text-lg font-bold tracking-tight ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-            {t('brand')}
+        {/* ─── Logo & Branding ─── */}
+        <Link to="/" className="group flex items-center gap-1.5">
+          <div className="relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-blue-600 to-blue-500 shadow-lg shadow-blue-500/20 transition-transform duration-300 group-hover:scale-105 group-hover:rotate-3">
+            <img 
+              src="/logo.png" 
+              alt="MediConnect Logo" 
+              className="h-8 w-8 object-contain brightness-0 invert" 
+            />
+          </div>
+          <span className={`text-xl font-[800] tracking-tighter ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+            Medi<span className="text-blue-500">Connect</span>
           </span>
         </Link>
 
         {/* ─── Desktop Nav Links ─── */}
-        <ul className="hidden items-center gap-1 md:flex">
+        <ul className="hidden items-center gap-2 md:flex">
           {navItems.map((item) => (
-            <li key={item.key}>
+            <li key={item.key || item.href}>
               <a
                 href={item.href}
-                className={`rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
+                className={`group relative rounded-lg px-4 py-2 text-[13px] font-bold tracking-wide transition-all duration-200 ${
                   isDark
-                    ? 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-100'
-                    : 'text-slate-500 hover:bg-slate-100/80 hover:text-slate-900'
+                    ? 'text-slate-400 hover:text-slate-100'
+                    : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
-                {t(item.key)}
+                {item.key?.includes('nav.') ? t(item.key) : item.label}
+                <span className="absolute bottom-1 left-4 right-4 h-0.5 scale-x-0 bg-blue-500 transition-transform duration-300 group-hover:scale-x-100" />
               </a>
             </li>
           ))}
         </ul>
 
         {/* ─── Desktop Right Section ─── */}
-        <div className="hidden items-center gap-2 md:flex">
-          {/* Language Switcher */}
-          <div className="relative" ref={languageMenuRef}>
-            <button
-              onClick={() => setLanguageOpen((prev) => !prev)}
-              className={`inline-flex h-9 w-9 items-center justify-center rounded-xl transition-all duration-200 ${
-                isDark
-                  ? 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
-                  : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
-              }`}
-              aria-label={t('nav.language')}
-              title={language === 'en' ? t('nav.english') : t('nav.marathi')}
-            >
-              <Globe size={18} />
-            </button>
-
-            {languageOpen && (
-              <div
-                className={`absolute right-0 mt-2 w-40 overflow-hidden rounded-xl border p-1 shadow-xl transition-all ${
-                  isDark ? 'border-slate-700 bg-slate-900 shadow-black/30' : 'border-slate-200 bg-white shadow-slate-200/80'
+        <div className="hidden items-center gap-3 md:flex">
+          {/* Theme & Language Utilities */}
+          <div className={`flex items-center gap-1 rounded-2xl border p-1 ${isDark ? 'border-slate-800 bg-slate-900/50' : 'border-slate-200 bg-slate-100/50'}`}>
+            <div className="relative" ref={languageMenuRef}>
+              <button
+                onClick={() => setLanguageOpen((prev) => !prev)}
+                className={`flex h-8 w-8 items-center justify-center rounded-xl transition-all ${
+                  isDark ? 'text-slate-400 hover:text-slate-100' : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
-                {languages.map((item) => {
-                  const selected = item.code === language;
-                  return (
+                <Globe size={16} />
+              </button>
+              {languageOpen && (
+                <div className={`absolute right-0 mt-3 w-40 overflow-hidden rounded-2xl border p-1.5 shadow-2xl ${
+                  isDark ? 'border-slate-800 bg-slate-900 shadow-black/40' : 'border-slate-200 bg-white shadow-slate-200/50'
+                }`}>
+                  {languages.map((item) => (
                     <button
                       key={item.code}
-                      onClick={() => {
-                        setLanguage(item.code);
-                        setLanguageOpen(false);
-                      }}
-                      className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium transition ${
-                        selected
-                          ? isDark
-                            ? 'bg-blue-500/10 text-blue-400'
-                            : 'bg-blue-50 text-blue-600'
-                          : isDark
-                          ? 'text-slate-300 hover:bg-slate-800'
-                          : 'text-slate-600 hover:bg-slate-50'
+                      onClick={() => { setLanguage(item.code); setLanguageOpen(false); }}
+                      className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-bold transition ${
+                        item.code === language 
+                          ? 'bg-blue-600 text-white' 
+                          : isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-50'
                       }`}
                     >
-                      <span>{item.label}</span>
-                      {selected && (
-                        <span className="text-blue-500">✓</span>
-                      )}
+                      {item.label}
                     </button>
-                  );
-                })}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
+            <button
+              onClick={toggleTheme}
+              className={`flex h-8 w-8 items-center justify-center rounded-xl transition-all ${
+                isDark ? 'text-slate-400 hover:text-amber-400' : 'text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              {isDark ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
           </div>
-
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className={`inline-flex h-9 w-9 items-center justify-center rounded-xl transition-all duration-200 ${
-              isDark
-                ? 'text-slate-400 hover:bg-slate-800 hover:text-amber-400'
-                : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
-            }`}
-            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-            title={isDark ? t('nav.themeLight') : t('nav.themeDark')}
-          >
-            {isDark ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
 
           {/* Auth Section */}
           {isAuthenticated ? (
@@ -180,9 +177,10 @@ function Navbar() {
               {!onDashboard && (
                 <Link
                   to="/dashboard"
-                  className="ml-1 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/30"
+                  className="relative overflow-hidden rounded-xl bg-blue-600 px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white shadow-xl shadow-blue-500/25 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-500 active:translate-y-0"
                 >
-                  Dashboard
+                  <span className="relative z-10">Dashboard</span>
+                  <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 hover:translate-x-full" />
                 </Link>
               )}
 
@@ -298,7 +296,7 @@ function Navbar() {
         >
           <ul className="space-y-1">
             {navItems.map((item) => (
-              <li key={item.key}>
+              <li key={item.key || item.href}>
                 <a
                   href={item.href}
                   onClick={() => setMenuOpen(false)}
@@ -306,7 +304,7 @@ function Navbar() {
                     isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'
                   }`}
                 >
-                  {t(item.key)}
+                  {item.key?.includes('nav.') ? t(item.key) : item.label}
                 </a>
               </li>
             ))}
