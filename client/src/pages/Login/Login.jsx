@@ -105,12 +105,19 @@ function Login() {
             </button>
           </form>
 
-          <p className={`mt-5 text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-            No account yet?{' '}
-            <Link to="/register" className="font-semibold text-blue-600 hover:underline">
-              Create one
-            </Link>
-          </p>
+          <div className="mt-4 flex flex-col space-y-4">
+            <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+              No account yet?{' '}
+              <Link to="/register" className="font-semibold text-blue-600 hover:underline">
+                Create one
+              </Link>
+            </p>
+            <p className="text-sm">
+              <Link to="/forgot-password" title="Forgot Password" id="forgot-password-link" className="font-semibold text-blue-600 hover:underline">
+                Forgot password?
+              </Link>
+            </p>
+          </div>
         </div>
       </main>
     </div>

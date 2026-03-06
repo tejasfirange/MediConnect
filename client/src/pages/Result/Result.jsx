@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import RiskMeter from '../../components/RiskMeter';
 import { useTheme } from '../../context/ThemeContext';
 import './Result.css';
 
@@ -36,9 +35,9 @@ function Result() {
                 <p>Category: <span className="font-semibold capitalize">{category}</span></p>
                 <p className="mt-1">Answered questions: <span className="font-semibold">{answeredCount}</span></p>
                 <p className="mt-1">Red flag: <span className="font-semibold">{result.redFlagTriggered ? 'Yes' : 'No'}</span></p>
+                <p className="mt-1">Risk level: <span className="font-semibold capitalize">{result.riskLevel || '-'}</span></p>
+                <p className="mt-1">Score: <span className="font-semibold">{result.totalScore ?? '-'}</span></p>
               </div>
-
-              <RiskMeter riskLevel={result.riskLevel} totalScore={result.totalScore} />
 
               <div className={`rounded-xl border px-4 py-3 ${isDark ? 'border-slate-700 bg-slate-800' : 'border-slate-200 bg-slate-50'}`}>
                 <p className="text-sm font-semibold">Recommendation</p>

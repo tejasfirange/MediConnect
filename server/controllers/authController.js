@@ -291,7 +291,7 @@ const forgotPassword = async (req, res) => {
     );
 
     const resetLink =
-      `http://localhost:5173/reset-password/${token}`;
+      `http://localhost:5174/reset-password/${token}`;
 
     // send email here
     await sendEmail(email, resetLink);
@@ -313,8 +313,8 @@ const forgotPassword = async (req, res) => {
 ========================= */
 
 const resetPassword = async (req, res) => {
-
-  const { token, newPassword } = req.body;
+  const { token } = req.params;
+  const { newPassword } = req.body;
 
   try {
 

@@ -31,8 +31,28 @@ export async function loginUser(payload) {
   }
 }
 
+export async function forgotPassword(payload) {
+  try {
+    const response = await api.post('/auth/forgot-password', payload);
+    return response.data;
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+}
+
+export async function resetPassword(token, payload) {
+  try {
+    const response = await api.post(`/auth/reset-password/${token}`, payload);
+    return response.data;
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+}
+
 export default {
   registerStepOne,
   registerStepTwo,
   loginUser,
+  forgotPassword,
+  resetPassword,
 };

@@ -1,4 +1,4 @@
-const DEFAULT_MODEL = process.env.CEREBRAS_MODEL || 'llama-3.3-70b';
+const DEFAULT_MODEL = (process.env.CEREBRAS_MODEL || 'llama-3.3-70b').trim();
 const SUPPORTED_LANGUAGES = new Set(['en', 'mr']);
 
 let cerebrasClientPromise = null;
@@ -63,39 +63,84 @@ async function getCerebrasClient() {
   return cerebrasClientPromise;
 }
 
+
 function buildPrompt({ language, result, category }) {
   const outputLanguage = language === 'mr' ? 'Marathi' : 'English';
-  const responseLines = (result.responseDetails || [])
-    .map((entry, index) => {
-      const redFlagText = entry.redFlag ? ' [red flag]' : '';
-      return `${index + 1}. Q: ${entry.questionText} | A: ${entry.selectedOptionText} | score: ${entry.score}${redFlagText}`;
-    })
-    .join('\n');
 
-  return [
-    'Create a detailed but patient-friendly triage summary for a patient-facing app.',
-    `Language: ${outputLanguage}`,
-    `Category: ${category}`,
-    `Risk level: ${result.riskLevel}`,
-    `Total score: ${result.totalScore}`,
-    `Red flag triggered: ${result.redFlagTriggered ? 'yes' : 'no'}`,
-    `Answered questions: ${result.answeredCount || 0}`,
-    `Base recommendation: ${result.recommendation}`,
-    'User responses:',
-    responseLines || 'No responses available.',
-    'Constraints:',
-    '- Target 180 to 260 words.',
-    '- Do not provide definitive diagnosis.',
-    '- Include one clear next-step action and one caution statement.',
-    '- Keep tone calm and clear.',
-    '- Include 3 sections in plain text with headings:',
-    '  1) Summary',
-    '  2) Why This Risk Level',
-    '  3) Key Responses',
-    '- In Key Responses, mention 5-10 important answers from user responses.',
-    '- Return plain text only.',
-  ].join('\n');
+  const responses = (result.responseDetails || [])
+    .map((entry, index) => {
+      const redFlag = entry.redFlag ? ' (RED FLAG)' : '';
+      return `${index + 1}. Question: ${entry.questionText}
+Answer: ${entry.selectedOptionText}
+Score: ${entry.score}${redFlag}`;
+    })
+    .join('\n\n');
+
+  return {
+    system: `
+You are a medical triage assistant generating patient-facing summaries.
+
+Your task is to explain a symptom assessment result clearly and responsibly.
+
+Rules:
+- DO NOT diagnose diseases.
+- DO NOT prescribe medications.
+- DO NOT claim certainty.
+- Use calm, supportive language.
+- Explain risk level logically based on symptoms and scoring.
+- Help the user understand what their responses mean.
+
+Your output must be informative, medically responsible, and easy for a non-medical user to understand.
+`,
+
+    user: `
+Generate a comprehensive triage summary.
+
+Language: ${outputLanguage}
+
+Assessment Category: ${category}
+
+Assessment Result Data:
+Risk Level: ${result.riskLevel}
+Total Score: ${result.totalScore}
+Red Flag Triggered: ${result.redFlagTriggered ? 'Yes' : 'No'}
+Questions Answered: ${result.answeredCount || 0}
+
+System Recommendation:
+${result.recommendation}
+
+User Responses:
+${responses || 'No responses available'}
+
+Instructions:
+
+Write a detailed explanation with the following sections.
+
+1. Assessment Overview
+Explain what the system detected overall.
+
+2. Risk Interpretation
+Explain why the system classified the case as ${result.riskLevel}.
+Mention important contributing factors such as symptom duration, severity, or red flags.
+
+3. Key Symptoms Contributing to Risk
+Summarize the most important answers that influenced the assessment.
+
+4. Recommended Next Steps
+Explain what the user should do next in simple language.
+
+5. Warning Signs
+Explain situations where the user should seek urgent medical care.
+
+Constraints:
+- 220 to 320 words
+- Friendly tone
+- Avoid medical jargon
+- Plain text only
+`
+  };
 }
+
 
 async function generateAssessmentSummary({ result, category, language }) {
   const normalizedLanguage = normalizeLanguage(language);
@@ -126,17 +171,24 @@ async function generateAssessmentSummary({ result, category, language }) {
 
   try {
     const cerebras = await getCerebrasClient();
+    const prompt = buildPrompt({ language: normalizedLanguage, result, category });
+
+    console.log(`[Cerebras] Generating summary for category: ${category} (${normalizedLanguage})...`);
+
     const completion = await cerebras.chat.completions.create({
       model: DEFAULT_MODEL,
-      messages: [{ role: 'user', content: buildPrompt({ language: normalizedLanguage, result, category }) }],
-      max_completion_tokens: 520,
-      temperature: 0.2,
+      messages: [
+        { role: 'system', content: prompt.system },
+        { role: 'user', content: prompt.user }
+      ],
+      max_completion_tokens: 700,
+      temperature: 0.25,
       top_p: 1,
-      stream: false,
     });
 
     const text = completion?.choices?.[0]?.message?.content?.trim();
     if (!text) {
+      console.warn('[Cerebras] Warning: Empty completion content. Falling back.');
       return {
         language: normalizedLanguage,
         text: getFallbackSummary(result, normalizedLanguage),
@@ -144,12 +196,17 @@ async function generateAssessmentSummary({ result, category, language }) {
       };
     }
 
+    console.log(`[Cerebras] Summary generated successfully (${text.length} chars).`);
     return {
       language: normalizedLanguage,
       text,
       source: 'cerebras',
     };
   } catch (_error) {
+    console.error('[Cerebras] Error generating summary:', _error.name, _error.message);
+    if (_error.response) {
+      console.error('[Cerebras] API Response:', _error.response.status, _error.response.data);
+    }
     return {
       language: normalizedLanguage,
       text: getFallbackSummary(result, normalizedLanguage),
