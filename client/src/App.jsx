@@ -19,11 +19,16 @@ import ReactionTest from './pages/HealthTests/ReactionTest';
 import Hydration from './pages/HealthTests/Hydration';
 import StressQuiz from './pages/HealthTests/StressQuiz';
 import MemoryStrength  from './pages/HealthTests/memorystrenth';  
+import MyConsultations from './pages/Dashboard/MyConsultations';
+import Profile from './pages/Profile/Profile';
 
-function ProtectedRoute({ children }) {
-  const { isAuthenticated } = useAuth();
+function ProtectedRoute({ children, allowedRoles }) {
+  const { isAuthenticated, user } = useAuth();
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
+  }
+  if (allowedRoles && !allowedRoles.includes(user?.role)) {
+    return <Navigate to="/dashboard" replace />;
   }
   return children;
 }
@@ -67,7 +72,7 @@ function AppRoutes() {
       <Route
         path="/assessment"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={['patient']}>
             <Assessment />
           </ProtectedRoute>
         }
@@ -76,12 +81,27 @@ function AppRoutes() {
       <Route
         path="/history"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={['patient']}>
             <History />
           </ProtectedRoute>
         }
       />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route
+        path="/my-consultations"
+        element={
+          <ProtectedRoute allowedRoles={['patient']}>
+            <MyConsultations />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/tests" element={<HealthTools />} />

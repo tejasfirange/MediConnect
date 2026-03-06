@@ -1,121 +1,108 @@
-import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useTheme } from '../../context/ThemeContext';
+import { resetPassword } from '../../services/authService';
 
-export default function ResetPassword() {
-
+function ResetPassword() {
+  const { isDark } = useTheme();
   const { token } = useParams();
   const navigate = useNavigate();
 
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const panelClass = isDark
+    ? 'border-slate-700 bg-slate-900 text-slate-100'
+    : 'border-slate-200 bg-white text-slate-900';
+
+  const inputClass = isDark
+    ? 'border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-400'
+    : 'border-slate-300 bg-white text-slate-900 placeholder:text-slate-400';
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
-
+    
     if (password !== confirmPassword) {
-      setMessage("Passwords do not match");
+      const msg = 'Passwords do not match';
+      setMessage(msg);
+      toast.error(msg);
       return;
     }
 
     setLoading(true);
-    setMessage("");
+    setMessage('');
 
     try {
-
-      const res = await fetch(
-        "http://localhost:5000/api/auth/reset-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            token,
-            newPassword: password
-          })
-        }
-      );
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setMessage("Password reset successful!");
-
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000);
-
-      } else {
-        setMessage(data.message);
-      }
-
+      const data = await resetPassword(token, { newPassword: password });
+      setMessage(data.message || 'Password reset successful!');
+      toast.success('Password reset successfully');
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (err) {
-      setMessage("Server error. Try again later.");
+      const errorMsg = err.message || 'Server error. Try again later.';
+      setMessage(errorMsg);
+      toast.error(errorMsg);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
-
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-blue-200 to-indigo-300 relative overflow-hidden">
-
-      {/* Gradient Blur Shapes */}
-      <div className="absolute w-72 h-72 bg-blue-400 rounded-full blur-3xl opacity-30 top-10 left-10"></div>
-      <div className="absolute w-72 h-72 bg-indigo-500 rounded-full blur-3xl opacity-30 bottom-10 right-10"></div>
-
-      <div className="bg-white shadow-2xl rounded-2xl p-10 w-full max-w-md relative">
-
-        <h2 className="text-3xl font-bold text-center text-blue-600 mb-2">
-          MediConnect
-        </h2>
-
-        <p className="text-center text-gray-500 mb-6">
-          Reset your password
-        </p>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-
-          <input
-            type="password"
-            placeholder="New Password"
-            required
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            required
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition duration-200"
-          >
-            {loading ? "Resetting..." : "Reset Password"}
-          </button>
-
-        </form>
-
-        {message && (
-          <p className="text-center text-sm text-green-600 mt-4">
-            {message}
+    <div className={`reset-password-page min-h-screen ${isDark ? 'bg-slate-950' : 'bg-slate-50'}`}>
+      <main className="mx-auto flex min-h-screen w-full max-w-md items-center justify-center px-4 py-8">
+        <div className={`w-full rounded-3xl border p-6 shadow-sm md:p-8 ${panelClass}`}>
+          <h1 className="text-2xl font-bold">New password</h1>
+          <p className={`mt-1 text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+            Enter your new credentials below.
           </p>
-        )}
 
-      </div>
+          <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+            <input
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="New password"
+              className={`w-full rounded-xl border px-4 py-3 outline-none ring-blue-300 focus:ring ${inputClass}`}
+            />
+            <input
+              type="password"
+              required
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm new password"
+              className={`w-full rounded-xl border px-4 py-3 outline-none ring-blue-300 focus:ring ${inputClass}`}
+            />
 
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {loading ? 'Resetting...' : 'Reset password'}
+            </button>
+          </form>
+
+          {message && (
+            <p className={`mt-4 text-center text-sm font-medium ${message.includes('successful') ? 'text-green-500' : 'text-red-500'}`}>
+              {message}
+            </p>
+          )}
+
+          <div className="mt-6 text-center">
+            <Link to="/login" className="text-sm font-semibold text-blue-600 hover:underline">
+              Cancel and back to sign in
+            </Link>
+          </div>
+        </div>
+      </main>
     </div>
 
   );
 }
+
+export default ResetPassword;

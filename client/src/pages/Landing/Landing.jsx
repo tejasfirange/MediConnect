@@ -11,9 +11,10 @@ import './Landing.css';
 function Landing() {
   const { t } = useTranslation('landing');
   const { isDark } = useTheme();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const isDoctor = user?.role === 'doctor';
 
-  const pageClass = `landing-page min-h-screen relative overflow-hidden ${isDark ? 'theme-dark bg-slate-950 text-slate-100' : 'bg-[#f8faff] text-slate-900'}`;
+  const pageClass = `landing-page min-h-screen flex flex-col relative overflow-hidden ${isDark ? 'theme-dark bg-slate-950 text-slate-100' : 'bg-[#f8faff] text-slate-900'}`;
 
   return (
     <div id="home" className={pageClass}>
@@ -26,7 +27,7 @@ function Landing() {
       )}
       <Navbar />
 
-      <main className="relative z-10 isolate">
+      <main className="relative z-10 isolate flex-1">
         {/* ─── Hero Section ─── */}
         <section className="mx-auto w-full max-w-7xl px-6 pb-20 pt-10 md:px-12 md:pt-16 lg:pt-20">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
@@ -52,10 +53,10 @@ function Landing() {
 
                 <div className="flex flex-wrap gap-4 pt-2">
                   <Link
-                    to={isAuthenticated ? '/assessment' : '/login'}
+                    to={isAuthenticated ? (isDoctor ? '/dashboard' : '/assessment') : '/login'}
                     className="rounded-xl bg-blue-600 px-8 py-4 text-base font-bold text-white shadow-xl shadow-blue-500/25 transition duration-300 hover:-translate-y-1 hover:bg-blue-700 hover:shadow-blue-500/35 active:translate-y-0"
                   >
-                    {t('startAssessment')}
+                    {isAuthenticated && isDoctor ? 'Go to Dashboard' : t('startAssessment')}
                   </Link>
                   <a
                     href="#how-it-works"

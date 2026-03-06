@@ -316,9 +316,10 @@ function evaluateAssessment(category, answers, language) {
     };
   }
 
-  const { riskLevel, recommendation, scoreRatio } = evaluateRisk(totalScore, redFlagTriggered, {
+  const { riskLevel, riskLevelCode, recommendation, scoreRatio } = evaluateRisk(totalScore, redFlagTriggered, {
     minPossibleScore,
     maxPossibleScore,
+    language,
   });
   return {
     completed: true,
@@ -328,6 +329,7 @@ function evaluateAssessment(category, answers, language) {
     maxPossibleScore,
     redFlagTriggered,
     riskLevel,
+    riskLevelCode,
     recommendation,
     scoreRatio,
     answeredCount,

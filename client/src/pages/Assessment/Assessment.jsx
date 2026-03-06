@@ -53,33 +53,18 @@ function Assessment() {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [answers, setAnswers] = useState([]);
 
-  useEffect(() => {
-    let mounted = true;
-
-    async function loadCategories() {
-      try {
-        const data = await getCategories();
-        if (!mounted) return;
-        setCategories(data);
-      } catch (err) {
-        if (!mounted) return;
-        setError(err.message);
-      }
+  const loadCategories = async () => {
+    try {
+      const data = await getCategories();
+      setCategories(data);
+    } catch (err) {
+      setError(err.message);
     }
+  };
 
+  useEffect(() => {
     loadCategories();
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  const selectedLabel = useMemo(
-    () => {
-      const category = categories.find((c) => c.key === selectedCategory);
-      return getCategoryDisplayLabel(selectedCategory, category?.label, i18n.language);
-    },
-    [categories, selectedCategory, i18n.language]
-  );
+  }, [i18n.language]);
 
   const startAssessment = async (categoryKey) => {
     setError('');
@@ -107,6 +92,7 @@ function Assessment() {
           result,
           category: categoryKey,
           answeredCount: nextAnswers.length,
+          answers: nextAnswers,
         },
       });
       return;
@@ -115,6 +101,32 @@ function Assessment() {
     setCurrentQuestionId(result.nextQuestionId);
     setCurrentQuestion(result.nextQuestion);
   };
+
+  // Re-fetch question when language changes
+  useEffect(() => {
+    if (selectedCategory) {
+      setLoading(true);
+      if (answers.length === 0) {
+        getInitialQuestion(selectedCategory)
+          .then(data => {
+            setCurrentQuestionId(data.questionId);
+            setCurrentQuestion(data.question);
+          })
+          .catch(err => setError(err.message))
+          .finally(() => setLoading(false));
+      } else {
+        evaluateAssessment(selectedCategory, answers)
+          .then(result => {
+             if (!result.completed) {
+                setCurrentQuestionId(result.nextQuestionId);
+                setCurrentQuestion(result.nextQuestion);
+             }
+          })
+          .catch(err => setError(err.message))
+          .finally(() => setLoading(false));
+      }
+    }
+  }, [i18n.language]);
 
   const handleSelectOption = async (optionIndex) => {
     if (!currentQuestionId || !selectedCategory) return;
@@ -157,10 +169,18 @@ function Assessment() {
     }
   };
 
+  const selectedLabel = useMemo(
+    () => {
+      const category = categories.find((c) => c.key === selectedCategory);
+      return getCategoryDisplayLabel(selectedCategory, category?.label, i18n.language);
+    },
+    [categories, selectedCategory, i18n.language]
+  );
+
   return (
-    <div className={`assessment-page min-h-screen pb-24 ${isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
+    <div className={`assessment-page min-h-screen flex flex-col ${isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
       <Navbar />
-      <main className="mx-auto max-w-4xl px-4 py-10 md:px-6">
+      <main className="mx-auto max-w-4xl px-4 py-10 md:px-6 flex-1">
         <div className={`rounded-3xl border p-6 md:p-8 ${isDark ? 'border-slate-700 bg-slate-900' : 'border-slate-200 bg-white'}`}>
           <h1 className="text-2xl font-bold">Assessment</h1>
           <p className={`mt-2 text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>

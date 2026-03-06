@@ -55,5 +55,41 @@
     "outOf": "out of 100",
     "totalScore": "Total score: {{score}}"
   },
-  "ctaStartNew": "Start New Assessment"
+  "ctaStartNew": "Start New Assessment",
+  "assessmentResult": {
+    "title": "Assessment Result",
+    "category": "Category",
+    "answeredQuestions": "Answered questions",
+    "redFlag": "Red flag",
+    "riskLevel": "Risk level",
+    "score": "Score",
+    "yes": "Yes",
+    "no": "No",
+    "clinicalRecommendation": "Clinical Recommendation",
+    "medicalSummary": "Medical Summary",
+    "clinicalResponseHistory": "Clinical Response History",
+    "patientAnswer": "Patient Answer",
+    "redFlagAlert": "Red Flag Alert",
+    "sendToDoctor": "Send to Doctor",
+    "transmitting": "Transmitting...",
+    "sentToQueue": "Sent to doctor queue. A clinical review is pending.",
+    "retake": "Retake Assessment",
+    "backToDashboard": "Back to Dashboard",
+    "noData": "No result data found. Please complete an assessment first."
+  },
+  "pastHistory": {
+    "title": "Past History",
+    "subtitle": "Review your previous assessment reports and recommendations.",
+    "noReports": "No assessments yet.",
+    "noReportsText": "Start your first health assessment to see risk trends and recommendations here.",
+    "selectReport": "Select a report to view details.",
+    "reportId": "Report #{{id}}",
+    "risk": "Risk",
+    "score": "Score",
+    "recommendation": "Recommendation",
+    "summary": "Summary",
+    "responseDetails": "Response Details",
+    "ans": "Answer",
+    "redFlag": "Red flag"
+  }
 }

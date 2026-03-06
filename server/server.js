@@ -1,13 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const assessmentRoutes = require('./routes/assessmentRoutes');
+dotenv.config();
 
+const assessmentRoutes = require('./routes/assessmentRoutes');
 const authRoutes = require("./routes/authRoutes");
 const patientRoutes = require("./routes/patientRoutes");
 const doctorRoutes = require("./routes/doctorRoutes");
-
-dotenv.config();
+const consultationRoutes = require('./routes/consultationRoutes');
 
 const app = express();
 
@@ -21,6 +21,7 @@ app.use('/api/assessment', assessmentRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/patient", patientRoutes);
 app.use("/api/doctor", doctorRoutes);
+app.use('/api/consultations', consultationRoutes);
 
 app.get('/api/health', (_req, res) => {
   res.status(200).json({
