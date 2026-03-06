@@ -22,6 +22,7 @@ import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { getPatientHistory } from '../../services/patientService';
+import api from '../../services/api';
 import DoctorDashboard from './DoctorDashboard';
 import './Dashboard.css';
 
@@ -45,6 +46,7 @@ function Dashboard() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [reports, setReports] = useState([]);
+  const [profile, setProfile] = useState(null);
   const [tipIndex, setTipIndex] = useState(0);
 
   const healthTips = useMemo(
@@ -62,9 +64,17 @@ function Dashboard() {
 
     async function loadDashboardData() {
       try {
-        const data = await getPatientHistory();
+        const historyData = await getPatientHistory();
         if (!mounted) return;
-        setReports(data);
+        setReports(historyData);
+        
+        try {
+          const profileData = await api.get('/patient/me');
+          if (mounted) setProfile(profileData.data.patient);
+        } catch (e) {
+          // Profile might not exist yet
+          if (mounted) setProfile(null);
+        }
       } catch (error) {
         if (!mounted) return;
         toast.error(error.message || 'Unable to load dashboard data');
@@ -159,8 +169,16 @@ function Dashboard() {
       iconColor: 'text-emerald-500',
     },
     {
-      to: '/dashboard',
+      to: '/profile',
       icon: Settings,
+      title: 'Profile Settings',
+      desc: 'Update your personal and clinical information.',
+      iconBg: isDark ? 'bg-amber-500/20' : 'bg-amber-100',
+      iconColor: 'text-amber-500',
+    },
+    {
+      to: '/dashboard',
+      icon: LogOut,
       title: t('actions.logoutTitle'),
       desc: t('actions.logoutDesc'),
       iconBg: isDark ? 'bg-rose-500/20' : 'bg-rose-100',
@@ -190,10 +208,27 @@ function Dashboard() {
           <p className={`text-xs font-semibold uppercase tracking-[0.2em] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
             {t('brandTag')}
           </p>
+
+          {!loading && !profile?.name && (
+            <div className={`mt-4 p-4 rounded-2xl border flex items-center justify-between gap-4 ${isDark ? 'bg-amber-500/10 border-amber-500/30' : 'bg-amber-50 border-amber-200'}`}>
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-amber-500 text-white">
+                  <User size={20} />
+                </div>
+                <div>
+                  <p className="text-sm font-bold">Complete Your Profile</p>
+                  <p className="text-xs opacity-80 text-amber-700 dark:text-amber-400">Add your name and contact details for better prescriptions.</p>
+                </div>
+              </div>
+              <Link to="/profile" className="px-4 py-2 rounded-lg bg-amber-500 text-white text-xs font-bold hover:bg-amber-600 transition">
+                Set Up Now
+              </Link>
+            </div>
+          )}
           <h1 className="dashboard-hero__greeting mt-2">
             {t(`greeting.${getGreetingKey()}`)},{' '}
             <span className="bg-gradient-to-r from-blue-600 to-sky-500 bg-clip-text text-transparent">
-              {getFirstName(user?.email, t('greeting.fallbackName'))}
+              {profile?.name || getFirstName(user?.email, t('greeting.fallbackName'))}
             </span>{' '}
             <span className="inline-block animate-bounce" style={{ animationDuration: '2s' }}>{'\u{1F44B}'}</span>
           </h1>

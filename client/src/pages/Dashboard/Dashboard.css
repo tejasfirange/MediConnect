@@ -12,9 +12,12 @@
 }
 
 .dashboard-page--dark {
-  background-image:
-    radial-gradient(circle at 10% -5%, rgba(37, 99, 235, 0.1), transparent 30%),
-    radial-gradient(circle at 85% 0%, rgba(14, 165, 233, 0.09), transparent 34%);
+  background-color: #020617;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.12) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(14, 165, 233, 0.08) 0px, transparent 50%);
+  background-attachment: fixed;
 }
 
 /* ── Floating Orbs ── */
@@ -34,7 +37,8 @@
 }
 
 .dashboard-page--dark .dashboard-orb {
-  opacity: 0.5;
+  opacity: 0.4;
+  filter: blur(120px);
 }
 
 .dashboard-orb--blue {
@@ -172,11 +176,11 @@
 @keyframes fadeSlideUp {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(20px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -200,8 +204,8 @@
 .dashboard-action:hover {
   transform: translateY(-4px);
   box-shadow:
-    0 12px 32px -8px rgba(0, 0, 0, 0.1),
-    0 4px 12px -4px rgba(0, 0, 0, 0.05);
+    0 20px 40px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(59, 130, 246, 0.1);
 }
 
 .dashboard-action:hover::before {
@@ -298,6 +302,45 @@
   margin-bottom: 0.5rem;
 }
 
+/* ── Urgent/Alert Styling inside Markdown ── */
+.markdown-wrapper blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid #ef4444;
+  background: rgba(239, 68, 68, 0.05);
+  border-radius: 0 12px 12px 0;
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.dashboard-page--dark .markdown-wrapper blockquote {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #f87171;
+  color: #f87171;
+}
+
+.markdown-wrapper blockquote p {
+  margin-bottom: 0;
+}
+
+.markdown-wrapper strong {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.dashboard-page--dark .markdown-wrapper strong {
+  color: #60a5fa;
+}
+
+/* Highlight specifically for "Immediate attention" keywords */
+.markdown-wrapper strong:contains("Immediate"),
+.markdown-wrapper strong:contains("Urgent"),
+.markdown-wrapper strong:contains("Emergency") {
+  color: #ef4444;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 /* ── Enhanced Tables for Medical Data ── */
 .markdown-wrapper table {
   width: 100%;
@@ -342,8 +385,24 @@
 }
 
 .dashboard-page--dark .glass-panel {
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 10px 30px -10px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+.dashboard-page--dark .dashboard-action:not(.bg-blue-50) {
+  background: rgba(30, 41, 59, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dashboard-page--dark .dashboard-action:hover:not(.bg-blue-50) {
+  background: rgba(30, 41, 59, 0.5);
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
 }
 
 /* ── Consultation Detail Specifics ── */
@@ -377,4 +436,300 @@
 .dashboard-page--dark .doctor-info-bar {
   background: rgba(59, 130, 246, 0.08);
   border-color: rgba(59, 130, 246, 0.15);
+}
+
+/* ── Medical Prescription High-Fidelity Printing ── */
+.hidden-print-template {
+  display: none;
+}
+
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .hidden-print-template, .hidden-print-template * {
+    visibility: visible !important;
+  }
+  .hidden-print-template {
+    display: block !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    background: white !important;
+    color: black !important;
+  }
+}
+
+.medical-prescription-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+  background: white;
+  font-family: 'Times New Roman', serif;
+  color: #1a1a1a;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.prescription-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.hospital-branding {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-icon {
+  width: 50px;
+  height: 50px;
+  background: #2563eb;
+  color: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 900;
+  font-family: 'Inter', sans-serif;
+}
+
+.brand-name {
+  font-size: 26px;
+  font-weight: 800;
+  color: #2563eb;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -1px;
+}
+
+.hospital-tag {
+  font-size: 12px;
+  margin: 0;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.doctor-info-header {
+  text-align: right;
+}
+
+.doc-name {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.doc-qual {
+  font-size: 14px;
+  margin: 2px 0;
+}
+
+.doc-reg, .doc-contact {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+.header-divider {
+  height: 2px;
+  background: #2563eb;
+  margin: 10px 0 20px 0;
+}
+
+.patient-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+  margin-bottom: 15px;
+}
+
+.detail-item .label {
+  font-weight: 700;
+  font-size: 13px;
+  margin-right: 8px;
+  color: #334155;
+}
+
+.detail-item .value {
+  font-size: 14px;
+}
+
+.content-divider {
+  border-bottom: 1px dashed #cbd5e1;
+  margin: 15px 0;
+}
+
+.clinical-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: underline;
+  margin-bottom: 10px;
+  color: #1a1a1a;
+}
+
+.clinical-list {
+  padding-left: 15px;
+  margin: 0;
+  font-size: 13px;
+}
+
+.clinical-list li {
+  margin-bottom: 4px;
+}
+
+.findings-text {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.rx-symbol {
+  font-size: 36px;
+  font-family: serif;
+  font-style: italic;
+  font-weight: 700;
+  margin: 10px 0;
+}
+
+.prescription-body {
+  min-height: 250px;
+}
+
+.prescription-line {
+  font-size: 15px;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.advice-section {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 20px;
+  margin-top: 40px;
+}
+
+.advice-text {
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.follow-up {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.prescription-footer {
+  margin-top: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.footer-disclaimer {
+  font-size: 11px;
+  color: #64748b;
+  font-style: italic;
+}
+
+.signature-area {
+  text-align: center;
+}
+
+.sig-line {
+  border-top: 1px solid #1a1a1a;
+  width: 180px;
+  margin-bottom: 10px;
+}
+
+.sig-label {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ── PDF Prescription Table Specifics ── */
+.medical-rx-content {
+  color: black !important;
+}
+
+.medical-rx-content table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  border: 1.5px solid #000 !important;
+  margin: 20px 0 !important;
+}
+
+.medical-rx-content th {
+  background: white !important;
+  color: black !important;
+  padding: 10px !important;
+  border: 1px solid #000 !important;
+  text-align: left !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+.medical-rx-content td {
+  padding: 10px !important;
+  border: 1px solid #000 !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  color: black !important;
+  vertical-align: top !important;
+}
+
+.medical-rx-content h1,
+.medical-rx-content h2,
+.medical-rx-content h3 {
+  color: black !important;
+  border: none !important;
+  padding: 0 !important;
+  margin-top: 25px !important;
+  margin-bottom: 12px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+}
+
+.medical-rx-content p, 
+.medical-rx-content li {
+  color: black !important;
+  font-size: 14px !important;
+  margin-bottom: 6px !important;
+}
+
+.medical-rx-content strong {
+  color: black !important;
+  font-weight: 800 !important;
+}
+
+.medical-rx-content ul {
+  padding-left: 1.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Hide URLs and browser artifacts in print */
+@page {
+  size: auto;
+  margin: 0mm;
+}
+
+@media print {
+  .medical-prescription-container {
+    box-shadow: none !important;
+    padding: 60px !important;
+  }
 }

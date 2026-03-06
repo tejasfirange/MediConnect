@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Globe, LogOut, Menu, Moon, Sun, User, X } from 'lucide-react';
+import { Globe, LogOut, Menu, Moon, Sun, User, X, Activity } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { toast } from 'react-toastify';
@@ -219,10 +219,22 @@ function Navbar() {
                           isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-50'
                         }`}
                       >
-                        <User size={16} />
+                        <Activity size={16} />
                         Dashboard
                       </Link>
                     )}
+
+                    {/* Profile Link */}
+                    <Link
+                      to="/profile"
+                      onClick={() => setProfileOpen(false)}
+                      className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                        isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-50'
+                      }`}
+                    >
+                      <User size={16} />
+                      My Profile
+                    </Link>
 
                     {/* Logout */}
                     <button
@@ -324,7 +336,17 @@ function Navbar() {
 
           <div className="mt-3 flex items-center gap-2">
             {isAuthenticated ? (
-              <>
+              <div className="flex flex-col w-full gap-1">
+                <Link
+                  to="/profile"
+                  onClick={() => setMenuOpen(false)}
+                  className={`flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                    isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'
+                  }`}
+                >
+                  <User size={16} />
+                  Profile
+                </Link>
                 {!onDashboard && (
                   <Link
                     to="/dashboard"
@@ -343,7 +365,7 @@ function Navbar() {
                   <LogOut size={16} />
                   Log out
                 </button>
-              </>
+              </div>
             ) : (
               <>
                 <Link
