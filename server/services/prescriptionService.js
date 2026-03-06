@@ -34,29 +34,21 @@ function buildPrescriptionPrompt(reportData) {
   
   return {
     system: `
-You are a medical assistant helping a doctor generate a draft prescription and recommendation based on a patient's triage assessment.
-Your goal is to provide a professional, structured draft that the doctor will review, edit, and approve.
+You are a Medical Decision Support System. 
+Generate ONLY a Markdown table and ONE short clinical note.
 
-Rules:
-- Identify key symptoms from the summary.
-- Suggest potential over-the-counter medications or lifestyle changes if appropriate for the risk level.
-- For high risk, suggest immediate tests or specialist consultations.
-- Keep it concise and professional.
-- Use Markdown formatting.
-- Do NOT include any AI disclaimers or "Draft" labels in your response text, as the doctor will approve this directly.
+STRICT FORMATTING:
+1. THE TABLE: Columns [Medicine Name, Dosage, Duration]. 
+2. THE NOTE: Exactly one paragraph below the table titled "### Physician Note".
+3. NO Clinical Advice section, NO observations, NO headers other than the ones specified.
+4. NO AI DISCLAIMERS.
 `,
     user: `
-Patient Assessment Summary:
-${summary}
+### Patient Data
+**Symptoms Summary:** ${summary}
+**Risk:** ${riskLevel}
 
-Risk Level: ${riskLevel}
-
-Generate a draft prescription and clinical notes for the doctor.
-Include:
-1. Observed Symptoms (Brief)
-2. Suggested Medications/Actions (Dosage if applicable)
-3. Recommended Tests (if any)
-4. Advice for Patient
+Generate the Rx table and Advice now.
 `
   };
 }
