@@ -1,5 +1,7 @@
 # 🏥 MediConnect: AI-Powered Smart Triage & Clinic Management
 
+**🚀 Live Demo:** [https://mediconnect-hackathon.netlify.app/](https://mediconnect-hackathon.netlify.app/)
+
 MediConnect is a next-generation healthcare platform designed to bridge the gap between patients and clinicians through AI-driven diagnostics, seamless consultation management, and a premium, localized user experience.
 
 ---
@@ -71,6 +73,7 @@ Launch both systems in parallel for development:
 ```bash
 npm run dev
 ```
+*Note: The backend automatically performs a database migration on startup to ensure your schema is up-to-date.*
 
 ---
 
