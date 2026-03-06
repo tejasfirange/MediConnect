@@ -1,27 +1,101 @@
-.landing-page {
-  background-image:
-    radial-gradient(circle at 18% 12%, rgba(59, 130, 246, 0.12), transparent 35%),
-    radial-gradient(circle at 84% 4%, rgba(191, 219, 254, 0.45), transparent 30%);
+/* ── Smooth Scrolling ── */
+html {
   scroll-behavior: smooth;
 }
 
-.landing-page.theme-dark {
+.landing-page {
   background-image:
-    radial-gradient(circle at 20% 10%, rgba(59, 130, 246, 0.2), transparent 40%),
-    radial-gradient(circle at 90% 5%, rgba(37, 99, 235, 0.18), transparent 35%);
+    radial-gradient(circle at 18% 12%, rgba(59, 130, 246, 0.08), transparent 35%),
+    radial-gradient(circle at 84% 4%, rgba(191, 219, 254, 0.25), transparent 30%),
+    radial-gradient(circle at 50% 80%, rgba(99, 102, 241, 0.04), transparent 40%);
+  background-color: #f8faff;
+  transition: background-color 0.3s ease;
 }
 
+.landing-page.theme-dark {
+  background-color: #020617 !important;
+  background-image:
+    radial-gradient(circle at 10% -5%, rgba(37, 99, 235, 0.15), transparent 30%),
+    radial-gradient(circle at 85% 0%, rgba(14, 165, 233, 0.12), transparent 34%);
+}
+
+/* ── Floating Orbs (Match Dashboard) ── */
+.dashboard-orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: 0.6;
+  z-index: 0;
+  animation: orbFloat 22s ease-in-out infinite alternate;
+}
+
+.theme-dark .dashboard-orb {
+  opacity: 0.7;
+}
+
+.dashboard-orb--blue {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.25), transparent 70%);
+  top: -15%;
+  left: -10%;
+}
+
+.dashboard-orb--sky {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.2), transparent 70%);
+  top: 30%;
+  right: -10%;
+  animation-delay: -7s;
+}
+
+.dashboard-orb--violet {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.18), transparent 70%);
+  bottom: 0%;
+  left: 10%;
+  animation-delay: -14s;
+}
+
+@keyframes orbFloat {
+  0% { transform: translate(0, 0) scale(1.1); }
+  50% { transform: translate(40px, -30px) scale(1.15); }
+  100% { transform: translate(-20px, 20px) scale(1); }
+}
+
+/* ── Hero Card Entrance ── */
 .hero-card {
-  animation: rise-in 0.45s ease-out;
+  animation: cardFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.3s;
 }
 
-@keyframes rise-in {
+@keyframes cardFadeIn {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(20px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
+}
+
+/* ── Typography & Shadows ── */
+h1, h2, h3, h4 {
+  letter-spacing: -0.02em;
+}
+
+/* Mobile responsive adjustments for hero illustration on small screens */
+@media (max-width: 1023px) {
+  .hero-card {
+    display: none; /* Hide floating card on small screens to avoid mess */
+  }
+}
+
+/* Subtle pulse for the risk dot */
+.bg-red-500.animate-pulse {
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
 }

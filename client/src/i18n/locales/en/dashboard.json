@@ -1,0 +1,59 @@
+{
+  "brandTag": "MediConnect",
+  "title": "Health Dashboard",
+  "subtitle": "Track your latest risk signals, review assessment activity, and take your next health check with a clearer workflow.",
+  "greeting": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening",
+    "fallbackName": "there"
+  },
+  "hero": {
+    "welcomeWithReports": "You have {{count}} assessment(s) on record. Your latest risk level is {{risk}}.",
+    "welcomeEmpty": "Welcome! Start your first health assessment to get personalized risk insights."
+  },
+  "metrics": {
+    "lastRisk": "Last Risk Level",
+    "totalAssessments": "Total Assessments",
+    "lastCheck": "Last Check"
+  },
+  "latestReport": "Latest report #{{id}}",
+  "noAssessments": "No assessments yet",
+  "riskLevels": {
+    "low": "Low",
+    "moderate": "Moderate",
+    "high": "High",
+    "critical": "Critical",
+    "noData": "No data"
+  },
+  "quickTip": {
+    "title": "Daily Health Tip",
+    "tag": "Wellness",
+    "text": "Drink enough water and track symptoms regularly. Small daily checks can prevent delayed treatment.",
+    "tips": [
+      "Drink enough water and track symptoms regularly. Small daily checks can prevent delayed treatment.",
+      "Try to get at least 7-8 hours of sleep. Rest is one of the most effective forms of recovery.",
+      "Even 15 minutes of walking each day can significantly improve cardiovascular health.",
+      "Practice deep breathing for 5 minutes daily - it reduces stress and improves mental clarity."
+    ]
+  },
+  "actions": {
+    "startAssessment": "Start Assessment",
+    "pastHistory": "Past History",
+    "logout": "Logout",
+    "newAssessmentTitle": "New Assessment",
+    "newAssessmentDesc": "Take a new health risk assessment",
+    "viewHistoryTitle": "View History",
+    "viewHistoryDesc": "Review your past assessments",
+    "logoutTitle": "Logout",
+    "logoutDesc": "Sign out of your account",
+    "quickActions": "Quick Actions",
+    "open": "Open"
+  },
+  "riskMeter": {
+    "title": "Risk Level",
+    "outOf": "out of 100",
+    "totalScore": "Total score: {{score}}"
+  },
+  "ctaStartNew": "Start New Assessment"
+}

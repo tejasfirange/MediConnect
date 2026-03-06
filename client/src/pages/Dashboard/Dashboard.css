@@ -1,21 +1,261 @@
+/* ── Animated Background ── */
 .dashboard-page {
   background-image:
-    radial-gradient(circle at 10% -5%, rgba(37, 99, 235, 0.1), transparent 28%),
-    radial-gradient(circle at 85% 0%, rgba(14, 165, 233, 0.09), transparent 32%);
+    radial-gradient(circle at 10% -5%, rgba(37, 99, 235, 0.08), transparent 28%),
+    radial-gradient(circle at 85% 0%, rgba(14, 165, 233, 0.07), transparent 32%);
 }
 
-.dashboard-shell {
-  backdrop-filter: blur(8px);
+.dashboard-page--light {
+  background-image:
+    radial-gradient(circle at 12% -8%, rgba(37, 99, 235, 0.045), transparent 26%),
+    radial-gradient(circle at 88% 0%, rgba(14, 165, 233, 0.035), transparent 28%);
 }
 
+.dashboard-page--dark {
+  background-image:
+    radial-gradient(circle at 10% -5%, rgba(37, 99, 235, 0.1), transparent 30%),
+    radial-gradient(circle at 85% 0%, rgba(14, 165, 233, 0.09), transparent 34%);
+}
+
+/* ── Floating Orbs ── */
+.dashboard-orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(90px);
+  opacity: 0.5;
+  z-index: 0;
+  animation: orbFloat 18s ease-in-out infinite alternate;
+}
+
+.dashboard-page--light .dashboard-orb {
+  filter: blur(110px);
+  opacity: 0.22;
+}
+
+.dashboard-page--dark .dashboard-orb {
+  opacity: 0.5;
+}
+
+.dashboard-orb--blue {
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.18), transparent 70%);
+  top: -8%;
+  left: -5%;
+}
+
+.dashboard-orb--sky {
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.14), transparent 70%);
+  top: 30%;
+  right: -8%;
+  animation-delay: -6s;
+}
+
+.dashboard-orb--violet {
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.12), transparent 70%);
+  bottom: 5%;
+  left: 15%;
+  animation-delay: -12s;
+}
+
+@keyframes orbFloat {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -20px) scale(1.08); }
+  100% { transform: translate(-15px, 15px) scale(0.95); }
+}
+
+/* ── Hero Section ── */
 .dashboard-hero {
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.25rem;
 }
 
-.dashboard-metric {
-  transition: transform 180ms ease, box-shadow 180ms ease;
+.dashboard-hero__greeting {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
-.dashboard-metric:hover {
-  transform: translateY(-2px);
+.dashboard-hero__sub {
+  margin-top: 0.5rem;
+  font-size: 0.938rem;
+  line-height: 1.6;
+}
+
+/* ── CTA Pulse ── */
+.dashboard-cta {
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
+  animation: ctaPulse 2.5s ease-out infinite;
+}
+
+@keyframes ctaPulse {
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.45); }
+  70% { box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+
+/* ── Stat Cards ── */
+.dashboard-stat {
+  position: relative;
+  overflow: hidden;
+  transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 260ms ease;
+}
+
+.dashboard-stat::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 4px 0 0 4px;
+  background: var(--stat-accent, #3b82f6);
+}
+
+.dashboard-stat:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 32px -8px rgba(0, 0, 0, 0.1),
+    0 4px 12px -4px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-stat--risk-critical {
+  --stat-accent: #ef4444;
+}
+
+.dashboard-stat--risk-high {
+  --stat-accent: #f97316;
+}
+
+.dashboard-stat--risk-moderate {
+  --stat-accent: #f59e0b;
+}
+
+.dashboard-stat--risk-low {
+  --stat-accent: #10b981;
+}
+
+/* Risk glow effect for critical */
+.dashboard-stat--risk-critical::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: transparent;
+  box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.08);
+  pointer-events: none;
+}
+
+/* ── Card Entrance Animations ── */
+.dashboard-fadeIn {
+  animation: fadeSlideUp 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.dashboard-fadeIn:nth-child(1) { animation-delay: 80ms; }
+.dashboard-fadeIn:nth-child(2) { animation-delay: 160ms; }
+.dashboard-fadeIn:nth-child(3) { animation-delay: 240ms; }
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Action Cards ── */
+.dashboard-action {
+  position: relative;
+  overflow: hidden;
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 220ms ease;
+}
+
+.dashboard-action::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
+  transition: opacity 220ms ease;
+}
+
+.dashboard-action:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 32px -8px rgba(0, 0, 0, 0.1),
+    0 4px 12px -4px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-action:hover::before {
+  opacity: 1;
+}
+
+.dashboard-action__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  font-size: 0;
+  transition: transform 220ms ease;
+}
+
+.dashboard-action:hover .dashboard-action__icon {
+  transform: scale(1.1);
+}
+
+/* ── Quick Tip ── */
+.dashboard-tip {
+  animation: fadeSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 400ms both;
+}
+
+/* ── Skeleton Loaders ── */
+.dashboard-skeleton {
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(148, 163, 184, 0.08),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* ── Scrollbar Styling ── */
+.dashboard-page::-webkit-scrollbar { width: 6px; }
+.dashboard-page::-webkit-scrollbar-track { background: transparent; }
+.dashboard-page::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 3px;
 }
