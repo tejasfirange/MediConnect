@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
+import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { loginUser } from '../../services/authService';
@@ -47,9 +46,12 @@ function Login() {
       const data = await loginUser({ email: email.trim(), password });
       const user = decodeTokenUser(data.token);
       login({ token: data.token, user });
+      toast.success('Logged in successfully');
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message);
+      const message = err.message || 'Login failed';
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -57,8 +59,7 @@ function Login() {
 
   return (
     <div className={`login-page min-h-screen ${isDark ? 'bg-slate-950' : 'bg-slate-50'}`}>
-      <Navbar />
-      <main className="mx-auto w-full max-w-xl px-4 py-10 md:px-6">
+      <main className="mx-auto flex min-h-screen w-full max-w-xl items-center justify-center px-4 py-8 md:px-6">
         <div className={`rounded-3xl border p-6 shadow-sm md:p-8 ${panelClass}`}>
           <h1 className="text-2xl font-bold">Sign in</h1>
           <p className={`mt-1 text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
@@ -102,7 +103,6 @@ function Login() {
           </p>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

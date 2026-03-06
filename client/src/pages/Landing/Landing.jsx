@@ -10,7 +10,7 @@ function Landing() {
   const { t } = useTranslation('landing');
   const { isDark } = useTheme();
 
-  const pageClass = `landing-page min-h-screen ${isDark ? 'theme-dark bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`;
+  const pageClass = `landing-page min-h-screen pb-24 ${isDark ? 'theme-dark bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`;
 
   return (
     <div id="home" className={pageClass}>
