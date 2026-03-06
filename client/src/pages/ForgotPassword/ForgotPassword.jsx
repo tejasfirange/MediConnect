@@ -39,9 +39,13 @@ export default function ForgotPassword() {
 
   return (
 
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-600">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-blue-200 to-indigo-300 relative overflow-hidden">
 
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
+      {/* Background Blur Shapes */}
+      <div className="absolute w-72 h-72 bg-blue-400 rounded-full blur-3xl opacity-30 top-10 left-10"></div>
+      <div className="absolute w-72 h-72 bg-indigo-500 rounded-full blur-3xl opacity-30 bottom-10 right-10"></div>
+
+      <div className="bg-white shadow-2xl rounded-2xl p-10 w-full max-w-md relative">
 
         <h2 className="text-3xl font-bold text-center text-blue-600 mb-2">
           MediConnect
@@ -57,7 +61,7 @@ export default function ForgotPassword() {
             type="email"
             placeholder="Enter your email"
             required
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -65,7 +69,7 @@ export default function ForgotPassword() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition duration-200"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition duration-200"
           >
             {loading ? "Sending..." : "Send Reset Link"}
           </button>
