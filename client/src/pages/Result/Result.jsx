@@ -95,14 +95,14 @@ function Result() {
   const canSendToDoctor = user?.role === 'patient' && isRiskAboveLow && !sent;
 
   return (
-    <div className={`dashboard-page min-h-screen pb-24 ${isDark ? 'dashboard-page--dark' : 'dashboard-page--light'}`}>
+    <div className={`dashboard-page min-h-screen flex flex-col ${isDark ? 'dashboard-page--dark bg-slate-950' : 'dashboard-page--light bg-slate-50'}`}>
       <div className="dashboard-orb dashboard-orb--blue"></div>
       <div className="dashboard-orb dashboard-orb--sky"></div>
       <Navbar />
-      <main className="mx-auto max-w-4xl px-4 py-10 md:px-6">
+      <main className="mx-auto max-w-4xl px-4 py-10 md:px-6 flex-1">
         <div className={`prescription-card glass-panel rounded-3xl border p-6 md:p-8 ${isDark ? 'border-slate-700' : 'border-slate-200'}`}>
           <div className="flex items-center justify-between mb-6">
-             <h1 className="text-3xl font-bold">{t('assessmentResult.title')}</h1>
+             <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{t('assessmentResult.title')}</h1>
              {reEvaluating && (
                 <div className="flex items-center gap-2 text-blue-500 animate-pulse">
                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
@@ -139,7 +139,7 @@ function Result() {
 
               {result.summary ? (
                 <div className={`rounded-xl border px-4 py-3 ${isDark ? 'border-slate-700 bg-slate-800' : 'border-slate-200 bg-slate-50'}`}>
-                  <p className="mb-2 text-sm font-semibold border-b border-slate-700/50 pb-2">{t('assessmentResult.medicalSummary')} ({result.summaryLanguage || 'en'})</p>
+                  <p className={`mb-2 text-sm font-semibold border-b border-slate-700/50 pb-2 ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>{t('assessmentResult.medicalSummary')} ({result.summaryLanguage || 'en'})</p>
                   <div className={`markdown-wrapper text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {result.summary}
@@ -150,14 +150,14 @@ function Result() {
 
               {Array.isArray(result.responseDetails) && result.responseDetails.length > 0 ? (
                 <div className={`rounded-xl border px-4 py-3 ${isDark ? 'border-slate-700 bg-slate-800' : 'border-slate-200 bg-slate-50'}`}>
-                  <p className="text-sm font-semibold mb-3">{t('assessmentResult.clinicalResponseHistory')}</p>
+                  <p className={`text-sm font-semibold mb-3 ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>{t('assessmentResult.clinicalResponseHistory')}</p>
                   <div className="space-y-3">
                     {result.responseDetails.map((item, index) => (
                       <div
                         key={`${item.questionId}-${index}`}
                         className={`rounded-lg border px-4 py-3 text-sm transition-colors ${isDark ? 'border-slate-700 bg-slate-900/50' : 'border-slate-200 bg-white'}`}
                       >
-                        <p className="font-bold mb-1 opacity-90">{index + 1}. {item.questionText}</p>
+                        <p className={`font-bold mb-1 ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>{index + 1}. {item.questionText}</p>
                         <p className={`font-medium ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>{t('assessmentResult.patientAnswer')}: {item.selectedOptionText}</p>
                         {item.redFlag && (
                            <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-rose-500/10 text-rose-500 text-[10px] font-black uppercase tracking-tighter border border-rose-500/20">
@@ -195,9 +195,13 @@ function Result() {
                 >
                   {t('assessmentResult.retake')}
                 </Link>
-                <Link
+                 <Link
                   to="/dashboard"
-                  className="rounded-xl border border-slate-300 px-6 py-3.5 text-sm font-bold text-slate-700 hover:bg-slate-50"
+                  className={`rounded-xl border px-6 py-3.5 text-sm font-bold transition ${
+                    isDark 
+                    ? 'border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white' 
+                    : 'border-slate-300 text-slate-700 hover:bg-slate-50'
+                  }`}
                 >
                   {t('assessmentResult.backToDashboard')}
                 </Link>

@@ -193,7 +193,7 @@ function Dashboard() {
 
   return (
     <div
-      className={`dashboard-page min-h-screen pb-24 ${
+      className={`dashboard-page min-h-screen flex flex-col ${
         isDark ? 'dashboard-page--dark bg-slate-950 text-slate-100' : 'dashboard-page--light bg-slate-50 text-slate-900'
       }`}
     >
@@ -203,7 +203,7 @@ function Dashboard() {
 
       <Navbar />
 
-      <main className="relative z-10 mx-auto w-full max-w-6xl px-4 py-10 md:px-8 md:py-14">
+      <main className="relative z-10 mx-auto w-full max-w-6xl px-4 py-10 md:px-8 md:py-14 flex-1">
         <section className="dashboard-hero">
           <p className={`text-xs font-semibold uppercase tracking-[0.2em] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
             {t('brandTag')}

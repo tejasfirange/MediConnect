@@ -20,5 +20,7 @@ router.get('/my-consultations', authMiddleware, consultationController.getPatien
 router.get('/queue', authMiddleware, isDoctor, consultationController.getDoctorQueue);
 router.get('/completed', authMiddleware, isDoctor, consultationController.getCompletedConsultations);
 router.put('/:id', authMiddleware, isDoctor, consultationController.updateConsultation);
+router.post('/:id/claim', authMiddleware, isDoctor, consultationController.claimConsultation);
+router.post('/:id/release', authMiddleware, isDoctor, consultationController.releaseConsultation);
 
 module.exports = router;

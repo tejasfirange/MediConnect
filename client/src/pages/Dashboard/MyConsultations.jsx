@@ -65,12 +65,12 @@ function MyConsultations() {
   };
 
   return (
-    <div className={`dashboard-page min-h-screen pb-24 ${isDark ? 'dashboard-page--dark' : 'dashboard-page--light'}`}>
+    <div className={`dashboard-page min-h-screen flex flex-col ${isDark ? 'dashboard-page--dark bg-slate-950 text-slate-100' : 'dashboard-page--light bg-slate-50 text-slate-900'}`}>
       <div className="dashboard-orb dashboard-orb--blue"></div>
       <div className="dashboard-orb dashboard-orb--sky"></div>
       <Navbar />
       
-      <main className="mx-auto max-w-5xl px-4 py-10 md:px-8">
+      <main className="mx-auto max-w-5xl px-4 py-10 md:px-8 flex-1">
         <header className="dashboard-hero mb-8">
           <h1 className="dashboard-hero__greeting text-3xl font-bold">My Consultations</h1>
           <p className={`dashboard-hero__sub ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
