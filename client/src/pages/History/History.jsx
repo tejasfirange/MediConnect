@@ -6,6 +6,8 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
 import { getPatientHistory } from '../../services/patientService';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const categoryLabelMap = {
   en: {
@@ -160,7 +162,11 @@ function History() {
                       {result?.summary ? (
                         <div className={`mt-4 rounded-xl border px-3 py-2 text-sm ${isDark ? 'border-slate-700 bg-slate-900 text-slate-300' : 'border-slate-200 bg-white text-slate-700'}`}>
                           <p className="font-semibold border-b border-slate-700/30 pb-1 mb-2">{t('pastHistory.summary')} ({result.summaryLanguage || 'en'})</p>
-                          <p className="mt-1 whitespace-pre-line leading-relaxed">{result.summary}</p>
+                          <div className="mt-1 markdown-wrapper">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                              {result.summary}
+                            </ReactMarkdown>
+                          </div>
                         </div>
                       ) : null}
 
