@@ -290,8 +290,11 @@ const forgotPassword = async (req, res) => {
       [email, token, expires]
     );
 
-    const resetLink =
-      `${process.env.FRONTEND_URL}/reset-password/${token}`;
+    const baseUrl = process.env.FRONTEND_URL.endsWith('/') 
+      ? process.env.FRONTEND_URL.slice(0, -1) 
+      : process.env.FRONTEND_URL;
+
+    const resetLink = `${baseUrl}/reset-password/${token}`;
 
     // send email here
     await sendEmail(email, resetLink);
