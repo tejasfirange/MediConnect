@@ -71,9 +71,9 @@ function MyConsultations() {
       <Navbar />
       
       <main className="mx-auto max-w-5xl px-4 py-10 md:px-8 flex-1">
-        <header className="dashboard-hero mb-8">
-          <h1 className="dashboard-hero__greeting text-3xl font-bold">My Consultations</h1>
-          <p className={`dashboard-hero__sub ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+        <header className="dashboard-hero mb-6 md:mb-8">
+          <h1 className="dashboard-hero__greeting text-2xl md:text-3xl font-bold">My Consultations</h1>
+          <p className={`dashboard-hero__sub text-sm md:text-base ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
             Track the status of your sent assessments and view prescriptions.
           </p>
         </header>
@@ -104,28 +104,31 @@ function MyConsultations() {
                   {/* Card Header (Toggle Area) */}
                   <button
                     onClick={() => setSelectedConsult(isExpanded ? null : c)}
-                    className="w-full text-left p-6 md:p-8 outline-none"
+                    className="w-full text-left p-4 md:p-8 outline-none"
                   >
-                    <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="consultation-id-badge">#{c.id}</div>
-                        <div className="text-xs font-medium text-slate-500">
+                    <div className="flex flex-row justify-between items-center gap-2 mb-4">
+                      <div className="flex items-center gap-2 md:gap-3">
+                        <div className="consultation-id-badge text-[10px] md:text-sm">#{c.id}</div>
+                        <div className="text-[10px] md:text-xs font-medium text-slate-500">
                           {new Date(c.created_at).toLocaleDateString()}
                         </div>
                       </div>
-                      {getStatusBadge(c.status)}
+                      <div className="scale-75 md:scale-100 origin-right">
+                        {getStatusBadge(c.status)}
+                      </div>
                     </div>
                     
-                    <div className="flex items-end justify-between">
-                      <div>
-                        <h4 className="text-xl font-bold mb-1">Consultation Request</h4>
-                        <p className="text-sm text-slate-400">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-lg md:text-xl font-bold mb-1 truncate">Consultation Request</h4>
+                        <p className="text-xs md:text-sm text-slate-400 truncate">
                           Risk Level: <span className="capitalize text-blue-500 font-semibold">{c.risk_level}</span>
-                          {c.doctor_name && <span className="ml-3">| Dr. {c.doctor_name}</span>}
+                          {c.doctor_name && <span className="hidden sm:inline ml-3">| Dr. {c.doctor_name}</span>}
                         </p>
+                        {c.doctor_name && <p className="text-[10px] text-slate-500 sm:hidden mt-0.5 font-medium">Assigned to Dr. {c.doctor_name}</p>}
                       </div>
-                      <div className={`transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`}>
-                         <ChevronRight size={24} className="text-slate-400" />
+                      <div className={`transition-transform duration-300 shrink-0 ${isExpanded ? 'rotate-90' : ''}`}>
+                         <ChevronRight size={20} className="text-slate-400" />
                       </div>
                     </div>
                   </button>
@@ -133,10 +136,10 @@ function MyConsultations() {
                   {/* Expanded Content */}
                   <div 
                     className={`transition-all duration-300 ease-in-out ${
-                      isExpanded ? 'max-h-[2000px] opacity-100 border-t border-slate-700/20' : 'max-h-0 opacity-0'
+                      isExpanded ? 'max-h-[3000px] opacity-100 border-t border-slate-700/20' : 'max-h-0 opacity-0'
                     } overflow-hidden`}
                   >
-                    <div className="p-6 md:p-8 space-y-8">
+                    <div className="p-4 md:p-8 space-y-6 md:space-y-8">
                        {/* Prescription Logic */}
                        {c.status === 'rejected' ? (
                         <div className="bg-red-500/10 border border-red-500/20 p-5 rounded-2xl flex gap-4 items-center text-red-500">
@@ -155,12 +158,12 @@ function MyConsultations() {
                                    <p className="text-xs text-slate-500 font-medium">Validated & Signed by Dr. {c.doctor_name}</p>
                                  </div>
                               </div>
-                              <button 
-                                onClick={handleDownloadPDF}
-                                className="flex items-center gap-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-500/20"
-                              >
-                                <Download size={16} /> Download PDF
-                              </button>
+                               <button 
+                                 onClick={handleDownloadPDF}
+                                 className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-500/20"
+                               >
+                                 <Download size={16} /> Download PDF
+                               </button>
                            </div>
                            <div className={`markdown-wrapper rounded-2xl p-6 md:p-8 ${isDark ? 'text-slate-300 bg-slate-800/50' : 'text-slate-700 bg-slate-50'}`}>
                               <ReactMarkdown remarkPlugins={[remarkGfm]}>
