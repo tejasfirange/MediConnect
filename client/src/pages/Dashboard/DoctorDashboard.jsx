@@ -265,7 +265,7 @@ function DoctorDashboard() {
                            </span>
                         </div>
                         <p className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{selectedConsult.patient_email}</p>
-                        <p className="text-[10px] font-black uppercase text-blue-500 mt-2 tracking-widest">Case ID: {selectedConsult.id.slice(-8).toUpperCase()}</p>
+                        <p className="text-[10px] font-black uppercase text-blue-500 mt-2 tracking-widest">Case ID: {String(selectedConsult.id).toUpperCase()}</p>
                       </div>
                     </div>
                     

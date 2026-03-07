@@ -61,6 +61,12 @@ function Dashboard() {
   );
 
   useEffect(() => {
+    // If the user is a doctor, we don't need to load patient-specific reports/profile
+    if (user?.role === 'doctor') {
+      setLoading(false);
+      return;
+    }
+
     let mounted = true;
 
     async function loadDashboardData() {
@@ -302,6 +308,8 @@ function Dashboard() {
                     </p>
                     <ClipboardList size={18} className="text-blue-500" />
                   </div>
+                  {/* This line seems to be intended for DoctorDashboard, but was placed here. Removing it to fix the issue. */}
+                  {/* <p className="text-[10px] font-black uppercase text-blue-500 mt-2 tracking-widest">Case ID: {String(selectedConsult.id).toUpperCase()}</p> */}
                   <p className="mt-3 text-4xl font-black leading-none tracking-tight">{summary.totalAssessments}</p>
                 </div>
 
