@@ -35,14 +35,10 @@ export default function LungTest() {
 
   return (
     <div 
-      className="min-h-screen bg-slate-50 flex items-center justify-start p-4 bg-cover bg-center transition-all duration-700" 
+      className="min-h-screen bg-slate-50 flex items-center justify-center lg:justify-start p-4 bg-cover bg-center transition-all duration-700" 
       style={{ backgroundImage: `url(${lungBg})` }}
     >
-      {/* ADJUSTMENT: 
-          Changed 'md:ml-20' to 'md:ml-40' to move the block slightly more to the right.
-          Added 'shadow-[0_20px_50px_rgba(0,0,0,0.15)]' for deeper contrast against the BG.
-      */}
-      <div className="bg-white/95 backdrop-blur-sm w-full max-w-sm rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden border border-slate-100 p-8 flex flex-col items-center ml-0 md:ml-40 animate-in slide-in-from-left-10 duration-700">
+      <div className="bg-white/95 backdrop-blur-sm w-full max-w-sm rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden border border-slate-100 p-8 flex flex-col items-center ml-0 lg:ml-32 animate-in slide-in-from-left-10 duration-700">
         
         {/* Header */}
         <div className="flex flex-col items-center mb-6">

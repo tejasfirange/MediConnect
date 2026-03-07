@@ -47,15 +47,10 @@ export default function ReactionTest() {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-end p-4 bg-cover bg-center bg-no-repeat transition-all duration-700" 
+      className="min-h-screen flex items-center justify-center lg:justify-end p-4 bg-cover bg-center bg-no-repeat transition-all duration-700" 
       style={{ backgroundImage: `url(${reactionBg})` }}
     >
-      {/* CHANGES MADE:
-          1. Increased max-width to 380px for a more substantial "block" feel.
-          2. Changed md:mr-32 to md:mr-48 to push the block further toward the center-left.
-          3. Adjusted internal padding for the wider layout.
-      */}
-      <div className="bg-white h-[600px] w-full max-w-[380px] rounded-[2.5rem] shadow-[0_25px_60px_rgba(0,0,0,0.3)] overflow-hidden border border-slate-100 flex flex-col relative mr-0 md:mr-48 animate-in slide-in-from-right-10 duration-700">
+      <div className="bg-white h-[600px] w-full max-w-[380px] rounded-[2.5rem] shadow-[0_25px_60px_rgba(0,0,0,0.3)] overflow-hidden border border-slate-100 flex flex-col relative mr-0 lg:mr-32 animate-in slide-in-from-right-10 duration-700">
         
         {/* Header */}
         <div className="p-8 pb-4 flex items-center justify-between border-b border-slate-50">

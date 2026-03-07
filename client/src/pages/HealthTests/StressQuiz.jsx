@@ -54,14 +54,10 @@ export default function StressQuiz() {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-start p-4 font-sans bg-cover bg-center bg-no-repeat transition-all duration-700" 
+      className="min-h-screen flex items-center justify-center lg:justify-start p-4 font-sans bg-cover bg-center bg-no-repeat transition-all duration-700" 
       style={{ backgroundImage: `url(${stressBg})` }}
     >
-      {/* 1. Increased max-w to 400px for a more impactful block.
-          2. Increased md:ml-48 to move the block slightly more toward the center-right.
-          3. Fixed h-[600px] to ensure no layout jumping during transitions.
-      */}
-      <div className="bg-white/95 backdrop-blur-sm w-full max-w-[400px] h-[600px] rounded-[2.5rem] shadow-[0_30px_70px_rgba(0,0,0,0.3)] overflow-hidden border border-slate-100 flex flex-col relative ml-0 md:ml-48 animate-in slide-in-from-left-10 duration-700">
+      <div className="bg-white/95 backdrop-blur-sm w-full max-w-[400px] h-[600px] rounded-[2.5rem] shadow-[0_30px_70px_rgba(0,0,0,0.3)] overflow-hidden border border-slate-100 flex flex-col relative ml-0 lg:ml-32 animate-in slide-in-from-left-10 duration-700">
         
         {/* Progress Header */}
         {!showResult && (
