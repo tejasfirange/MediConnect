@@ -54,11 +54,20 @@ function Result() {
   const answers = state?.answers;
 
   useEffect(() => {
-    if (category && answers && answers.length > 0) {
+    // Normalize language codes for comparison
+    const currentLang = i18n.language?.startsWith('mr') ? 'mr' : 'en';
+    const resultLang = currentResult?.summaryLanguage?.startsWith('mr') ? 'mr' : 'en';
+
+    // Only re-evaluate if the language is actually different from the current summary
+    if (category && answers && answers.length > 0 && currentLang !== resultLang) {
       setReEvaluating(true);
       evaluateAssessment(category, answers)
         .then(newResult => {
-          setCurrentResult(newResult);
+          setCurrentResult(prev => ({
+            ...newResult,
+            reportId: prev?.reportId,
+            reportSaved: prev?.reportSaved
+          }));
         })
         .catch(err => {
           console.error("Failed to re-evaluate assessment in new language:", err);
