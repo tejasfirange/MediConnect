@@ -113,17 +113,31 @@ function Navbar() {
         <ul className="hidden items-center gap-2 md:flex">
           {navItems.map((item) => (
             <li key={item.key || item.href}>
-              <a
-                href={item.href}
-                className={`group relative rounded-lg px-4 py-2 text-[13px] font-bold tracking-wide transition-all duration-200 ${
-                  isDark
-                    ? 'text-slate-400 hover:text-slate-100'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-              >
-                {item.key?.includes('nav.') ? t(item.key) : item.label}
-                <span className="absolute bottom-1 left-4 right-4 h-0.5 scale-x-0 bg-blue-500 transition-transform duration-300 group-hover:scale-x-100" />
-              </a>
+              {item.href.includes('#') ? (
+                <a
+                  href={item.href}
+                  className={`group relative rounded-lg px-4 py-2 text-[13px] font-bold tracking-wide transition-all duration-200 ${
+                    isDark
+                      ? 'text-slate-400 hover:text-slate-100'
+                      : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                >
+                  {item.key?.includes('nav.') ? t(item.key) : item.label}
+                  <span className="absolute bottom-1 left-4 right-4 h-0.5 scale-x-0 bg-blue-500 transition-transform duration-300 group-hover:scale-x-100" />
+                </a>
+              ) : (
+                <Link
+                  to={item.href}
+                  className={`group relative rounded-lg px-4 py-2 text-[13px] font-bold tracking-wide transition-all duration-200 ${
+                    isDark
+                      ? 'text-slate-400 hover:text-slate-100'
+                      : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                >
+                  {item.key?.includes('nav.') ? t(item.key) : item.label}
+                  <span className="absolute bottom-1 left-4 right-4 h-0.5 scale-x-0 bg-blue-500 transition-transform duration-300 group-hover:scale-x-100" />
+                </Link>
+              )}
             </li>
           ))}
         </ul>
@@ -297,15 +311,27 @@ function Navbar() {
           <ul className="space-y-1">
             {navItems.map((item) => (
               <li key={item.key || item.href}>
-                <a
-                  href={item.href}
-                  onClick={() => setMenuOpen(false)}
-                  className={`block rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                    isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'
-                  }`}
-                >
-                  {item.key?.includes('nav.') ? t(item.key) : item.label}
-                </a>
+                {item.href.includes('#') ? (
+                  <a
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`block rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                      isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    {item.key?.includes('nav.') ? t(item.key) : item.label}
+                  </a>
+                ) : (
+                  <Link
+                    to={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`block rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                      isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    {item.key?.includes('nav.') ? t(item.key) : item.label}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
