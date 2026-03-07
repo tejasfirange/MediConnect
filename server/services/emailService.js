@@ -1,11 +1,15 @@
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, // use STARTTLS
   auth: {
     user: "sunbeaminternship@gmail.com",
     pass: "acfc yejg qgsl qmxg"
-  }
+  },
+  // Force IPv4 to avoid ENETUNREACH on some cloud network environments
+  family: 4 
 });
 
 async function sendResetEmail(email, link) {
