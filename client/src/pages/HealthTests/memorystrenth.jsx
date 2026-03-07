@@ -54,14 +54,10 @@ export default function MemoryStrength() {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-end p-4 bg-cover bg-center bg-no-repeat transition-all duration-700" 
+      className="min-h-screen flex items-center justify-center lg:justify-end p-4 bg-cover bg-center bg-no-repeat transition-all duration-700" 
       style={{ backgroundImage: `url(${memorybg})` }}
     >
-      {/* 1. Increased max-w to 380px for a more impactful block.
-          2. Increased md:mr-48 to shift the block further left toward the center.
-          3. Enhanced the shadow depth for better separation from the background.
-      */}
-      <div className="bg-white h-[600px] w-full max-w-[380px] rounded-[2.5rem] shadow-[0_30px_70px_rgba(0,0,0,0.3)] border border-slate-100 p-10 flex flex-col items-center mr-0 md:mr-48 animate-in slide-in-from-right-10 duration-700 relative">
+      <div className="bg-white h-[600px] w-full max-w-[380px] rounded-[2.5rem] shadow-[0_30px_70px_rgba(0,0,0,0.3)] border border-slate-100 p-6 md:p-10 flex flex-col items-center mr-0 lg:mr-32 animate-in slide-in-from-right-10 duration-700 relative">
         
         {/* Header Section */}
         <div className="flex items-center gap-4 mb-8 w-full border-b border-slate-50 pb-6">

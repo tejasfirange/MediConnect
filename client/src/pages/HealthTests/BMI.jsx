@@ -40,12 +40,12 @@ export default function BMICalculator() {
   return (
 
     <div
-      className="min-h-screen flex items-center justify-end px-30 bg-cover bg-center p-1.5"
+      className="min-h-screen flex items-center justify-center lg:justify-end lg:pr-32 px-4 bg-cover bg-center"
       style={{ backgroundImage: `url(${bmiBg})` }}
     >
 
       {/* Calculator Card */}
-      <div className="bg-white/80 backdrop-blur-sm p-10 rounded-3xl shadow-xl w-full max-w-md">
+      <div className="bg-white/90 backdrop-blur-md p-6 md:p-10 rounded-3xl shadow-2xl w-full max-w-md border border-white/20">
 
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">

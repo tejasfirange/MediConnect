@@ -36,7 +36,7 @@ export default function HydrationApp() {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-end p-4 font-sans bg-cover bg-center bg-no-repeat"
+      className="min-h-screen flex items-center justify-center lg:justify-end p-4 font-sans bg-cover bg-center bg-no-repeat"
       style={{ 
         // Removed the linear-gradient overlay completely for 100% clarity
         backgroundImage: `url(${hydrationBg})` 
@@ -64,7 +64,7 @@ export default function HydrationApp() {
           2. Removed backdrop-blur-sm
           3. Increased mr-32 to push it further right
       */}
-      <div className="bg-white h-[560px] w-full max-w-[350px] rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.2)] overflow-hidden border border-slate-100 flex flex-col transition-all mr-0 md:mr-32">
+      <div className="bg-white h-[560px] w-full max-w-[350px] rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.2)] overflow-hidden border border-slate-100 flex flex-col transition-all mr-0 lg:mr-32">
         
         {/* Header & Input */}
         <div className="p-8 pb-4">
