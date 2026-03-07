@@ -237,13 +237,20 @@ function Assessment() {
                     } disabled:opacity-60`}
                   >
                     {/* Image Container */}
-                    <div className={`w-full aspect-square overflow-hidden border-b ${
-                      isDark ? 'bg-slate-800 border-slate-800' : 'bg-slate-50 border-slate-50'
+                    <div className={`w-full aspect-square overflow-hidden border-b relative ${
+                      isDark ? 'bg-slate-800/50 border-slate-800' : 'bg-slate-100/50 border-slate-50'
                     }`}>
+                      {/* Placeholder Shimmer */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" 
+                           style={{ backgroundSize: '200% 100%' }} />
+                      
                       <img 
                         src={categoryImageMap[category.key] || hairImg} 
                         alt={category.label}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
+                        decoding="async"
+                        onLoad={(e) => e.target.classList.add('opacity-100')}
+                        className="w-full h-full object-cover transition-all duration-700 opacity-0 group-hover:scale-110"
                       />
                     </div>
                     
