@@ -1,15 +1,18 @@
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  // Using hardcoded IPv4 for smtp.gmail.com to bypass Render's IPv6 resolution issues
+  host: "142.250.141.108", 
   port: 587,
   secure: false, // use STARTTLS
   auth: {
     user: "sunbeaminternship@gmail.com",
     pass: "acfc yejg qgsl qmxg"
   },
-  // Force IPv4 to avoid ENETUNREACH on some cloud network environments
-  family: 4 
+  tls: {
+    // Required to match the certificate to the domain when using IP as host
+    servername: "smtp.gmail.com"
+  }
 });
 
 async function sendResetEmail(email, link) {
