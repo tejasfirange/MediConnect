@@ -304,6 +304,7 @@ const forgotPassword = async (req, res) => {
     });
 
   } catch (error) {
+    console.error("Forgot Password Error:", error);
 
     res.status(500).json({
       message: error.message

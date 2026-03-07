@@ -14,10 +14,20 @@ const { runMigration } = require('./services/migrationService');
 runMigration();
 
 const app = express();
-
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+const corsOptions = {
+  origin: [
+    'https://mediconnect-hackathon.netlify.app',
+    'http://localhost:5173',
+    'http://localhost:3000'
+  ],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/assessment', assessmentRoutes);
