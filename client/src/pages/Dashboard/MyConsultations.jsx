@@ -65,7 +65,7 @@ function MyConsultations() {
   };
 
   return (
-    <div className={`dashboard-page min-h-screen flex flex-col ${isDark ? 'dashboard-page--dark bg-slate-950 text-slate-100' : 'dashboard-page--light bg-slate-50 text-slate-900'}`}>
+    <div className={`dashboard-page min-h-screen flex flex-col overflow-x-hidden ${isDark ? 'dashboard-page--dark bg-slate-950 text-slate-100' : 'dashboard-page--light bg-slate-50 text-slate-900'}`}>
       <div className="dashboard-orb dashboard-orb--blue"></div>
       <div className="dashboard-orb dashboard-orb--sky"></div>
       <Navbar />
@@ -107,28 +107,28 @@ function MyConsultations() {
                     className="w-full text-left p-4 md:p-8 outline-none"
                   >
                     <div className="flex flex-row justify-between items-center gap-2 mb-4">
-                      <div className="flex items-center gap-2 md:gap-3">
-                        <div className="consultation-id-badge text-[10px] md:text-sm">#{c.id}</div>
-                        <div className="text-[10px] md:text-xs font-medium text-slate-500">
+                      <div className="flex items-center gap-2 md:gap-3 min-w-0">
+                        <div className="consultation-id-badge text-[10px] md:text-sm shrink-0">#{c.id}</div>
+                        <div className="text-[10px] md:text-xs font-medium text-slate-500 truncate">
                           {new Date(c.created_at).toLocaleDateString()}
                         </div>
                       </div>
-                      <div className="scale-75 md:scale-100 origin-right">
+                      <div className="scale-75 md:scale-100 origin-right shrink-0">
                         {getStatusBadge(c.status)}
                       </div>
                     </div>
                     
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-lg md:text-xl font-bold mb-1 truncate">Consultation Request</h4>
-                        <p className="text-xs md:text-sm text-slate-400 truncate">
+                        <h4 className="text-base md:text-xl font-bold mb-1 truncate">Consultation Request</h4>
+                        <p className="text-[11px] md:text-sm text-slate-400 truncate">
                           Risk Level: <span className="capitalize text-blue-500 font-semibold">{c.risk_level}</span>
                           {c.doctor_name && <span className="hidden sm:inline ml-3">| Dr. {c.doctor_name}</span>}
                         </p>
-                        {c.doctor_name && <p className="text-[10px] text-slate-500 sm:hidden mt-0.5 font-medium">Assigned to Dr. {c.doctor_name}</p>}
+                        {c.doctor_name && <p className="text-[10px] text-slate-500 sm:hidden mt-0.5 font-medium truncate">Assigned to Dr. {c.doctor_name}</p>}
                       </div>
                       <div className={`transition-transform duration-300 shrink-0 ${isExpanded ? 'rotate-90' : ''}`}>
-                         <ChevronRight size={20} className="text-slate-400" />
+                         <ChevronRight size={18} className="text-slate-400" />
                       </div>
                     </div>
                   </button>
